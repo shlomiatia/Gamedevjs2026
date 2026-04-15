@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude mcp *)",
+      "WebFetch(domain:github.com)",
+      "Bash(gh repo *)",
+      "Bash(where godot *)",
+      "Read(//c/Program Files/**)",
+      "Bash(cmd.exe /c \"where godot\")",
+      "Bash(cmd.exe /c 'dir /s /b \"C:\\\\Program Files\\\\Godot\\\\*.exe\" 2>nul')",
+      "Bash(cmd.exe /c 'dir /s /b \"C:\\\\Program Files \\(x86\\)\\\\Godot\\\\*.exe\" 2>nul')",
+      "Bash(cmd.exe /c 'dir /s /b \"C:\\\\Users\\\\shlom\\\\*godot*\" 2>nul')",
+      "Bash(cmd.exe /c 'dir /s /b \"C:\\\\Program Files\\\\*godot*.exe\" 2>nul & dir /s /b \"C:\\\\Program Files \\(x86\\)\\\\*godot*.exe\" 2>nul & dir /s /b \"C:\\\\Users\\\\shlom\\\\AppData\\\\*godot*.exe\" 2>nul')",
+      "Skill(update-config)"
+    ]
+  }
+}
