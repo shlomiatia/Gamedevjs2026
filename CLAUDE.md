@@ -9,13 +9,25 @@ Scenes/
   Tree/
     Tree.tscn
     tree.gd          (if the scene has a script)
-  Woodcutter/
-    Woodcutter.tscn
-    woodcutter.gd
+  Camera/
+    Camera.tscn
+    camera.gd
+  BuildingManager/
+    BuildingManager.tscn
+    building_manager.gd
+  Buildings/          ← all building scenes live here
+    WoodcutterHut/
+      WoodcutterHut.tscn
+      woodcutter_hut.gd
+    BuilderHut/
+      BuilderHut.tscn
+      builder_hut.gd
   ...
 ```
 
 **Exception:** `Scenes/Main.tscn` and `Scenes/main.gd` live directly in `Scenes/` — Main is the level scene, not a reusable prefab.
+
+**Buildings standard:** All building scenes live under `Scenes/Buildings/<BuildingName>/`. Building scripts use `class_name` so their constants (e.g. `SIZE_X`, `SIZE_Y`, `BUILDING_NAME`) are globally accessible without a preload.
 
 ---
 

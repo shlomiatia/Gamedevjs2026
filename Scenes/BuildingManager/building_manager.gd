@@ -2,44 +2,54 @@ extends Node2D
 
 var occupied_tiles: Dictionary = {}
 
-const WoodcutterScene = preload("res://Scenes/Woodcutter/Woodcutter.tscn")
-const WoodcutterScript = preload("res://Scenes/Woodcutter/woodcutter.gd")
+const WoodcutterHutScene = preload("res://Scenes/Buildings/WoodcutterHut/WoodcutterHut.tscn")
+const BuilderHutScene = preload("res://Scenes/Buildings/BuilderHut/BuilderHut.tscn")
 
 var _grass_layer: TileMapLayer
 var _spawn_parent: Node2D
 var _tile_size: Vector2i
 var _building_mode := false
 var _preview: Node2D = null
+var _active_scene: PackedScene = null
+var _active_size: Vector2i = Vector2i.ZERO
 
-@onready var _build_button: Button = $UI/BuildWoodcutterButton
+@onready var _build_woodcutter_button: Button = $UI/BuildWoodcutterHutButton
+@onready var _build_builder_button: Button = $UI/BuildBuilderHutButton
 
 func _ready() -> void:
     _grass_layer = get_parent().get_node("Grass") as TileMapLayer
     _spawn_parent = get_parent() as Node2D
     _tile_size = _grass_layer.tile_set.tile_size
-    _build_button.pressed.connect(_on_build_woodcutter_pressed)
+    _build_woodcutter_button.pressed.connect(
+        func(): _start_building(WoodcutterHutScene, Vector2i(WoodcutterHut.SIZE_X, WoodcutterHut.SIZE_Y)))
+    _build_builder_button.pressed.connect(
+        func(): _start_building(BuilderHutScene, Vector2i(BuilderHut.SIZE_X, BuilderHut.SIZE_Y)))
 
-func _on_build_woodcutter_pressed() -> void:
+func _start_building(scene: PackedScene, size: Vector2i) -> void:
     if _building_mode:
         return
+    _active_scene = scene
+    _active_size = size
     _building_mode = true
-    _preview = WoodcutterScene.instantiate()
+    _preview = scene.instantiate()
     _spawn_parent.add_child(_preview)
 
 func _cancel_building() -> void:
     _building_mode = false
     _preview.queue_free()
     _preview = null
+    _active_scene = null
+    _active_size = Vector2i.ZERO
 
-func _place_woodcutter() -> void:
+func _place_building() -> void:
     var mouse_tile := _get_mouse_tile()
     if _is_footprint_blocked(mouse_tile):
         return
-    var building := WoodcutterScene.instantiate()
+    var building := _active_scene.instantiate()
     building.position = _footprint_position(mouse_tile)
     _spawn_parent.add_child(building)
-    for dx in WoodcutterScript.SIZE_X:
-        for dy in WoodcutterScript.SIZE_Y:
+    for dx in _active_size.x:
+        for dy in _active_size.y:
             occupied_tiles[Vector2i(mouse_tile.x + dx, mouse_tile.y + dy)] = building
     _cancel_building()
 
@@ -48,13 +58,13 @@ func _get_mouse_tile() -> Vector2i:
 
 func _footprint_position(top_left_tile: Vector2i) -> Vector2:
     var tl := _grass_layer.map_to_local(top_left_tile)
-    var x := tl.x + (WoodcutterScript.SIZE_X - 1) * _tile_size.x / 2.0
-    var y := tl.y + (WoodcutterScript.SIZE_Y - 0.5) * _tile_size.y
+    var x := tl.x + (_active_size.x - 1) * _tile_size.x / 2.0
+    var y := tl.y + (_active_size.y - 0.5) * _tile_size.y
     return Vector2(x, y)
 
 func _is_footprint_blocked(top_left_tile: Vector2i) -> bool:
-    for dx in WoodcutterScript.SIZE_X:
-        for dy in WoodcutterScript.SIZE_Y:
+    for dx in _active_size.x:
+        for dy in _active_size.y:
             if occupied_tiles.has(Vector2i(top_left_tile.x + dx, top_left_tile.y + dy)):
                 return true
     return false
@@ -65,7 +75,7 @@ func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventMouseButton and event.pressed:
         match event.button_index:
             MOUSE_BUTTON_LEFT:
-                _place_woodcutter()
+                _place_building()
             MOUSE_BUTTON_RIGHT:
                 _cancel_building()
 

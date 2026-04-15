@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://by6qam4q8r3s7"]
+
+[ext_resource type="Script" path="res://Scenes/Buildings/BuilderHut/builder_hut.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cdkpe3hq6o048" path="res://Textures/house.png" id="2_house"]
+
+[node name="BuilderHut" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_house")
+position = Vector2(0, -104)
+
+[node name="NameLabel" type="Label" parent="."]
+position = Vector2(-100, -225)
+size = Vector2(200, 26)
+horizontal_alignment = 1
+text = "BuilderHut"
