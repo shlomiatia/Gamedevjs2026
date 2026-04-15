@@ -6,5 +6,10 @@
 [node name="Main" type="Node2D"]
 script = ExtResource("1_r150o")
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Road" type="TileMapLayer" parent="."]
+tile_set = ExtResource("2_tileset")
+
+[node name="Grass" type="TileMapLayer" parent="."]
 tile_set = ExtResource("2_tileset")
