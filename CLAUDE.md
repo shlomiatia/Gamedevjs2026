@@ -6,28 +6,35 @@ Every scene lives in its own subfolder under `Scenes/`, named after the scene:
 
 ```
 Scenes/
-  Tree/
-    Tree.tscn
-    tree.gd          (if the scene has a script)
-  Camera/
-    Camera.tscn
-    camera.gd
-  BuildingManager/
-    BuildingManager.tscn
-    building_manager.gd
-  Buildings/          ← all building scenes live here
+  Buildings/      ← building scenes
     WoodcutterHut/
       WoodcutterHut.tscn
       woodcutter_hut.gd
     BuilderHut/
       BuilderHut.tscn
       builder_hut.gd
+  Workers/        ← worker/unit scenes
+    Builder/
+      Builder.tscn
+  Resources/      ← resource item scenes
+    Log/
+      Log.tscn
+  Tree/
+    Tree.tscn
+  Camera/
+    Camera.tscn
+    camera.gd
+  BuildingManager/
+    BuildingManager.tscn
+    building_manager.gd
   ...
 ```
 
 **Exception:** `Scenes/Main.tscn` and `Scenes/main.gd` live directly in `Scenes/` — Main is the level scene, not a reusable prefab.
 
-**Buildings standard:** All building scenes live under `Scenes/Buildings/<BuildingName>/`. Building scripts use `class_name` so their constants (e.g. `SIZE_X`, `SIZE_Y`, `BUILDING_NAME`) are globally accessible without a preload.
+**Category subfolders:** Group related scenes under a category folder (`Buildings/`, `Workers/`, `Resources/`). Each scene still gets its own named subfolder within the category.
+
+**Buildings standard:** Building scripts use `class_name` so constants (`SIZE_X`, `SIZE_Y`, `BUILDING_NAME`) are globally accessible without a preload.
 
 ---
 
