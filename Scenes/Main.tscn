@@ -4,6 +4,7 @@
 [ext_resource type="TileSet" uid="uid://bvnoyr7mkjuo4" path="res://Textures/tileset.tres" id="2_tileset"]
 
 [node name="Main" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_r150o")
 
 [node name="Camera2D" type="Camera2D" parent="."]
