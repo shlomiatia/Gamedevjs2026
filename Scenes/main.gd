@@ -8,7 +8,7 @@ const TREE_COUNT := 30
 const TREE_AREA_WIDTH := 20
 const TREE_AREA_HEIGHT := 15
 
-const TreeScene = preload("res://Scenes/Tree.tscn")
+const TreeScene = preload("res://Scenes/Tree/Tree.tscn")
 
 @onready var grass_layer: TileMapLayer = $Grass
 @onready var camera: Camera2D = $Camera2D
