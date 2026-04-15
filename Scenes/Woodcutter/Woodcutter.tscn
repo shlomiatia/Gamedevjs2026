@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bw4k7n2qar1s5"]
+
+[ext_resource type="Script" path="res://Scenes/Woodcutter/woodcutter.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cdkpe3hq6o048" path="res://Textures/house.png" id="2_house"]
+
+[node name="Woodcutter" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_house")
+position = Vector2(0, -104)
