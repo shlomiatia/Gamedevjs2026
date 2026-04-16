@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 		_river_timer -= 1.0 / RIVER_FPS
 		_river_frame = (_river_frame + 1) % RIVER_FRAMES
 		var col := _river_frame % RIVER_COLS
-		var row := _river_frame / RIVER_COLS
+		var row: int = _river_frame / RIVER_COLS
 		for x in LEVEL_WIDTH:
 			river.set_cell(Vector2i(x, RIVER_ROW), 0, Vector2i(col, row))
 
