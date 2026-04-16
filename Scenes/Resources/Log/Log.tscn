@@ -1,9 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://ca1r2p6s9t5u3"]
+[gd_scene load_steps=3 format=3 uid="uid://ca1r2p6s9t5u3"]
 
-[ext_resource type="Texture2D" uid="uid://palujxi30yg0" path="res://Textures/log.png" id="1_log"]
+[ext_resource type="Script" uid="uid://cryshxbekws01" path="res://Scenes/Resources/Log/log.gd" id="1_log_script"]
+[ext_resource type="Texture2D" uid="uid://palujxi30yg0" path="res://Textures/log.png" id="2_log"]
 
 [node name="Log" type="Node2D"]
+script = ExtResource("1_log_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_log")
+texture = ExtResource("2_log")
 position = Vector2(0, -16)

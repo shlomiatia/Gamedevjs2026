@@ -59,18 +59,19 @@ func _place_building() -> void:
     _cancel_building()
 
 func _spawn_builder_hut_extras(building_pos: Vector2) -> void:
-    var half_w := _active_size.x / 2.0 * _tile_size.x
+    var below_center := building_pos + Vector2(0.0, _tile_size.y / 2.0)
 
     var builder := BuilderScene.instantiate()
-    builder.position = building_pos + Vector2(half_w + _tile_size.x * 0.5, 0.0)
+    builder.position = below_center
     _spawn_parent.add_child(builder)
 
+    var log_tile := below_center + Vector2(_tile_size.x, 0.0)
     var log1 := LogScene.instantiate()
-    log1.position = building_pos + Vector2(half_w - 10.0, -8.0)
+    log1.position = log_tile
     _spawn_parent.add_child(log1)
 
     var log2 := LogScene.instantiate()
-    log2.position = building_pos + Vector2(half_w + 6.0, -2.0)
+    log2.position = log_tile + Vector2(0.0, -Log.SPACE)
     _spawn_parent.add_child(log2)
 
 func _get_mouse_tile() -> Vector2i:
