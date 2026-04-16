@@ -7,27 +7,14 @@ const BUILDING_NAME := "Sawmill"
 
 const SawmillerScene = preload("res://Scenes/Workers/Sawmiller/Sawmiller.tscn")
 
-var _spawn_parent: Node2D = null
-var _map: Map = null
-
-func on_placed(spawn_parent: Node2D, map: Map) -> void:
-	_spawn_parent = spawn_parent
-	_map = map
-	$NameLabel.visible = false
-	$InputPile.visible = false
-	$OutputPile.visible = false
-	var coordination_manager := spawn_parent.get_node("CoordinationManager")
+func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node) -> void:
+	super.on_placed(spawn_parent, map, coordination_manager)
 	$OutputPile.setup(coordination_manager, CoordinationManager.ResourceType.PLANK)
-	set_construction_progress(0.01)
+	_start_construction()
 
 func complete_construction() -> void:
-	$Sprite2D.region_enabled = false
-	$Sprite2D.position = Vector2(0, -104)
-	$NameLabel.visible = true
-	$InputPile.visible = true
-	$OutputPile.visible = true
+	super.complete_construction()
 	var sawmiller := SawmillerScene.instantiate() as Sawmiller
 	sawmiller.position = position + Vector2(0.0, float(_map.get_tile_size().y) * 0.5)
-	var coordination_manager := _spawn_parent.get_node("CoordinationManager")
-	sawmiller.setup(self, _map, coordination_manager)
+	sawmiller.setup(self, _map, _coordination_manager)
 	_spawn_parent.add_child(sawmiller)

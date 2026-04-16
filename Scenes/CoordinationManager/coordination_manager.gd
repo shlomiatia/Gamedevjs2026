@@ -40,7 +40,7 @@ func notify_idle_builder(builder: Builder) -> void:
 
 # --- Resource collection queue ---
 
-func queue_resource_collection(worker, resource_type: int) -> void:
+func queue_resource_collection(worker: ResourceCollectorWorker, resource_type: int) -> void:
 	var pile := _find_free_resource_pile(resource_type)
 	if pile != null:
 		pile.reserve(worker)

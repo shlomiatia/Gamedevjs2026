@@ -17,10 +17,12 @@ var _coordination_manager: Node = null
 @onready var _build_builder_button: Button = $UI/BuildBuilderHutButton
 @onready var _build_sawmill_button: Button = $UI/BuildSawmillButton
 
+func setup(map: Map, coordination_manager: Node) -> void:
+	_map = map
+	_coordination_manager = coordination_manager
+
 func _ready() -> void:
 	_spawn_parent = get_parent() as Node2D
-	_map = get_parent().get_node("Map") as Map
-	_coordination_manager = get_parent().get_node("CoordinationManager")
 	_build_woodcutter_button.pressed.connect(
 		func(): _start_building(WoodcutterHutScene, Vector2i(WoodcutterHut.SIZE_X, WoodcutterHut.SIZE_Y)))
 	_build_builder_button.pressed.connect(
@@ -61,7 +63,7 @@ func _place_building() -> void:
 	for dx in _active_size.x:
 		for dy in _active_size.y:
 			_map.occupied_tiles[Vector2i(top_left.x + dx, top_left.y + dy)] = building
-	building.on_placed(_spawn_parent, _map)
+	building.on_placed(_spawn_parent, _map, _coordination_manager)
 	_coordination_manager.register_building(building)
 	if building is WoodcutterHut or building is Sawmill:
 		_coordination_manager.queue_construction(building)

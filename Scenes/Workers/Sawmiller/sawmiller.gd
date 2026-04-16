@@ -1,5 +1,5 @@
 class_name Sawmiller
-extends Node2D
+extends ResourceCollectorWorker
 
 const WORK_DURATION_MS := 5000.0
 
@@ -10,8 +10,6 @@ enum State { WAIT_FOR_RESOURCE, GO_TO_RESOURCE, GO_HOME, WORK }
 var _state := State.WAIT_FOR_RESOURCE
 var _sawmill: Sawmill = null
 var _map: Map = null
-var _coordination_manager: Node = null
-var _target_pile: ResourcePile = null
 var _work_elapsed := 0.0
 
 func setup(sawmill: Sawmill, map: Map, coordination_manager: Node) -> void:
@@ -23,9 +21,7 @@ func setup(sawmill: Sawmill, map: Map, coordination_manager: Node) -> void:
 func _ready() -> void:
 	_coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.LOG)
 
-func go_collect_resource(pile: ResourcePile) -> void:
-	_target_pile = pile
-	$Worker.navigate_to(pile.global_position)
+func _set_collecting_state() -> void:
 	_state = State.GO_TO_RESOURCE
 
 func _process(delta: float) -> void:

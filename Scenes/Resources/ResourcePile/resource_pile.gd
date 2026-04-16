@@ -33,11 +33,11 @@ func free_count() -> int:
 	_cleanup_reservations()
 	return get_child_count() - _reserved_by.size()
 
-func reserve(collector) -> void:
+func reserve(collector: Node) -> void:
 	_cleanup_reservations()
 	_reserved_by.append(collector)
 
-func collect(collector) -> Node2D:
+func collect(collector: Node) -> Node2D:
 	var idx := _reserved_by.find(collector)
 	if idx >= 0:
 		_reserved_by.remove_at(idx)
