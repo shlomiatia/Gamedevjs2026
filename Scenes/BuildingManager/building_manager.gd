@@ -3,6 +3,7 @@ extends Node2D
 
 const WoodcutterHutScene = preload("res://Scenes/Buildings/WoodcutterHut/WoodcutterHut.tscn")
 const BuilderHutScene = preload("res://Scenes/Buildings/BuilderHut/BuilderHut.tscn")
+const SawmillScene = preload("res://Scenes/Buildings/Sawmill/Sawmill.tscn")
 
 var _map: Map = null
 var _spawn_parent: Node2D = null
@@ -14,6 +15,7 @@ var _coordination_manager: Node = null
 
 @onready var _build_woodcutter_button: Button = $UI/BuildWoodcutterHutButton
 @onready var _build_builder_button: Button = $UI/BuildBuilderHutButton
+@onready var _build_sawmill_button: Button = $UI/BuildSawmillButton
 
 func _ready() -> void:
 	_spawn_parent = get_parent() as Node2D
@@ -23,6 +25,8 @@ func _ready() -> void:
 		func(): _start_building(WoodcutterHutScene, Vector2i(WoodcutterHut.SIZE_X, WoodcutterHut.SIZE_Y)))
 	_build_builder_button.pressed.connect(
 		func(): _start_building(BuilderHutScene, Vector2i(BuilderHut.SIZE_X, BuilderHut.SIZE_Y)))
+	_build_sawmill_button.pressed.connect(
+		func(): _start_building(SawmillScene, Vector2i(Sawmill.SIZE_X, Sawmill.SIZE_Y)))
 
 func _start_building(scene: PackedScene, size: Vector2i) -> void:
 	if _building_mode:
@@ -49,6 +53,8 @@ func _place_building() -> void:
 	var top_left := _get_footprint_top_left()
 	if _is_footprint_blocked(top_left):
 		return
+	if _active_scene == SawmillScene and not _is_adjacent_to_river(top_left):
+		return
 	var building := _active_scene.instantiate()
 	building.position = _footprint_position(top_left)
 	_spawn_parent.add_child(building)
@@ -57,9 +63,12 @@ func _place_building() -> void:
 			_map.occupied_tiles[Vector2i(top_left.x + dx, top_left.y + dy)] = building
 	building.on_placed(_spawn_parent, _map)
 	_coordination_manager.register_building(building)
-	if building is WoodcutterHut:
+	if building is WoodcutterHut or building is Sawmill:
 		_coordination_manager.queue_construction(building)
 	_cancel_building()
+
+func _is_adjacent_to_river(top_left: Vector2i) -> bool:
+	return top_left.y == Map.RIVER_ROW + 1
 
 func _footprint_position(top_left_tile: Vector2i) -> Vector2:
 	var tl := _map.tile_to_world(top_left_tile)
@@ -91,5 +100,8 @@ func _process(_delta: float) -> void:
 
 func _update_preview() -> void:
 	var top_left := _get_footprint_top_left()
+	var blocked := _is_footprint_blocked(top_left)
+	if not blocked and _active_scene == SawmillScene:
+		blocked = not _is_adjacent_to_river(top_left)
 	_preview.position = _footprint_position(top_left)
-	_preview.modulate = Color(1, 0, 0, 0.7) if _is_footprint_blocked(top_left) else Color(0, 1, 0, 0.7)
+	_preview.modulate = Color(1, 0, 0, 0.7) if blocked else Color(0, 1, 0, 0.7)

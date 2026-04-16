@@ -8,7 +8,7 @@ enum State { IDLE, WAIT_FOR_RESOURCE, GO_TO_RESOURCE, GO_TO_SITE, BUILD, GO_HOME
 
 var _state := State.IDLE
 var _path: Array[Vector2] = []
-var _target_hut: WoodcutterHut = null
+var _target_hut: Building = null
 var _target_pile: ResourcePile = null
 var _home_hut: Node2D = null
 var _map: Map = null
@@ -25,12 +25,12 @@ func setup(home_hut: Node2D, map: Map, coordination_manager: Node) -> void:
 func is_free() -> bool:
     return _state == State.IDLE or _state == State.GO_HOME
 
-func assign_build_task(target: WoodcutterHut) -> void:
+func assign_build_task(target: Building) -> void:
     if not is_free():
         return
     _target_hut = target
     _state = State.WAIT_FOR_RESOURCE
-    _coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.LOG)
+    _coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.PLANK)
 
 func go_collect_resource(pile: ResourcePile) -> void:
     _target_pile = pile
@@ -81,7 +81,7 @@ func _do_collect() -> void:
     _target_pile = null
     if log_node == null:
         _state = State.WAIT_FOR_RESOURCE
-        _coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.LOG)
+        _coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.PLANK)
         return
     log_node.position = Vector2(0, -48)
     add_child(log_node)

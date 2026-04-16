@@ -6,7 +6,7 @@ const SIZE_Y := 3
 const BUILDING_NAME := "BuilderHut"
 
 const BuilderScene = preload("res://Scenes/Workers/Builder/Builder.tscn")
-const LogScene = preload("res://Scenes/Resources/Log/Log.tscn")
+const PlankScene = preload("res://Scenes/Resources/Plank/Plank.tscn")
 
 func on_placed(spawn_parent: Node2D, map: Map) -> void:
 	var coordination_manager := spawn_parent.get_node("CoordinationManager")
@@ -17,6 +17,6 @@ func on_placed(spawn_parent: Node2D, map: Map) -> void:
 	builder.setup(self, map, coordination_manager)
 	spawn_parent.add_child(builder)
 
-	$OutputPile.setup(coordination_manager, CoordinationManager.ResourceType.LOG)
-	$OutputPile.add_resource(LogScene)
-	$OutputPile.add_resource(LogScene)
+	$OutputPile.setup(coordination_manager, CoordinationManager.ResourceType.PLANK)
+	$OutputPile.add_resource(PlankScene)
+	$OutputPile.add_resource(PlankScene)
