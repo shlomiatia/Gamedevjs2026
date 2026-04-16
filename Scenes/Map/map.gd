@@ -3,16 +3,38 @@ extends Node2D
 
 const LEVEL_WIDTH := 60
 const LEVEL_HEIGHT := 30
+const RIVER_ROW := 0
+const RIVER_FRAMES := 32
+const RIVER_COLS := 6
+const RIVER_FPS := 10.0
 
 var occupied_tiles: Dictionary = {}
 
 @onready var grass: TileMapLayer = $Grass
-@onready var road: TileMapLayer = $Road
+@onready var river: TileMapLayer = $River
+
+var _river_frame := 0
+var _river_timer := 0.0
 
 func _ready() -> void:
 	for x in LEVEL_WIDTH:
 		for y in LEVEL_HEIGHT:
 			grass.set_cell(Vector2i(x, y), 0, Vector2i(0, 0))
+
+	for x in LEVEL_WIDTH:
+		river.set_cell(Vector2i(x, RIVER_ROW), 0, Vector2i(0, 0))
+		grass.set_cell(Vector2i(x, RIVER_ROW), 0, Vector2i(0, 1))
+		occupied_tiles[Vector2i(x, RIVER_ROW)] = true
+
+func _process(delta: float) -> void:
+	_river_timer += delta
+	if _river_timer >= 1.0 / RIVER_FPS:
+		_river_timer -= 1.0 / RIVER_FPS
+		_river_frame = (_river_frame + 1) % RIVER_FRAMES
+		var col := _river_frame % RIVER_COLS
+		var row := _river_frame / RIVER_COLS
+		for x in LEVEL_WIDTH:
+			river.set_cell(Vector2i(x, RIVER_ROW), 0, Vector2i(col, row))
 
 func get_tile_size() -> Vector2i:
 	return grass.tile_set.tile_size
