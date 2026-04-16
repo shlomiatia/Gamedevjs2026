@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scenes/CoordinationManager/coordination_manager.gd" id="1_script"]
+
+[node name="CoordinationManager" type="Node"]
+script = ExtResource("1_script")

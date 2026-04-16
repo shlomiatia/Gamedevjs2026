@@ -4,26 +4,32 @@ extends Node2D
 const MOVE_SPEED := 160.0
 const BUILD_DURATION_MS := 5000.0
 
-enum State {IDLE, GO_TO_PICKUP, GO_TO_SITE, BUILD, GO_HOME}
+enum State { IDLE, GO_TO_PICKUP, GO_TO_SITE, BUILD, GO_HOME }
 
 var _state := State.IDLE
 var _path: Array[Vector2] = []
 var _target_hut: WoodcutterHut = null
 var _home_hut: Node2D = null
 var _building_manager: Node2D = null
+var _coordination_manager: Node = null
 var _grass_layer: TileMapLayer = null
 var _tile_size: Vector2i
 var _build_elapsed := 0.0
 var _carried_log: Node2D = null
 
-func setup(home_hut: Node2D, building_manager: Node2D, grass_layer: TileMapLayer, tile_size: Vector2i) -> void:
+func setup(home_hut: Node2D, building_manager: Node2D, grass_layer: TileMapLayer, coordination_manager: Node, tile_size: Vector2i) -> void:
     _home_hut = home_hut
     _building_manager = building_manager
     _grass_layer = grass_layer
+    _coordination_manager = coordination_manager
     _tile_size = tile_size
+    coordination_manager.register_builder(self)
+
+func is_free() -> bool:
+    return _state == State.IDLE or _state == State.GO_HOME
 
 func assign_build_task(target: WoodcutterHut) -> void:
-    if _state != State.IDLE:
+    if not is_free():
         return
     _target_hut = target
     _navigate_to(_home_world_pos())
@@ -75,24 +81,23 @@ func _on_path_finished() -> void:
             _build_elapsed = 0.0
         State.GO_HOME:
             _state = State.IDLE
-            _target_hut = null
 
 func _do_pickup() -> void:
     var output_pile: Node2D = _home_hut.get_node("OutputPile")
     if output_pile.get_child_count() == 0:
         _state = State.IDLE
         return
-    var log := output_pile.get_child(output_pile.get_child_count() - 1)
-    output_pile.remove_child(log)
-    log.position = Vector2(0, -48)
-    add_child(log)
-    _carried_log = log
+    var log_node := output_pile.get_child(output_pile.get_child_count() - 1)
+    output_pile.remove_child(log_node)
+    log_node.position = Vector2(0, -48)
+    add_child(log_node)
+    _carried_log = log_node
     _navigate_to(_site_world_pos())
     _state = State.GO_TO_SITE
 
 func _do_build(delta: float) -> void:
     _build_elapsed += delta * 1000.0
-    var progress := clampf(_build_elapsed / BUILD_DURATION_MS, 0.0, 1.0)
+    var progress: float = clampf(_build_elapsed / BUILD_DURATION_MS, 0.0, 1.0)
     _target_hut.set_construction_progress(progress)
     if progress >= 1.0:
         _finish_build()
@@ -102,8 +107,11 @@ func _finish_build() -> void:
         _carried_log.queue_free()
         _carried_log = null
     _target_hut.complete_construction()
+    _target_hut = null
     _state = State.GO_HOME
-    _navigate_to(_home_world_pos())
+    _coordination_manager.notify_idle_builder(self)
+    if _state == State.GO_HOME:
+        _navigate_to(_home_world_pos())
 
 # A* pathfinding on the tile grid
 func _astar(from: Vector2i, to: Vector2i) -> Array[Vector2i]:
@@ -145,7 +153,6 @@ func _astar(from: Vector2i, to: Vector2i) -> Array[Vector2i]:
                 if not open_set.has(neighbor):
                     open_set.append(neighbor)
 
-    # No path found: fall back to direct destination
     return [to]
 
 func _heuristic(a: Vector2i, b: Vector2i) -> float:
