@@ -88,5 +88,5 @@ func _finish_work() -> void:
 		_carried_log = null
 	var output_pile := _sawmill.get_node("OutputPile") as ResourcePile
 	output_pile.add_resource(PlankScene)
-	_coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.LOG)
 	_state = State.WAIT_FOR_RESOURCE
+	_coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.LOG)
