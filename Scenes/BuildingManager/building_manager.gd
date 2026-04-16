@@ -4,8 +4,6 @@ var occupied_tiles: Dictionary = {}
 
 const WoodcutterHutScene = preload("res://Scenes/Buildings/WoodcutterHut/WoodcutterHut.tscn")
 const BuilderHutScene = preload("res://Scenes/Buildings/BuilderHut/BuilderHut.tscn")
-const BuilderScene = preload("res://Scenes/Workers/Builder/Builder.tscn")
-const LogScene = preload("res://Scenes/Resources/Log/Log.tscn")
 
 var _grass_layer: TileMapLayer
 var _spawn_parent: Node2D
@@ -54,25 +52,8 @@ func _place_building() -> void:
     for dx in _active_size.x:
         for dy in _active_size.y:
             occupied_tiles[Vector2i(mouse_tile.x + dx, mouse_tile.y + dy)] = building
-    if _active_scene == BuilderHutScene:
-        _spawn_builder_hut_extras(building_pos)
+    building.on_placed(_spawn_parent, _tile_size)
     _cancel_building()
-
-func _spawn_builder_hut_extras(building_pos: Vector2) -> void:
-    var below_center := building_pos + Vector2(0.0, _tile_size.y / 2.0)
-
-    var builder := BuilderScene.instantiate()
-    builder.position = below_center
-    _spawn_parent.add_child(builder)
-
-    var log_tile := below_center + Vector2(_tile_size.x, 0.0)
-    var log1 := LogScene.instantiate()
-    log1.position = log_tile
-    _spawn_parent.add_child(log1)
-
-    var log2 := LogScene.instantiate()
-    log2.position = log_tile + Vector2(0.0, -Log.SPACE)
-    _spawn_parent.add_child(log2)
 
 func _get_mouse_tile() -> Vector2i:
     return _grass_layer.local_to_map(_grass_layer.get_local_mouse_position())

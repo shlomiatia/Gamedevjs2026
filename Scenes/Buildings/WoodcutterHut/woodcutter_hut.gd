@@ -1,5 +1,5 @@
 class_name WoodcutterHut
-extends Node2D
+extends Building
 
 const SIZE_X := 5
 const SIZE_Y := 3

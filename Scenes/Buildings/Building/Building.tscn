@@ -1,12 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://by6qam4q8r3s7"]
+[gd_scene load_steps=5 format=3 uid="uid://bap1qcvbb4owg"]
 
-[ext_resource type="Script" path="res://Scenes/Buildings/BuilderHut/builder_hut.gd" id="1_script"]
+[ext_resource type="Script" path="res://Scenes/Buildings/Building/building.gd" id="1_building_script"]
 [ext_resource type="Texture2D" uid="uid://cdkpe3hq6o048" path="res://Textures/house.png" id="2_house"]
 [ext_resource type="PackedScene" uid="uid://c7e72ujaqkmo7" path="res://Scenes/Resources/ResourcePile/ResourcePile.tscn" id="3_pile"]
 
-[node name="BuilderHut" type="Node2D"]
-script = ExtResource("1_script")
-building_name = "BuilderHut"
+[node name="Building" type="Node2D"]
+script = ExtResource("1_building_script")
+building_name = ""
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_house")

@@ -7,11 +7,14 @@ Every scene lives in its own subfolder under `Scenes/`, named after the scene:
 ```
 Scenes/
   Buildings/      ← building scenes
+    Building/     ← base building scene (inherited by all buildings)
+      Building.tscn
+      building.gd
     WoodcutterHut/
-      WoodcutterHut.tscn
+      WoodcutterHut.tscn  ← inherits Building.tscn
       woodcutter_hut.gd
     BuilderHut/
-      BuilderHut.tscn
+      BuilderHut.tscn     ← inherits Building.tscn
       builder_hut.gd
   Workers/        ← worker/unit scenes
     Builder/
@@ -19,6 +22,10 @@ Scenes/
   Resources/      ← resource item scenes
     Log/
       Log.tscn
+      log.gd
+    ResourcePile/
+      ResourcePile.tscn
+      resource_pile.gd
   Tree/
     Tree.tscn
   Camera/
@@ -34,7 +41,11 @@ Scenes/
 
 **Category subfolders:** Group related scenes under a category folder (`Buildings/`, `Workers/`, `Resources/`). Each scene still gets its own named subfolder within the category.
 
-**Buildings standard:** Building scripts use `class_name` so constants (`SIZE_X`, `SIZE_Y`, `BUILDING_NAME`) are globally accessible without a preload.
+**Buildings standard:** All buildings inherit `Building.tscn`. Building scripts extend `Building` (class_name) and define constants (`SIZE_X`, `SIZE_Y`, `BUILDING_NAME`). Building-specific placement logic goes in `on_placed(spawn_parent, tile_size)` — override in the building's script.
+
+**Building base scene layout:** Sprite2D at (0, -104), NameLabel at (-100, -225), InputPile (ResourcePile) at (-32, 16), OutputPile (ResourcePile) at (32, 16). The `building_name` export sets the label text.
+
+**ResourcePile:** Node2D with y_sort disabled. Call `add_resource(scene)` to push a resource onto the pile; each successive resource is stacked `SPACE` (8) px above the previous.
 
 ---
 
