@@ -1,3 +1,4 @@
+class_name BuildingManager
 extends Node2D
 
 var occupied_tiles: Dictionary = {}
@@ -13,6 +14,8 @@ var _preview: Node2D = null
 var _active_scene: PackedScene = null
 var _active_size: Vector2i = Vector2i.ZERO
 
+var _builders: Array = []
+
 @onready var _build_woodcutter_button: Button = $UI/BuildWoodcutterHutButton
 @onready var _build_builder_button: Button = $UI/BuildBuilderHutButton
 
@@ -24,6 +27,9 @@ func _ready() -> void:
         func(): _start_building(WoodcutterHutScene, Vector2i(WoodcutterHut.SIZE_X, WoodcutterHut.SIZE_Y)))
     _build_builder_button.pressed.connect(
         func(): _start_building(BuilderHutScene, Vector2i(BuilderHut.SIZE_X, BuilderHut.SIZE_Y)))
+
+func register_builder(builder: Builder) -> void:
+    _builders.append(builder)
 
 func _start_building(scene: PackedScene, size: Vector2i) -> void:
     if _building_mode:
@@ -53,7 +59,15 @@ func _place_building() -> void:
         for dy in _active_size.y:
             occupied_tiles[Vector2i(mouse_tile.x + dx, mouse_tile.y + dy)] = building
     building.on_placed(_spawn_parent, _tile_size)
+    if building is WoodcutterHut:
+        _assign_builder(building)
     _cancel_building()
+
+func _assign_builder(target: WoodcutterHut) -> void:
+    for builder in _builders:
+        if (builder as Builder)._state == Builder.State.IDLE:
+            (builder as Builder).assign_build_task(target)
+            return
 
 func _get_mouse_tile() -> Vector2i:
     return _grass_layer.local_to_map(_grass_layer.get_local_mouse_position())
