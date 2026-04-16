@@ -17,6 +17,8 @@ func on_placed(spawn_parent: Node2D, map: Map) -> void:
     $NameLabel.visible = false
     $InputPile.visible = false
     $OutputPile.visible = false
+    var coordination_manager := spawn_parent.get_node("CoordinationManager")
+    $OutputPile.setup(coordination_manager, CoordinationManager.ResourceType.LOG)
     set_construction_progress(0.01)
 
 func set_construction_progress(progress: float) -> void:
@@ -43,6 +45,5 @@ func complete_construction() -> void:
     $OutputPile.visible = true
     var woodcutter := WoodcutterScene.instantiate() as Woodcutter
     woodcutter.position = position + Vector2(0.0, float(_map.get_tile_size().y) * 0.5)
-    var coordination_manager := _spawn_parent.get_node("CoordinationManager")
-    woodcutter.setup(self, _map, coordination_manager)
+    woodcutter.setup(self, _map)
     _spawn_parent.add_child(woodcutter)
