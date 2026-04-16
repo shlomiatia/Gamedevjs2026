@@ -14,15 +14,17 @@ var _state := State.IDLE
 var _path: Array[Vector2] = []
 var _woodcutter_hut: WoodcutterHut = null
 var _map: Map = null
+var _coordination_manager: Node = null
 var _target_tree: GameTree = null
 var _target_tree_tile: Vector2i
 var _chop_elapsed := 0.0
 var _carried_log: Node2D = null
 var _idle_timer := 0.0
 
-func setup(woodcutter_hut: WoodcutterHut, map: Map) -> void:
+func setup(woodcutter_hut: WoodcutterHut, map: Map, coordination_manager: Node) -> void:
 	_woodcutter_hut = woodcutter_hut
 	_map = map
+	_coordination_manager = coordination_manager
 
 func _process(delta: float) -> void:
 	match _state:
@@ -107,6 +109,7 @@ func _try_deposit() -> void:
 		remove_child(_carried_log)
 		output_pile.add_existing_resource(_carried_log)
 		_carried_log = null
+		_coordination_manager.notify_free_resource(CoordinationManager.ResourceType.LOG)
 	_state = State.IDLE
 
 func _on_path_finished() -> void:

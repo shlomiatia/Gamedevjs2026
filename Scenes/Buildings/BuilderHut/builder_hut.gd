@@ -19,3 +19,5 @@ func on_placed(spawn_parent: Node2D, map: Map) -> void:
 
 	$OutputPile.add_resource(LogScene)
 	$OutputPile.add_resource(LogScene)
+	coordination_manager.notify_free_resource(CoordinationManager.ResourceType.LOG)
+	coordination_manager.notify_free_resource(CoordinationManager.ResourceType.LOG)
