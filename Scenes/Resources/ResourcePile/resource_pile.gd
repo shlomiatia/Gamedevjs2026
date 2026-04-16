@@ -7,3 +7,7 @@ func add_resource(scene: PackedScene) -> void:
     var resource := scene.instantiate()
     resource.position = Vector2(0, -get_child_count() * SPACE)
     add_child(resource)
+
+func add_existing_resource(node: Node2D) -> void:
+    node.position = Vector2(0, -get_child_count() * SPACE)
+    add_child(node)

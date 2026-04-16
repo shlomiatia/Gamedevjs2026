@@ -9,10 +9,14 @@ const WoodcutterScene = preload("res://Scenes/Workers/Woodcutter/Woodcutter.tscn
 
 var _spawn_parent: Node2D = null
 var _tile_size: Vector2i
+var _building_manager: Node2D = null
+var _grass_layer: TileMapLayer = null
 
 func on_placed(spawn_parent: Node2D, tile_size: Vector2i) -> void:
 	_spawn_parent = spawn_parent
 	_tile_size = tile_size
+	_building_manager = spawn_parent.get_node("BuildingManager")
+	_grass_layer = spawn_parent.get_node("Grass")
 	$NameLabel.visible = false
 	$InputPile.visible = false
 	$OutputPile.visible = false
@@ -27,7 +31,6 @@ func set_construction_progress(progress: float) -> void:
 	var shown_height := tex_height * progress
 	sprite.region_enabled = true
 	sprite.region_rect = Rect2(0.0, tex_height - shown_height, tex_width, shown_height)
-	# Keep the bottom of the sprite fixed at y = -104 + tex_height/2
 	var original_bottom_y := -104.0 + tex_height / 2.0
 	sprite.position = Vector2(0.0, original_bottom_y - shown_height / 2.0)
 
@@ -37,6 +40,7 @@ func complete_construction() -> void:
 	$NameLabel.visible = true
 	$InputPile.visible = true
 	$OutputPile.visible = true
-	var woodcutter := WoodcutterScene.instantiate()
+	var woodcutter := WoodcutterScene.instantiate() as Woodcutter
 	woodcutter.position = position + Vector2(0.0, float(_tile_size.y) * 0.5)
+	woodcutter.setup(self, _building_manager, _grass_layer, _tile_size)
 	_spawn_parent.add_child(woodcutter)
