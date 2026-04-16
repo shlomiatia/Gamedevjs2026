@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://by6qam4q8r3s7"]
+[gd_scene load_steps=4 format=3 uid="uid://by6qam4q8r3s7"]
 
-[ext_resource type="Script" path="res://Scenes/Buildings/BuilderHut/builder_hut.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://clty1or7v0xl6" path="res://Scenes/Buildings/BuilderHut/builder_hut.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cdkpe3hq6o048" path="res://Textures/house.png" id="2_house"]
 [ext_resource type="PackedScene" uid="uid://c7e72ujaqkmo7" path="res://Scenes/Resources/ResourcePile/ResourcePile.tscn" id="3_pile"]
 
@@ -9,14 +9,15 @@ script = ExtResource("1_script")
 building_name = "BuilderHut"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_house")
 position = Vector2(0, -104)
+texture = ExtResource("2_house")
 
 [node name="NameLabel" type="Label" parent="."]
-position = Vector2(-100, -225)
-size = Vector2(200, 26)
+offset_left = -100.0
+offset_top = -225.0
+offset_right = 100.0
+offset_bottom = -199.0
 horizontal_alignment = 1
-text = ""
 
 [node name="InputPile" parent="." instance=ExtResource("3_pile")]
 position = Vector2(-32, 16)
