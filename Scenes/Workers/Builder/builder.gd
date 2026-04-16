@@ -55,6 +55,7 @@ func _on_path_finished() -> void:
             _build_elapsed = 0.0
         State.GO_HOME:
             _state = State.IDLE
+            _coordination_manager.notify_idle_builder(self)
 
 func _do_collect() -> void:
     var resource := _target_pile.collect(self)
@@ -81,6 +82,4 @@ func _finish_build() -> void:
     _target_hut.complete_construction()
     _target_hut = null
     _state = State.GO_HOME
-    _coordination_manager.notify_idle_builder(self)
-    if _state == State.GO_HOME:
-        $Worker.navigate_to($Worker.home_world_pos())
+    $Worker.navigate_to($Worker.home_world_pos())

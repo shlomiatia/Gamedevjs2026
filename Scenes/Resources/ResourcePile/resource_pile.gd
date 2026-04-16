@@ -26,10 +26,15 @@ func _notify_new_resource() -> void:
 	if _coordination_manager != null and _resource_type >= 0:
 		_coordination_manager.notify_free_resource(_resource_type)
 
+func _cleanup_reservations() -> void:
+	_reserved_by = _reserved_by.filter(func(c): return is_instance_valid(c))
+
 func free_count() -> int:
+	_cleanup_reservations()
 	return get_child_count() - _reserved_by.size()
 
 func reserve(collector) -> void:
+	_cleanup_reservations()
 	_reserved_by.append(collector)
 
 func collect(collector) -> Node2D:

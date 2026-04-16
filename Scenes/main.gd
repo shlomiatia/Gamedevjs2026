@@ -31,3 +31,4 @@ func _spawn_trees() -> void:
 		tree.position = _map.tile_to_world(tile_pos) + Vector2(0, tile_size.y / 2.0)
 		add_child(tree)
 		_map.occupied_tiles[tile_pos] = tree
+		_map.trees[tile_pos] = tree

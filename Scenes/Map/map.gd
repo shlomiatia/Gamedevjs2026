@@ -9,6 +9,7 @@ const RIVER_COLS := 6
 const RIVER_FPS := 10.0
 
 var occupied_tiles: Dictionary = {}
+var trees: Dictionary = {}
 
 @onready var grass: TileMapLayer = $Grass
 @onready var river: TileMapLayer = $River
@@ -62,34 +63,65 @@ func _astar(from: Vector2i, to: Vector2i) -> Array[Vector2i]:
 		return [to]
 
 	var bounds := grass.get_used_rect()
-	var open_set: Array[Vector2i] = [from]
+	var open_heap: Array = [[_heuristic(from, to), from]]
 	var came_from: Dictionary = {}
 	var g_score: Dictionary = {from: 0.0}
-	var f_score: Dictionary = {from: _heuristic(from, to)}
-	var iterations := 0
+	var closed: Dictionary = {}
 
-	while not open_set.is_empty() and iterations < 10000:
-		iterations += 1
-		var current_idx := 0
-		for i in open_set.size():
-			if f_score.get(open_set[i], INF) < f_score.get(open_set[current_idx], INF):
-				current_idx = i
-		var current: Vector2i = open_set[current_idx]
+	while not open_heap.is_empty():
+		var entry: Array = _heap_pop(open_heap)
+		var current: Vector2i = entry[1]
+		if closed.has(current):
+			continue
+		closed[current] = true
 		if current == to:
 			return _reconstruct_path(came_from, current)
-		open_set.remove_at(current_idx)
 		for neighbor in _get_neighbors(current, bounds):
 			if occupied_tiles.has(neighbor) and neighbor != to:
+				continue
+			if closed.has(neighbor):
 				continue
 			var tentative_g: float = g_score.get(current, INF) + 1.0
 			if tentative_g < g_score.get(neighbor, INF):
 				came_from[neighbor] = current
 				g_score[neighbor] = tentative_g
-				f_score[neighbor] = tentative_g + _heuristic(neighbor, to)
-				if not open_set.has(neighbor):
-					open_set.append(neighbor)
+				_heap_push(open_heap, [tentative_g + _heuristic(neighbor, to), neighbor])
 
 	return [to]
+
+func _heap_push(heap: Array, entry: Array) -> void:
+	heap.append(entry)
+	var i := heap.size() - 1
+	while i > 0:
+		var parent := (i - 1) / 2
+		if heap[parent][0] <= heap[i][0]:
+			break
+		var tmp = heap[parent]
+		heap[parent] = heap[i]
+		heap[i] = tmp
+		i = parent
+
+func _heap_pop(heap: Array) -> Array:
+	var top = heap[0]
+	var last = heap.pop_back()
+	if not heap.is_empty():
+		heap[0] = last
+		var i := 0
+		while true:
+			var left := 2 * i + 1
+			var right := 2 * i + 2
+			var smallest := i
+			if left < heap.size() and heap[left][0] < heap[smallest][0]:
+				smallest = left
+			if right < heap.size() and heap[right][0] < heap[smallest][0]:
+				smallest = right
+			if smallest == i:
+				break
+			var tmp = heap[smallest]
+			heap[smallest] = heap[i]
+			heap[i] = tmp
+			i = smallest
+	return top
 
 func _heuristic(a: Vector2i, b: Vector2i) -> float:
 	return float(abs(a.x - b.x) + abs(a.y - b.y))

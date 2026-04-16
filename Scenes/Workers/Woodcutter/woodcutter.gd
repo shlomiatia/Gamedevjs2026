@@ -53,11 +53,8 @@ func _try_find_tree(delta: float) -> void:
 	var best_dist := INF
 	var best_tile := Vector2i.ZERO
 
-	for tile: Vector2i in _map.occupied_tiles:
-		var obj = _map.occupied_tiles[tile]
-		if not (obj is GameTree):
-			continue
-		var tree := obj as GameTree
+	for tile: Vector2i in _map.trees:
+		var tree := _map.trees[tile] as GameTree
 		if tree.targeted:
 			continue
 		var dist: float = tree.position.distance_to(_woodcutter_hut.position)
@@ -87,6 +84,7 @@ func _do_chop(delta: float) -> void:
 
 func _finish_chop() -> void:
 	_map.occupied_tiles.erase(_target_tree_tile)
+	_map.trees.erase(_target_tree_tile)
 	_target_tree.queue_free()
 	_target_tree = null
 
