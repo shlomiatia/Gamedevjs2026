@@ -9,9 +9,11 @@ const TreeScene = preload("res://Scenes/Tree/Tree.tscn")
 
 var trees: Dictionary = {}
 var _map: Map = null
+var _spawn_parent: Node2D = null
 
-func setup(map: Map) -> void:
+func setup(map: Map, spawn_parent: Node2D) -> void:
 	_map = map
+	_spawn_parent = spawn_parent
 	_spawn_trees()
 
 func _spawn_trees() -> void:
@@ -31,7 +33,7 @@ func _spawn_trees() -> void:
 			continue
 		var tree := TreeScene.instantiate() as GameTree
 		tree.position = _map.tile_to_world(tile_pos) + Vector2(0, tile_size.y / 2.0)
-		add_child(tree)
+		_spawn_parent.add_child(tree)
 		_map.occupied_tiles[tile_pos] = tree
 		trees[tile_pos] = tree
 

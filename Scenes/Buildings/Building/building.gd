@@ -41,6 +41,9 @@ func set_construction_progress(progress: float) -> void:
 	var original_bottom_y := SPRITE_OFFSET_Y + tex_height / 2.0
 	sprite.position = Vector2(0.0, original_bottom_y - shown_height / 2.0)
 
+func on_worker_died() -> void:
+	modulate = Color(0.45, 0.45, 0.45)
+
 func complete_construction() -> void:
 	$Sprite2D.region_enabled = false
 	$Sprite2D.position = Vector2(0, SPRITE_OFFSET_Y)

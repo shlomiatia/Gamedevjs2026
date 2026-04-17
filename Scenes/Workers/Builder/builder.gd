@@ -17,6 +17,11 @@ func setup(home_hut: Node2D, map: Map, coordination_manager: Node) -> void:
 	_coordination_manager = coordination_manager
 	$Worker.setup(home_hut, map)
 	coordination_manager.register_builder(self)
+	$Worker.died.connect(func():
+		_coordination_manager.deregister_builder(self)
+		(_home_hut as Building).on_worker_died()
+		queue_free()
+	)
 
 func is_free() -> bool:
 	return _state == State.IDLE or _state == State.GO_HOME

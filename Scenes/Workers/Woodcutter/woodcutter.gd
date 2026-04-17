@@ -23,6 +23,10 @@ func setup(woodcutter_hut: WoodcutterHut, map: Map, forest: Forest) -> void:
 	_map = map
 	_forest = forest
 	$Worker.setup(woodcutter_hut, map)
+	$Worker.died.connect(func():
+		_woodcutter_hut.on_worker_died()
+		queue_free()
+	)
 
 func _process(delta: float) -> void:
 	match _state:

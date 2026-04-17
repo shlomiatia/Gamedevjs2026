@@ -17,6 +17,10 @@ func setup(sawmill: Sawmill, map: Map, coordination_manager: Node) -> void:
 	_map = map
 	_coordination_manager = coordination_manager
 	$Worker.setup(sawmill, map)
+	$Worker.died.connect(func():
+		_sawmill.on_worker_died()
+		queue_free()
+	)
 
 func _ready() -> void:
 	_coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.LOG)

@@ -9,8 +9,11 @@ const BAR_WIDTH := 32.0
 const BAR_HEIGHT := 4.0
 const BAR_Y := -68.0
 
+signal died
+
 var move_speed := 80.0
 var hunger := MAX_HUNGER
+var _is_dead := false
 
 var _home: Node2D = null
 var _map: Map = null
@@ -63,8 +66,14 @@ func is_pile_full(pile: ResourcePile, capacity: int) -> bool:
 	return pile.get_child_count() >= capacity
 
 func _process(delta: float) -> void:
+	if _is_dead:
+		return
 	var drain := HUNGER_DRAIN_WALKING if not _path.is_empty() else HUNGER_DRAIN_IDLE
 	hunger = maxf(0.0, hunger - drain * delta)
+	if hunger == 0.0:
+		_is_dead = true
+		died.emit()
+		return
 	queue_redraw()
 
 func _draw() -> void:

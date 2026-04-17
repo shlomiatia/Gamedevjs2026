@@ -1,6 +1,8 @@
 class_name CoordinationManager
 extends Node
 
+signal game_over
+
 enum ResourceType { LOG, PLANK, APPLE }
 
 var _builders: Array = []
@@ -18,6 +20,11 @@ func _ready() -> void:
 func register_builder(builder: Builder) -> void:
 	_builders.append(builder)
 	notify_idle_builder(builder)
+
+func deregister_builder(builder: Builder) -> void:
+	_builders.erase(builder)
+	if _builders.is_empty():
+		game_over.emit()
 
 func register_building(building: Node2D) -> void:
 	_buildings.append(building)

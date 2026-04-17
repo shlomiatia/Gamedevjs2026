@@ -23,6 +23,10 @@ func setup(apple_farm: AppleFarm, map: Map, forest: Forest) -> void:
 	_map = map
 	_forest = forest
 	$Worker.setup(apple_farm, map)
+	$Worker.died.connect(func():
+		_apple_farm.on_worker_died()
+		queue_free()
+	)
 
 func _process(delta: float) -> void:
 	match _state:
