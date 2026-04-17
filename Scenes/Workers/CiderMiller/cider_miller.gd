@@ -75,7 +75,7 @@ func _finish_work() -> void:
 	var apple_node: Node2D = $Worker.drop()
 	if apple_node:
 		apple_node.queue_free()
-	var output_pile := _cider_mill.get_node("OutputPile") as ResourcePile
+	var output_pile := _cider_mill.get_node("Building/OutputPile") as ResourcePile
 	output_pile.add_resource(CiderScene)
 	_state = State.WAIT_FOR_RESOURCE
 	_coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.APPLE)

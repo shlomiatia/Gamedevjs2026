@@ -6,12 +6,12 @@ const BUILD_DURATION_MS := 5000.0
 enum State { IDLE, WAIT_FOR_RESOURCE_GO_HOME, WAIT_FOR_RESOURCE_IDLE, GO_TO_RESOURCE, GO_TO_SITE, BUILD, GO_HOME }
 
 var _state := State.IDLE
-var _target_hut: Building = null
-var _home_hut: Node2D = null
+var _target_hut = null
+var _home_hut: BuilderHut = null
 var _map: Map = null
 var _build_elapsed := 0.0
 
-func setup(home_hut: Node2D, map: Map, coordination_manager: Node) -> void:
+func setup(home_hut: BuilderHut, map: Map, coordination_manager: Node) -> void:
     _home_hut = home_hut
     _map = map
     _coordination_manager = coordination_manager
@@ -20,14 +20,14 @@ func setup(home_hut: Node2D, map: Map, coordination_manager: Node) -> void:
     coordination_manager.register_builder(self)
     $Worker.died.connect(func():
         _coordination_manager.deregister_builder(self)
-        (_home_hut as Building).on_worker_died()
+        _home_hut.on_worker_died()
         queue_free()
     )
 
 func is_free() -> bool:
     return _state == State.IDLE or _state == State.GO_HOME
 
-func assign_build_task(target: Building) -> void:
+func assign_build_task(target) -> void:
     if not is_free():
         return
     _target_hut = target

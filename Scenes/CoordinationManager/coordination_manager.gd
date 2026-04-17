@@ -34,7 +34,7 @@ func register_building(building: Node2D) -> void:
 
 # --- Construction queue ---
 
-func queue_construction(target: Building) -> void:
+func queue_construction(target: Node2D) -> void:
 	var builder := _find_closest_free_builder(target.position)
 	if builder != null:
 		builder.assign_build_task(target)
@@ -44,7 +44,7 @@ func queue_construction(target: Building) -> void:
 func notify_idle_builder(builder: Builder) -> void:
 	if _construction_queue.is_empty():
 		return
-	var target := _construction_queue.pop_front() as Building
+	var target = _construction_queue.pop_front()
 	builder.assign_build_task(target)
 
 # --- Resource collection queue ---
@@ -129,16 +129,16 @@ func _get_pile_for_type(building: Node2D, resource_type: int) -> ResourcePile:
 	match resource_type:
 		ResourceType.LOG:
 			if building is WoodcutterHut:
-				return building.get_node_or_null("OutputPile") as ResourcePile
+				return building.get_node_or_null("Building/OutputPile") as ResourcePile
 		ResourceType.PLANK:
 			if building is Sawmill or building is BuilderHut:
-				return building.get_node_or_null("OutputPile") as ResourcePile
+				return building.get_node_or_null("Building/OutputPile") as ResourcePile
 		ResourceType.APPLE:
 			if building is AppleFarm:
-				return building.get_node_or_null("OutputPile") as ResourcePile
+				return building.get_node_or_null("Building/OutputPile") as ResourcePile
 		ResourceType.CIDER:
 			if building is CiderMill:
-				return building.get_node_or_null("OutputPile") as ResourcePile
+				return building.get_node_or_null("Building/OutputPile") as ResourcePile
 	return null
 
 func _find_nearest_drink_pile(from_pos: Vector2) -> ResourcePile:

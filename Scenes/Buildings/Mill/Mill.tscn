@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4m1ll0c0mp01"]
+
+[ext_resource type="Script" path="res://Scenes/Buildings/Mill/mill.gd" id="1_mill_script"]
+[ext_resource type="Texture2D" uid="uid://cag3erqh0pxxx" path="res://Textures/watermill.png" id="2_watermill"]
+
+[node name="Mill" type="Node2D"]
+script = ExtResource("1_mill_script")
+
+[node name="WatermillSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_watermill")

@@ -1,31 +1,11 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://Scenes/Buildings/Sawmill/sawmill.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://cdkpe3hq6o048" path="res://Textures/house.png" id="2_house"]
-[ext_resource type="Texture2D" uid="uid://cag3erqh0pxxx" path="res://Textures/watermill.png" id="3_mill"]
-[ext_resource type="PackedScene" uid="uid://c7e72ujaqkmo7" path="res://Scenes/Resources/ResourcePile/ResourcePile.tscn" id="4_pile"]
+[ext_resource type="PackedScene" uid="uid://bap1qcvbb4owg" path="res://Scenes/Buildings/Building/Building.tscn" id="2_building"]
 
 [node name="Sawmill" type="Node2D"]
 script = ExtResource("1_script")
+
+[node name="Building" parent="." instance=ExtResource("2_building")]
 building_name = "Sawmill"
-
-[node name="WatermillSprite" type="Sprite2D" parent="."]
-position = Vector2(48, -96)
-texture = ExtResource("3_mill")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -104)
-texture = ExtResource("2_house")
-
-[node name="NameLabel" type="Label" parent="."]
-offset_left = -100.0
-offset_top = -225.0
-offset_right = 100.0
-offset_bottom = -199.0
-horizontal_alignment = 1
-
-[node name="InputPile" parent="." instance=ExtResource("4_pile")]
-position = Vector2(-32, 16)
-
-[node name="OutputPile" parent="." instance=ExtResource("4_pile")]
-position = Vector2(32, 16)
+has_mill = true

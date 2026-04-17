@@ -1,5 +1,5 @@
 class_name AppleFarm
-extends Building
+extends Node2D
 
 const SIZE_X := 5
 const SIZE_Y := 3
@@ -7,14 +7,28 @@ const BUILDING_NAME := "AppleFarm"
 
 const AppleFarmerScene = preload("res://Scenes/Workers/AppleFarmer/AppleFarmer.tscn")
 
+var _spawn_parent: Node2D = null
+var _map: Map = null
+var _forest: Forest = null
+var _coordination_manager: Node = null
+
 func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, forest: Forest) -> void:
-	super.on_placed(spawn_parent, map, coordination_manager, forest)
-	$OutputPile.setup(coordination_manager, CoordinationManager.ResourceType.APPLE)
-	_start_construction()
+	_spawn_parent = spawn_parent
+	_map = map
+	_forest = forest
+	_coordination_manager = coordination_manager
+	$Building.get_output_pile().setup(coordination_manager, CoordinationManager.ResourceType.APPLE)
+	$Building.start_construction()
+
+func set_construction_progress(progress: float) -> void:
+	$Building.set_construction_progress(progress)
 
 func complete_construction() -> void:
-	super.complete_construction()
+	$Building.complete_construction()
 	var farmer := AppleFarmerScene.instantiate() as AppleFarmer
 	farmer.position = position + Vector2(0.0, float(_map.get_tile_size().y) * 0.5)
 	farmer.setup(self, _map, _forest, _coordination_manager)
 	_spawn_parent.add_child(farmer)
+
+func on_worker_died() -> void:
+	$Building.on_worker_died()

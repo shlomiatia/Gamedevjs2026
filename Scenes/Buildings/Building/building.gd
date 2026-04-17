@@ -1,31 +1,21 @@
-class_name Building
+class_name BuildingComponent
 extends Node2D
 
 const SPRITE_OFFSET_Y := -104.0
 
+@export var has_mill: bool = false
 @export var building_name: String = "":
 	set(value):
 		building_name = value
 		if is_node_ready():
 			$NameLabel.text = value
 
-var _spawn_parent: Node2D = null
-var _map: Map = null
-var _coordination_manager: Node = null
-var _forest: Forest = null
-
 func _ready() -> void:
 	$NameLabel.text = building_name
+	$Mill.visible = false
 
-func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, forest: Forest) -> void:
-	_spawn_parent = spawn_parent
-	_map = map
-	_coordination_manager = coordination_manager
-	_forest = forest
-
-func _start_construction() -> void:
+func start_construction() -> void:
 	$NameLabel.visible = false
-	$InputPile.visible = false
 	$OutputPile.visible = false
 	set_construction_progress(0.01)
 
@@ -40,13 +30,24 @@ func set_construction_progress(progress: float) -> void:
 	sprite.region_rect = Rect2(0.0, tex_height - shown_height, tex_width, shown_height)
 	var original_bottom_y := SPRITE_OFFSET_Y + tex_height / 2.0
 	sprite.position = Vector2(0.0, original_bottom_y - shown_height / 2.0)
-
-func on_worker_died() -> void:
-	modulate = Color(0.45, 0.45, 0.45)
+	if has_mill:
+		$Mill.visible = true
+		$Mill.set_construction_progress(progress)
 
 func complete_construction() -> void:
 	$Sprite2D.region_enabled = false
 	$Sprite2D.position = Vector2(0, SPRITE_OFFSET_Y)
 	$NameLabel.visible = true
-	$InputPile.visible = true
 	$OutputPile.visible = true
+	if has_mill:
+		$Mill.complete_construction()
+
+func on_worker_died() -> void:
+	get_parent().modulate = Color(0.45, 0.45, 0.45)
+
+func set_milling(val: bool) -> void:
+	if has_mill:
+		$Mill.set_milling(val)
+
+func get_output_pile() -> ResourcePile:
+	return $OutputPile as ResourcePile

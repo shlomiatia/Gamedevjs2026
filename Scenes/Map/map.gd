@@ -3,7 +3,7 @@ extends Node2D
 
 const LEVEL_WIDTH := 60
 const LEVEL_HEIGHT := 30
-const RIVER_ROW := 0
+const RIVER_ROW := 3
 const RIVER_FRAMES := 32
 const RIVER_COLS := 6
 const RIVER_FPS := 10.0
@@ -22,6 +22,8 @@ func _ready() -> void:
 			grass.set_cell(Vector2i(x, y), 0, Vector2i(0, 0))
 
 	for x in LEVEL_WIDTH:
+		for y in RIVER_ROW:
+			occupied_tiles[Vector2i(x, y)] = true
 		river.set_cell(Vector2i(x, RIVER_ROW), 0, Vector2i(0, 0))
 		grass.set_cell(Vector2i(x, RIVER_ROW), 0, Vector2i(0, 1))
 		occupied_tiles[Vector2i(x, RIVER_ROW)] = true

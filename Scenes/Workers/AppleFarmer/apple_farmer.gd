@@ -52,7 +52,7 @@ func _process(delta: float) -> void:
 				_try_deposit()
 
 func _output_pile() -> ResourcePile:
-	return _apple_farm.get_node("OutputPile") as ResourcePile
+	return _apple_farm.get_node("Building/OutputPile") as ResourcePile
 
 func _is_output_full() -> bool:
 	return $Worker.is_pile_full(_output_pile(), OUTPUT_PILE_CAPACITY)

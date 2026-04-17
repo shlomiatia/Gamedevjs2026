@@ -1,16 +1,20 @@
 [gd_scene load_steps=5 format=3 uid="uid://bap1qcvbb4owg"]
 
-[ext_resource type="Script" path="res://Scenes/Buildings/Building/building.gd" id="1_building_script"]
+[ext_resource type="Script" path="res://Scenes/Buildings/Building/building.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cdkpe3hq6o048" path="res://Textures/house.png" id="2_house"]
-[ext_resource type="PackedScene" uid="uid://c7e72ujaqkmo7" path="res://Scenes/Resources/ResourcePile/ResourcePile.tscn" id="3_pile"]
+[ext_resource type="PackedScene" uid="uid://c4m1ll0c0mp01" path="res://Scenes/Buildings/Mill/Mill.tscn" id="3_mill"]
+[ext_resource type="PackedScene" uid="uid://c7e72ujaqkmo7" path="res://Scenes/Resources/ResourcePile/ResourcePile.tscn" id="4_pile"]
 
 [node name="Building" type="Node2D"]
-script = ExtResource("1_building_script")
+script = ExtResource("1_script")
 building_name = ""
+has_mill = false
+
+[node name="Mill" parent="." instance=ExtResource("3_mill")]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_house")
 position = Vector2(0, -104)
+texture = ExtResource("2_house")
 
 [node name="NameLabel" type="Label" parent="."]
 position = Vector2(-100, -225)
@@ -18,8 +22,5 @@ size = Vector2(200, 26)
 horizontal_alignment = 1
 text = ""
 
-[node name="InputPile" parent="." instance=ExtResource("3_pile")]
-position = Vector2(-32, 16)
-
-[node name="OutputPile" parent="." instance=ExtResource("3_pile")]
-position = Vector2(32, 16)
+[node name="OutputPile" parent="." instance=ExtResource("4_pile")]
+position = Vector2(0, 16)

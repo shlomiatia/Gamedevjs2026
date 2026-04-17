@@ -75,7 +75,7 @@ func _finish_work() -> void:
     var log_node: Node2D = $Worker.drop()
     if log_node:
         log_node.queue_free()
-    var output_pile := _sawmill.get_node("OutputPile") as ResourcePile
+    var output_pile := _sawmill.get_node("Building/OutputPile") as ResourcePile
     output_pile.add_resource(PlankScene)
     _state = State.WAIT_FOR_RESOURCE
     _coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.LOG)

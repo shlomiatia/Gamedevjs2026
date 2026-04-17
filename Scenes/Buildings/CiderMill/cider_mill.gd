@@ -1,5 +1,5 @@
 class_name CiderMill
-extends Building
+extends Node2D
 
 const SIZE_X := 5
 const SIZE_Y := 3
@@ -7,25 +7,29 @@ const BUILDING_NAME := "CiderMill"
 
 const CiderMillerScene = preload("res://Scenes/Workers/CiderMiller/CiderMiller.tscn")
 
-const WHEEL_ROTATION_SPEED := TAU / 10.0
+var _spawn_parent: Node2D = null
+var _map: Map = null
+var _coordination_manager: Node = null
 
-var _is_milling := false
+func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _forest: Forest) -> void:
+	_spawn_parent = spawn_parent
+	_map = map
+	_coordination_manager = coordination_manager
+	$Building.get_output_pile().setup(coordination_manager, CoordinationManager.ResourceType.CIDER)
+	$Building.start_construction()
 
-func set_milling(val: bool) -> void:
-	_is_milling = val
-
-func _process(delta: float) -> void:
-	if _is_milling:
-		$WatermillSprite.rotation += WHEEL_ROTATION_SPEED * delta
-
-func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, forest: Forest) -> void:
-	super.on_placed(spawn_parent, map, coordination_manager, forest)
-	$OutputPile.setup(coordination_manager, CoordinationManager.ResourceType.CIDER)
-	_start_construction()
+func set_construction_progress(progress: float) -> void:
+	$Building.set_construction_progress(progress)
 
 func complete_construction() -> void:
-	super.complete_construction()
+	$Building.complete_construction()
 	var miller := CiderMillerScene.instantiate() as CiderMiller
 	miller.position = position + Vector2(0.0, float(_map.get_tile_size().y) * 0.5)
 	miller.setup(self, _map, _coordination_manager)
 	_spawn_parent.add_child(miller)
+
+func on_worker_died() -> void:
+	$Building.on_worker_died()
+
+func set_milling(val: bool) -> void:
+	$Building.set_milling(val)
