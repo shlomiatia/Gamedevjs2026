@@ -32,19 +32,23 @@ func setup(woodcutter_hut: WoodcutterHut, map: Map, forest: Forest, coordination
 func go_eat_food(pile: ResourcePile) -> void:
 	$Worker.go_eat_food(pile)
 
+func go_drink_cider(pile: ResourcePile) -> void:
+	$Worker.go_drink_cider(pile)
+
 func _process(delta: float) -> void:
+	$Worker.set_working(_state == State.CHOP)
 	match _state:
 		State.IDLE:
-			if not $Worker.is_eating():
+			if not $Worker.is_satisfying_need():
 				_try_find_tree(delta)
 		State.GO_TO_TREE, State.GO_HOME:
 			if $Worker.tick_movement(delta):
 				_on_path_finished()
 		State.CHOP:
-			if not $Worker.is_eating():
+			if not $Worker.is_satisfying_need():
 				_do_chop(delta)
 		State.DEPOSIT:
-			if not $Worker.is_eating():
+			if not $Worker.is_satisfying_need():
 				_try_deposit()
 
 func _output_pile() -> ResourcePile:

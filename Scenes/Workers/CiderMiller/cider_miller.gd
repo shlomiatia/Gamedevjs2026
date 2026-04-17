@@ -32,13 +32,17 @@ func _set_collecting_state() -> void:
 func go_eat_food(pile: ResourcePile) -> void:
 	$Worker.go_eat_food(pile)
 
+func go_drink_cider(pile: ResourcePile) -> void:
+	$Worker.go_drink_cider(pile)
+
 func _process(delta: float) -> void:
+	$Worker.set_working(_state == State.WORK)
 	match _state:
 		State.GO_TO_RESOURCE, State.GO_HOME:
 			if $Worker.tick_movement(delta):
 				_on_path_finished()
 		State.WORK:
-			if not $Worker.is_eating():
+			if not $Worker.is_satisfying_need():
 				_do_work(delta)
 
 func _on_path_finished() -> void:
