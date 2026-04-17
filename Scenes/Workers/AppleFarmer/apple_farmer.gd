@@ -12,14 +12,16 @@ enum State { IDLE, GO_TO_TREE, PICK, GO_HOME, DEPOSIT }
 var _state := State.IDLE
 var _apple_farm: AppleFarm = null
 var _map: Map = null
+var _forest: Forest = null
 var _target_tree: GameTree = null
 var _target_tree_tile: Vector2i
 var _pick_elapsed := 0.0
 var _idle_timer := 0.0
 
-func setup(apple_farm: AppleFarm, map: Map) -> void:
+func setup(apple_farm: AppleFarm, map: Map, forest: Forest) -> void:
 	_apple_farm = apple_farm
 	_map = map
+	_forest = forest
 	$Worker.setup(apple_farm, map)
 
 func _process(delta: float) -> void:
@@ -49,23 +51,12 @@ func _try_find_tree(delta: float) -> void:
 	if _is_output_full():
 		return
 
-	var best_tree: GameTree = null
-	var best_dist := INF
-	var best_tile := Vector2i.ZERO
-
-	for tile: Vector2i in _map.trees:
-		var tree := _map.trees[tile] as GameTree
-		if tree.apple_targeted or not tree.has_apples:
-			continue
-		var dist: float = tree.position.distance_to(_apple_farm.position)
-		if dist <= AppleFarm.SEARCH_RADIUS and dist < best_dist:
-			best_dist = dist
-			best_tree = tree
-			best_tile = tile
-
-	if best_tree == null:
+	var result := _forest.find_tree(_apple_farm.position, true)
+	if result.is_empty():
 		return
 
+	var best_tree := result["tree"] as GameTree
+	var best_tile := result["tile"] as Vector2i
 	best_tree.apple_targeted = true
 	_target_tree = best_tree
 	_target_tree_tile = best_tile

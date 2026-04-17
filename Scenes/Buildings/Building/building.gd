@@ -12,14 +12,16 @@ const SPRITE_OFFSET_Y := -104.0
 var _spawn_parent: Node2D = null
 var _map: Map = null
 var _coordination_manager: Node = null
+var _forest: Forest = null
 
 func _ready() -> void:
 	$NameLabel.text = building_name
 
-func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node) -> void:
+func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, forest: Forest) -> void:
 	_spawn_parent = spawn_parent
 	_map = map
 	_coordination_manager = coordination_manager
+	_forest = forest
 
 func _start_construction() -> void:
 	$NameLabel.visible = false

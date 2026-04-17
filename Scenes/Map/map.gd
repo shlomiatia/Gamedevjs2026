@@ -9,7 +9,6 @@ const RIVER_COLS := 6
 const RIVER_FPS := 10.0
 
 var occupied_tiles: Dictionary = {}
-var trees: Dictionary = {}
 
 @onready var grass: TileMapLayer = $Grass
 @onready var river: TileMapLayer = $River

@@ -13,15 +13,17 @@ var _preview: Node2D = null
 var _active_scene: PackedScene = null
 var _active_size: Vector2i = Vector2i.ZERO
 var _coordination_manager: Node = null
+var _forest: Forest = null
 
 @onready var _build_woodcutter_button: Button = $UI/BuildWoodcutterHutButton
 @onready var _build_builder_button: Button = $UI/BuildBuilderHutButton
 @onready var _build_sawmill_button: Button = $UI/BuildSawmillButton
 @onready var _build_apple_farm_button: Button = $UI/BuildAppleFarmButton
 
-func setup(map: Map, coordination_manager: Node) -> void:
+func setup(map: Map, coordination_manager: Node, forest: Forest) -> void:
 	_map = map
 	_coordination_manager = coordination_manager
+	_forest = forest
 
 func _ready() -> void:
 	_spawn_parent = get_parent() as Node2D
@@ -67,7 +69,7 @@ func _place_building() -> void:
 	for dx in _active_size.x:
 		for dy in _active_size.y:
 			_map.occupied_tiles[Vector2i(top_left.x + dx, top_left.y + dy)] = building
-	building.on_placed(_spawn_parent, _map, _coordination_manager)
+	building.on_placed(_spawn_parent, _map, _coordination_manager, _forest)
 	_coordination_manager.register_building(building)
 	if building is WoodcutterHut or building is Sawmill or building is AppleFarm:
 		_coordination_manager.queue_construction(building)

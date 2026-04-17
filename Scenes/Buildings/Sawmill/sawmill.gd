@@ -7,8 +7,8 @@ const BUILDING_NAME := "Sawmill"
 
 const SawmillerScene = preload("res://Scenes/Workers/Sawmiller/Sawmiller.tscn")
 
-func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node) -> void:
-	super.on_placed(spawn_parent, map, coordination_manager)
+func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, forest: Forest) -> void:
+	super.on_placed(spawn_parent, map, coordination_manager, forest)
 	$OutputPile.setup(coordination_manager, CoordinationManager.ResourceType.PLANK)
 	_start_construction()
 

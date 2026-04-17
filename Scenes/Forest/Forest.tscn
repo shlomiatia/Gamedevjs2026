@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvovpbck2767e"]
+
+[ext_resource type="Script" path="res://Scenes/Forest/forest.gd" id="1_script"]
+
+[node name="Forest" type="Node2D"]
+script = ExtResource("1_script")

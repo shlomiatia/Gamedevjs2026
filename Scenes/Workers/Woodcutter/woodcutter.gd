@@ -12,14 +12,16 @@ enum State { IDLE, GO_TO_TREE, CHOP, GO_HOME, DEPOSIT }
 var _state := State.IDLE
 var _woodcutter_hut: WoodcutterHut = null
 var _map: Map = null
+var _forest: Forest = null
 var _target_tree: GameTree = null
 var _target_tree_tile: Vector2i
 var _chop_elapsed := 0.0
 var _idle_timer := 0.0
 
-func setup(woodcutter_hut: WoodcutterHut, map: Map) -> void:
+func setup(woodcutter_hut: WoodcutterHut, map: Map, forest: Forest) -> void:
 	_woodcutter_hut = woodcutter_hut
 	_map = map
+	_forest = forest
 	$Worker.setup(woodcutter_hut, map)
 
 func _process(delta: float) -> void:
@@ -49,23 +51,12 @@ func _try_find_tree(delta: float) -> void:
 	if _is_output_full():
 		return
 
-	var best_tree: GameTree = null
-	var best_dist := INF
-	var best_tile := Vector2i.ZERO
-
-	for tile: Vector2i in _map.trees:
-		var tree := _map.trees[tile] as GameTree
-		if tree.targeted:
-			continue
-		var dist: float = tree.position.distance_to(_woodcutter_hut.position)
-		if dist <= WoodcutterHut.SEARCH_RADIUS and dist < best_dist:
-			best_dist = dist
-			best_tree = tree
-			best_tile = tile
-
-	if best_tree == null:
+	var result := _forest.find_tree(_woodcutter_hut.position, false)
+	if result.is_empty():
 		return
 
+	var best_tree := result["tree"] as GameTree
+	var best_tile := result["tile"] as Vector2i
 	best_tree.targeted = true
 	_target_tree = best_tree
 	_target_tree_tile = best_tile
@@ -83,8 +74,7 @@ func _do_chop(delta: float) -> void:
 		_finish_chop()
 
 func _finish_chop() -> void:
-	_map.occupied_tiles.erase(_target_tree_tile)
-	_map.trees.erase(_target_tree_tile)
+	_forest.remove_tree(_target_tree_tile)
 	_target_tree.queue_free()
 	_target_tree = null
 
