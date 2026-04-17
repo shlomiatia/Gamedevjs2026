@@ -4,6 +4,7 @@ extends Node2D
 const WoodcutterHutScene = preload("res://Scenes/Buildings/WoodcutterHut/WoodcutterHut.tscn")
 const BuilderHutScene = preload("res://Scenes/Buildings/BuilderHut/BuilderHut.tscn")
 const SawmillScene = preload("res://Scenes/Buildings/Sawmill/Sawmill.tscn")
+const AppleFarmScene = preload("res://Scenes/Buildings/AppleFarm/AppleFarm.tscn")
 
 var _map: Map = null
 var _spawn_parent: Node2D = null
@@ -16,6 +17,7 @@ var _coordination_manager: Node = null
 @onready var _build_woodcutter_button: Button = $UI/BuildWoodcutterHutButton
 @onready var _build_builder_button: Button = $UI/BuildBuilderHutButton
 @onready var _build_sawmill_button: Button = $UI/BuildSawmillButton
+@onready var _build_apple_farm_button: Button = $UI/BuildAppleFarmButton
 
 func setup(map: Map, coordination_manager: Node) -> void:
 	_map = map
@@ -29,6 +31,8 @@ func _ready() -> void:
 		func(): _start_building(BuilderHutScene, Vector2i(BuilderHut.SIZE_X, BuilderHut.SIZE_Y)))
 	_build_sawmill_button.pressed.connect(
 		func(): _start_building(SawmillScene, Vector2i(Sawmill.SIZE_X, Sawmill.SIZE_Y)))
+	_build_apple_farm_button.pressed.connect(
+		func(): _start_building(AppleFarmScene, Vector2i(AppleFarm.SIZE_X, AppleFarm.SIZE_Y)))
 
 func _start_building(scene: PackedScene, size: Vector2i) -> void:
 	if _building_mode:
@@ -65,7 +69,7 @@ func _place_building() -> void:
 			_map.occupied_tiles[Vector2i(top_left.x + dx, top_left.y + dy)] = building
 	building.on_placed(_spawn_parent, _map, _coordination_manager)
 	_coordination_manager.register_building(building)
-	if building is WoodcutterHut or building is Sawmill:
+	if building is WoodcutterHut or building is Sawmill or building is AppleFarm:
 		_coordination_manager.queue_construction(building)
 	_cancel_building()
 

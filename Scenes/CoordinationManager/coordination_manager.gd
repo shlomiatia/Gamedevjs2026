@@ -1,7 +1,7 @@
 class_name CoordinationManager
 extends Node
 
-enum ResourceType { LOG, PLANK }
+enum ResourceType { LOG, PLANK, APPLE }
 
 var _builders: Array = []
 var _buildings: Array = []
@@ -11,6 +11,7 @@ var _resource_queues: Dictionary = {}
 func _ready() -> void:
 	_resource_queues[ResourceType.LOG] = []
 	_resource_queues[ResourceType.PLANK] = []
+	_resource_queues[ResourceType.APPLE] = []
 
 # --- Builder / building registration ---
 
@@ -73,6 +74,9 @@ func _get_pile_for_type(building: Node2D, resource_type: int) -> ResourcePile:
 				return building.get_node_or_null("OutputPile") as ResourcePile
 		ResourceType.PLANK:
 			if building is Sawmill or building is BuilderHut:
+				return building.get_node_or_null("OutputPile") as ResourcePile
+		ResourceType.APPLE:
+			if building is AppleFarm:
 				return building.get_node_or_null("OutputPile") as ResourcePile
 	return null
 
