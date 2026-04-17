@@ -16,6 +16,7 @@ func setup(home_hut: Node2D, map: Map, coordination_manager: Node) -> void:
 	_map = map
 	_coordination_manager = coordination_manager
 	$Worker.setup(home_hut, map)
+	$Worker.setup_food(coordination_manager)
 	coordination_manager.register_builder(self)
 	$Worker.died.connect(func():
 		_coordination_manager.deregister_builder(self)
@@ -36,13 +37,17 @@ func assign_build_task(target: Building) -> void:
 func _set_collecting_state() -> void:
 	_state = State.GO_TO_RESOURCE
 
+func go_eat_food(pile: ResourcePile) -> void:
+	$Worker.go_eat_food(pile)
+
 func _process(delta: float) -> void:
 	match _state:
 		State.GO_TO_RESOURCE, State.GO_TO_SITE, State.GO_HOME:
 			if $Worker.tick_movement(delta):
 				_on_path_finished()
 		State.BUILD:
-			_do_build(delta)
+			if not $Worker.is_eating():
+				_do_build(delta)
 
 func _site_world_pos() -> Vector2:
 	return _target_hut.position + Vector2(0, float(_map.get_tile_size().y) * 0.5)

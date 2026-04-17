@@ -16,5 +16,5 @@ func complete_construction() -> void:
 	super.complete_construction()
 	var farmer := AppleFarmerScene.instantiate() as AppleFarmer
 	farmer.position = position + Vector2(0.0, float(_map.get_tile_size().y) * 0.5)
-	farmer.setup(self, _map, _forest)
+	farmer.setup(self, _map, _forest, _coordination_manager)
 	_spawn_parent.add_child(farmer)

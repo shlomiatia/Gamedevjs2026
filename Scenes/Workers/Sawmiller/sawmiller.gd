@@ -17,6 +17,7 @@ func setup(sawmill: Sawmill, map: Map, coordination_manager: Node) -> void:
 	_map = map
 	_coordination_manager = coordination_manager
 	$Worker.setup(sawmill, map)
+	$Worker.setup_food(coordination_manager)
 	$Worker.died.connect(func():
 		_sawmill.on_worker_died()
 		queue_free()
@@ -28,13 +29,17 @@ func _ready() -> void:
 func _set_collecting_state() -> void:
 	_state = State.GO_TO_RESOURCE
 
+func go_eat_food(pile: ResourcePile) -> void:
+	$Worker.go_eat_food(pile)
+
 func _process(delta: float) -> void:
 	match _state:
 		State.GO_TO_RESOURCE, State.GO_HOME:
 			if $Worker.tick_movement(delta):
 				_on_path_finished()
 		State.WORK:
-			_do_work(delta)
+			if not $Worker.is_eating():
+				_do_work(delta)
 
 func _on_path_finished() -> void:
 	match _state:

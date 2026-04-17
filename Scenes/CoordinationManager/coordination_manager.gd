@@ -9,6 +9,7 @@ var _builders: Array = []
 var _buildings: Array = []
 var _construction_queue: Array = []
 var _resource_queues: Dictionary = {}
+var _food_queue: Array = []
 
 func _ready() -> void:
 	_resource_queues[ResourceType.LOG] = []
@@ -57,7 +58,32 @@ func queue_resource_collection(worker: ResourceCollectorWorker, resource_type: i
 	else:
 		_resource_queues[resource_type].append(worker)
 
+func queue_food_collection(worker: Node2D) -> void:
+	var pile := _find_nearest_food_pile(worker.position)
+	if pile != null:
+		pile.reserve(worker)
+		worker.go_eat_food(pile)
+	else:
+		_food_queue.append(worker)
+
 func notify_free_resource(resource_type: int) -> void:
+	if resource_type == ResourceType.APPLE:
+		_cleanup_food_queue()
+		if not _food_queue.is_empty():
+			_food_queue.sort_custom(func(a, b):
+				var ha: float = (a.get_node("Worker") as Worker).hunger
+				var hb: float = (b.get_node("Worker") as Worker).hunger
+				return ha < hb
+			)
+			var hungry_worker := _food_queue.pop_front() as Node2D
+			var pile := _find_nearest_food_pile(hungry_worker.position)
+			if pile != null:
+				pile.reserve(hungry_worker)
+				hungry_worker.go_eat_food(pile)
+				return
+			else:
+				_food_queue.push_front(hungry_worker)
+				return
 	var queue: Array = _resource_queues[resource_type]
 	if queue.is_empty():
 		return
@@ -90,6 +116,21 @@ func _get_pile_for_type(building: Node2D, resource_type: int) -> ResourcePile:
 			if building is CiderMill:
 				return building.get_node_or_null("OutputPile") as ResourcePile
 	return null
+
+func _find_nearest_food_pile(from_pos: Vector2) -> ResourcePile:
+	var best: ResourcePile = null
+	var best_dist := INF
+	for building in _buildings:
+		var pile := _get_pile_for_type(building as Node2D, ResourceType.APPLE)
+		if pile != null and pile.free_count() > 0:
+			var d := (building as Node2D).position.distance_to(from_pos)
+			if d < best_dist:
+				best_dist = d
+				best = pile
+	return best
+
+func _cleanup_food_queue() -> void:
+	_food_queue = _food_queue.filter(func(w): return is_instance_valid(w))
 
 # --- Private helpers ---
 

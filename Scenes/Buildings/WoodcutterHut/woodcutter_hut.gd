@@ -16,5 +16,5 @@ func complete_construction() -> void:
 	super.complete_construction()
 	var woodcutter := WoodcutterScene.instantiate() as Woodcutter
 	woodcutter.position = position + Vector2(0.0, float(_map.get_tile_size().y) * 0.5)
-	woodcutter.setup(self, _map, _forest)
+	woodcutter.setup(self, _map, _forest, _coordination_manager)
 	_spawn_parent.add_child(woodcutter)

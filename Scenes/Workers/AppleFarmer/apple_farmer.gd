@@ -18,27 +18,34 @@ var _target_tree_tile: Vector2i
 var _pick_elapsed := 0.0
 var _idle_timer := 0.0
 
-func setup(apple_farm: AppleFarm, map: Map, forest: Forest) -> void:
+func setup(apple_farm: AppleFarm, map: Map, forest: Forest, coordination_manager: Node) -> void:
 	_apple_farm = apple_farm
 	_map = map
 	_forest = forest
 	$Worker.setup(apple_farm, map)
+	$Worker.setup_food(coordination_manager)
 	$Worker.died.connect(func():
 		_apple_farm.on_worker_died()
 		queue_free()
 	)
 
+func go_eat_food(pile: ResourcePile) -> void:
+	$Worker.go_eat_food(pile)
+
 func _process(delta: float) -> void:
 	match _state:
 		State.IDLE:
-			_try_find_tree(delta)
+			if not $Worker.is_eating():
+				_try_find_tree(delta)
 		State.GO_TO_TREE, State.GO_HOME:
 			if $Worker.tick_movement(delta):
 				_on_path_finished()
 		State.PICK:
-			_do_pick(delta)
+			if not $Worker.is_eating():
+				_do_pick(delta)
 		State.DEPOSIT:
-			_try_deposit()
+			if not $Worker.is_eating():
+				_try_deposit()
 
 func _output_pile() -> ResourcePile:
 	return _apple_farm.get_node("OutputPile") as ResourcePile
