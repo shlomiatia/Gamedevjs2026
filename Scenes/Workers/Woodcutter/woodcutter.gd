@@ -35,6 +35,9 @@ func go_eat_food(pile: ResourcePile) -> void:
 func go_drink_cider(pile: ResourcePile) -> void:
 	$Worker.go_drink_cider(pile)
 
+func go_wear_clothes(pile: ResourcePile) -> void:
+	$Worker.go_wear_clothes(pile)
+
 func _process(delta: float) -> void:
 	$Worker.set_working(_state == State.CHOP)
 	match _state:

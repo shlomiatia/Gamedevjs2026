@@ -73,7 +73,7 @@ func _place_building() -> void:
 	var top_left := _get_footprint_top_left()
 	if _is_footprint_blocked(top_left):
 		return
-	if (_active_scene == SawmillScene or _active_scene == CiderMillScene) and not _is_adjacent_to_river(top_left):
+	if (_active_scene == SawmillScene or _active_scene == CiderMillScene or _active_scene == WoolMillScene) and not _is_adjacent_to_river(top_left):
 		return
 	var building := _active_scene.instantiate()
 	building.position = _footprint_position(top_left)
@@ -121,7 +121,7 @@ func _process(_delta: float) -> void:
 func _update_preview() -> void:
 	var top_left := _get_footprint_top_left()
 	var blocked := _is_footprint_blocked(top_left)
-	if not blocked and (_active_scene == SawmillScene or _active_scene == CiderMillScene):
+	if not blocked and (_active_scene == SawmillScene or _active_scene == CiderMillScene or _active_scene == WoolMillScene):
 		blocked = not _is_adjacent_to_river(top_left)
 	_preview.position = _footprint_position(top_left)
 	_preview.modulate = Color(1, 0, 0, 0.7) if blocked else Color(0, 1, 0, 0.7)

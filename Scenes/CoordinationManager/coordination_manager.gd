@@ -11,6 +11,7 @@ var _construction_queue: Array = []
 var _resource_queues: Dictionary = {}
 var _food_queue: Array = []
 var _drink_queue: Array = []
+var _clothing_queue: Array = []
 
 func _ready() -> void:
 	_resource_queues[ResourceType.LOG] = []
@@ -75,6 +76,14 @@ func queue_drink_collection(worker: Node2D) -> void:
 	else:
 		_drink_queue.append(worker)
 
+func queue_clothing_collection(worker: Node2D) -> void:
+	var pile := _find_nearest_clothing_pile(worker.position)
+	if pile != null:
+		pile.reserve(worker)
+		worker.go_wear_clothes(pile)
+	else:
+		_clothing_queue.append(worker)
+
 func notify_free_resource(resource_type: int) -> void:
 	if resource_type == ResourceType.APPLE:
 		_cleanup_food_queue()
@@ -109,6 +118,23 @@ func notify_free_resource(resource_type: int) -> void:
 				return
 			else:
 				_drink_queue.push_front(thirsty_worker)
+				return
+	if resource_type == ResourceType.CLOTHES:
+		_cleanup_clothing_queue()
+		if not _clothing_queue.is_empty():
+			_clothing_queue.sort_custom(func(a, b):
+				var ca: float = (a.get_node("Worker") as Worker).clothing
+				var cb: float = (b.get_node("Worker") as Worker).clothing
+				return ca < cb
+			)
+			var needy_worker := _clothing_queue.pop_front() as Node2D
+			var pile := _find_nearest_clothing_pile(needy_worker.position)
+			if pile != null:
+				pile.reserve(needy_worker)
+				needy_worker.go_wear_clothes(pile)
+				return
+			else:
+				_clothing_queue.push_front(needy_worker)
 				return
 	var queue: Array = _resource_queues[resource_type]
 	if queue.is_empty():
@@ -163,6 +189,21 @@ func _find_nearest_drink_pile(from_pos: Vector2) -> ResourcePile:
 
 func _cleanup_drink_queue() -> void:
 	_drink_queue = _drink_queue.filter(func(w): return is_instance_valid(w))
+
+func _find_nearest_clothing_pile(from_pos: Vector2) -> ResourcePile:
+	var best: ResourcePile = null
+	var best_dist := INF
+	for building in _buildings:
+		var pile := _get_pile_for_type(building as Node2D, ResourceType.CLOTHES)
+		if pile != null and pile.free_count() > 0:
+			var d := (building as Node2D).position.distance_to(from_pos)
+			if d < best_dist:
+				best_dist = d
+				best = pile
+	return best
+
+func _cleanup_clothing_queue() -> void:
+	_clothing_queue = _clothing_queue.filter(func(w): return is_instance_valid(w))
 
 func _find_nearest_food_pile(from_pos: Vector2) -> ResourcePile:
 	var best: ResourcePile = null
