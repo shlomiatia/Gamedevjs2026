@@ -36,7 +36,9 @@ func go_drink_cider(pile: ResourcePile) -> void:
 	$Worker.go_drink_cider(pile)
 
 func _process(delta: float) -> void:
-	$Worker.set_working(_state == State.WORK)
+	var working: bool = _state == State.WORK and not $Worker.is_satisfying_need()
+	$Worker.set_working(working)
+	_cider_mill.set_milling(working)
 	match _state:
 		State.GO_TO_RESOURCE, State.GO_HOME:
 			if $Worker.tick_movement(delta):

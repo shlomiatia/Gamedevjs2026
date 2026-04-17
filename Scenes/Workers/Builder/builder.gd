@@ -91,5 +91,8 @@ func _finish_build() -> void:
 		resource.queue_free()
 	_target_hut.complete_construction()
 	_target_hut = null
-	_state = State.GO_HOME
-	$Worker.navigate_to($Worker.home_world_pos())
+	_state = State.IDLE
+	_coordination_manager.notify_idle_builder(self)
+	if _state == State.IDLE:
+		_state = State.GO_HOME
+		$Worker.navigate_to($Worker.home_world_pos())
