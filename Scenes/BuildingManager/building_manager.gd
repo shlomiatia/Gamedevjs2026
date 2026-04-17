@@ -69,8 +69,8 @@ func _place_building() -> void:
 	for dx in _active_size.x:
 		for dy in _active_size.y:
 			_map.occupied_tiles[Vector2i(top_left.x + dx, top_left.y + dy)] = building
-	building.on_placed(_spawn_parent, _map, _coordination_manager, _forest)
 	_coordination_manager.register_building(building)
+	building.on_placed(_spawn_parent, _map, _coordination_manager, _forest)
 	if building is WoodcutterHut or building is Sawmill or building is AppleFarm:
 		_coordination_manager.queue_construction(building)
 	_cancel_building()
