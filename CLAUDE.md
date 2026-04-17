@@ -87,6 +87,7 @@ These tiles are partially grass and partially transparent, designed to blend gra
 | Atlas (col:row) | Grass coverage |
 |-----------------|----------------|
 | 5:0 | Frame — grass on all four edges, empty (transparent) in the middle |
+| 5:3 | Edge — top edge only (variant; used when right, bottom, and left are dirt) |
 | 4:1 | Corner — bottom-right corner only |
 | 5:1 | Edge — bottom edge only |
 | 6:1 | Corner — bottom-left corner only |

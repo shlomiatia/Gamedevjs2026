@@ -23,4 +23,4 @@ horizontal_alignment = 1
 text = ""
 
 [node name="OutputPile" parent="." instance=ExtResource("4_pile")]
-position = Vector2(0, 16)
+position = Vector2(32, 16)

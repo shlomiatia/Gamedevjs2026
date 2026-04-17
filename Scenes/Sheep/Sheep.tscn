@@ -101,4 +101,4 @@ script = ExtResource("2_script")
 sprite_frames = SubResource("SpriteFrames_sheep")
 animation = &"unsheared_walk"
 autoplay = "unsheared_stand"
-frame_progress = 0.32005638
+frame_progress = 0.30434698

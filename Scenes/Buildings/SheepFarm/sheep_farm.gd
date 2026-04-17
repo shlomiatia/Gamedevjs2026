@@ -25,13 +25,15 @@ func set_construction_progress(progress: float) -> void:
 func complete_construction() -> void:
 	$Building.complete_construction()
 
+	var farmer_pos := position + Vector2(0.0, float(_map.get_tile_size().y) * 0.5)
+
 	var sheep := SheepScene.instantiate() as Sheep
-	sheep.position = position + Vector2(16.0, 0.0)
+	sheep.position = farmer_pos
 	_spawn_parent.add_child(sheep)
 	sheep.shear()
 
 	var farmer := SheepFarmerScene.instantiate() as SheepFarmer
-	farmer.position = position + Vector2(0.0, float(_map.get_tile_size().y) * 0.5)
+	farmer.position = farmer_pos
 	farmer.setup(self, _map, sheep, _coordination_manager)
 	_spawn_parent.add_child(farmer)
 
