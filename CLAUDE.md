@@ -56,29 +56,29 @@ Scenes/
 
 Tiles are referenced by atlas coordinates (col:row), zero-based.
 
-### Road tiles (overlay layer)
+### Dirt tiles (overlay layer)
 
 | Atlas (col:row) | Name | Connections / Notes |
 |-----------------|------|---------------------|
 | 0:0 | Grass | Full grass tile (base layer) |
-| 1:0 | Road | Full road tile |
-| 2:0 | Road – 3-way junction | Opens: top, right, bottom |
-| 3:0 | Road – 3-way junction | Opens: left, bottom, right |
-| 4:0 | Road – 4-way junction | Opens: top, right, bottom, left |
-| 0:1 | Road – Straight | Opens: left, right |
-| 1:1 | Road – Straight | Opens: top, bottom |
-| 2:1 | Road – 3-way junction | Opens: left, top, right |
-| 3:1 | Road – 3-way junction | Opens: top, left, bottom |
-| 0:2 | Road – Curve | Opens: bottom, right |
-| 1:2 | Road – Curve | Opens: left, bottom |
-| 2:2 | Road – Dead end | Opens: top only |
-| 3:2 | Road – Dead end | Opens: right only |
-| 0:3 | Road – Curve | Opens: top, right |
-| 1:3 | Road – Curve | Opens: left, top |
-| 2:3 | Road – Dead end | Opens: bottom only |
-| 3:3 | Road – Dead end | Opens: left only |
+| 1:0 | Dirt | Full dirt tile |
+| 2:0 | Dirt – 3-way junction | Opens: top, right, bottom |
+| 3:0 | Dirt – 3-way junction | Opens: left, bottom, right |
+| 4:0 | Dirt – 4-way junction | Opens: top, right, bottom, left |
+| 0:1 | Dirt – Straight | Opens: left, right |
+| 1:1 | Dirt – Straight | Opens: top, bottom |
+| 2:1 | Dirt – 3-way junction | Opens: left, top, right |
+| 3:1 | Dirt – 3-way junction | Opens: top, left, bottom |
+| 0:2 | Dirt – Curve | Opens: bottom, right |
+| 1:2 | Dirt – Curve | Opens: left, bottom |
+| 2:2 | Dirt – Dead end | Opens: top only |
+| 3:2 | Dirt – Dead end | Opens: right only |
+| 0:3 | Dirt – Curve | Opens: top, right |
+| 1:3 | Dirt – Curve | Opens: left, top |
+| 2:3 | Dirt – Dead end | Opens: bottom only |
+| 3:3 | Dirt – Dead end | Opens: left only |
 
-Road tiles are overlay tiles — placed on the **Grass** TileMapLayer on top of other tiles.
+Dirt tiles are overlay tiles — placed on the **Grass** TileMapLayer on top of other tiles.
 
 ### Grass overlay tiles (placed over other terrain)
 

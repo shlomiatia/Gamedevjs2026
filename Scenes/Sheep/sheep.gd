@@ -1,21 +1,22 @@
 class_name Sheep
 extends Node2D
 
-const REGROW_TIME := 30.0
+const FOLLOW_SPEED := 80.0
+const FOLLOW_STOP_DISTANCE := 16.0
 
 var is_sheared := false
-var targeted := false
-var _regrow_timer := 0.0
 
 func _ready() -> void:
 	$AnimatedSprite2D.play("unsheared_stand")
 
-func _process(delta: float) -> void:
-	if is_sheared:
-		_regrow_timer += delta
-		if _regrow_timer >= REGROW_TIME:
-			_regrow_timer = 0.0
-			regrow()
+func follow_toward(target_pos: Vector2, delta: float) -> void:
+	var dir := target_pos - position
+	var dist := dir.length()
+	if dist <= FOLLOW_STOP_DISTANCE:
+		set_walking(false)
+		return
+	set_walking(true)
+	position += dir.normalized() * FOLLOW_SPEED * delta
 
 func set_walking(walking: bool) -> void:
 	if is_sheared:
@@ -25,7 +26,6 @@ func set_walking(walking: bool) -> void:
 
 func shear() -> void:
 	is_sheared = true
-	_regrow_timer = 0.0
 	$AnimatedSprite2D.play("sheared_stand")
 
 func regrow() -> void:

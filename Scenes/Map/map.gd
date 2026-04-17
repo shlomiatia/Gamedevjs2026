@@ -11,7 +11,8 @@ const RIVER_FPS := 10.0
 var occupied_tiles: Dictionary = {}
 
 @onready var grass: TileMapLayer = $Grass
-@onready var river: TileMapLayer = $River
+@onready var dirt: TileMapLayer = $Dirt
+@onready var river_and_dirt: TileMapLayer = $RiverAndDirt
 
 var _river_frame := 0
 var _river_timer := 0.0
@@ -20,11 +21,13 @@ func _ready() -> void:
 	for x in LEVEL_WIDTH:
 		for y in LEVEL_HEIGHT:
 			grass.set_cell(Vector2i(x, y), 0, Vector2i(0, 0))
+			if y != RIVER_ROW:
+				dirt.set_cell(Vector2i(x, y), 0, Vector2i(1, 0))
 
 	for x in LEVEL_WIDTH:
 		for y in RIVER_ROW:
 			occupied_tiles[Vector2i(x, y)] = true
-		river.set_cell(Vector2i(x, RIVER_ROW), 0, Vector2i(0, 0))
+		river_and_dirt.set_cell(Vector2i(x, RIVER_ROW), 0, Vector2i(0, 0))
 		grass.set_cell(Vector2i(x, RIVER_ROW), 0, Vector2i(0, 1))
 		occupied_tiles[Vector2i(x, RIVER_ROW)] = true
 
@@ -36,7 +39,7 @@ func _process(delta: float) -> void:
 		var col := _river_frame % RIVER_COLS
 		var row: int = _river_frame / RIVER_COLS
 		for x in LEVEL_WIDTH:
-			river.set_cell(Vector2i(x, RIVER_ROW), 0, Vector2i(col, row))
+			river_and_dirt.set_cell(Vector2i(x, RIVER_ROW), 0, Vector2i(col, row))
 
 func get_tile_size() -> Vector2i:
 	return grass.tile_set.tile_size
@@ -49,6 +52,23 @@ func tile_to_world(tile: Vector2i) -> Vector2:
 
 func get_mouse_tile() -> Vector2i:
 	return grass.local_to_map(grass.get_local_mouse_position())
+
+func find_grass_tile(near_pos: Vector2) -> Vector2i:
+	var best := Vector2i(-1, -1)
+	var best_dist := INF
+	for tile in grass.get_used_cells():
+		if occupied_tiles.has(tile):
+			continue
+		if grass.get_cell_atlas_coords(tile) != Vector2i(0, 0):
+			continue
+		var dist := tile_to_world(tile).distance_to(near_pos)
+		if dist < best_dist:
+			best_dist = dist
+			best = tile
+	return best
+
+func eat_grass(tile: Vector2i) -> void:
+	grass.erase_cell(tile)
 
 func find_path(from_world: Vector2, to_world: Vector2) -> Array[Vector2]:
 	var from_tile := world_to_tile(from_world)
