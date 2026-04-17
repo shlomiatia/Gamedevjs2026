@@ -1,7 +1,16 @@
 class_name Worker
 extends Node2D
 
+const MAX_HUNGER := 200.0
+const HUNGER_DRAIN_IDLE := 1.0
+const HUNGER_DRAIN_WALKING := 2.0
+
+const BAR_WIDTH := 32.0
+const BAR_HEIGHT := 4.0
+const BAR_Y := -68.0
+
 var move_speed := 80.0
+var hunger := MAX_HUNGER
 
 var _home: Node2D = null
 var _map: Map = null
@@ -52,3 +61,22 @@ func is_carrying() -> bool:
 
 func is_pile_full(pile: ResourcePile, capacity: int) -> bool:
 	return pile.get_child_count() >= capacity
+
+func _process(delta: float) -> void:
+	var drain := HUNGER_DRAIN_WALKING if not _path.is_empty() else HUNGER_DRAIN_IDLE
+	hunger = maxf(0.0, hunger - drain * delta)
+	queue_redraw()
+
+func _draw() -> void:
+	var ratio := hunger / MAX_HUNGER
+	var bx := -BAR_WIDTH * 0.5
+	draw_rect(Rect2(bx, BAR_Y, BAR_WIDTH, BAR_HEIGHT), Color(0.15, 0.15, 0.15, 0.85))
+	var color: Color
+	if ratio > 0.5:
+		color = Color(0.25, 0.8, 0.25)
+	elif ratio > 0.25:
+		color = Color(0.9, 0.7, 0.1)
+	else:
+		color = Color(0.9, 0.2, 0.2)
+	if ratio > 0.0:
+		draw_rect(Rect2(bx, BAR_Y, BAR_WIDTH * ratio, BAR_HEIGHT), color)
