@@ -1,0 +1,99 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Texture2D" path="res://Textures/sheep.png" id="1_sheep_tex"]
+[ext_resource type="Script" path="res://Scenes/Sheep/sheep.gd" id="2_script"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_us1"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_us2"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uw1"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ss1"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ss2"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sw2"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uw2"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sheep"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_us1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_us2")
+}],
+"loop": true,
+"name": &"unsheared_stand",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_us1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uw1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_us1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uw2")
+}],
+"loop": true,
+"name": &"unsheared_walk",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ss1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ss2")
+}],
+"loop": true,
+"name": &"sheared_stand",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ss1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uw1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ss1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sw2")
+}],
+"loop": true,
+"name": &"sheared_walk",
+"speed": 4.0
+}]
+
+[node name="Sheep" type="Node2D"]
+script = ExtResource("2_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_sheep")
+animation = &"unsheared_stand"
+autoplay = "unsheared_stand"
