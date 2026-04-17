@@ -46,7 +46,7 @@ func _process(delta: float) -> void:
         State.GO_TO_GRASS, State.GO_HOME:
             if $Worker.tick_movement(delta):
                 _on_path_finished()
-            if is_instance_valid(_sheep):
+            elif is_instance_valid(_sheep):
                 _sheep.follow_toward(position, delta)
         State.GRAZE:
             if not $Worker.is_satisfying_need():
