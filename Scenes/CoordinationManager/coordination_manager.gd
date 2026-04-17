@@ -3,7 +3,7 @@ extends Node
 
 signal game_over
 
-enum ResourceType { LOG, PLANK, APPLE, CIDER, WOOL }
+enum ResourceType { LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES }
 
 var _builders: Array = []
 var _buildings: Array = []
@@ -18,6 +18,7 @@ func _ready() -> void:
 	_resource_queues[ResourceType.APPLE] = []
 	_resource_queues[ResourceType.CIDER] = []
 	_resource_queues[ResourceType.WOOL] = []
+	_resource_queues[ResourceType.CLOTHES] = []
 
 # --- Builder / building registration ---
 
@@ -142,6 +143,9 @@ func _get_pile_for_type(building: Node2D, resource_type: int) -> ResourcePile:
 				return building.get_node_or_null("Building/OutputPile") as ResourcePile
 		ResourceType.WOOL:
 			if building is SheepFarm:
+				return building.get_node_or_null("Building/OutputPile") as ResourcePile
+		ResourceType.CLOTHES:
+			if building is WoolMill:
 				return building.get_node_or_null("Building/OutputPile") as ResourcePile
 	return null
 
