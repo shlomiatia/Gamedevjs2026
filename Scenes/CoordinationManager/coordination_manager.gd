@@ -44,9 +44,7 @@ func queue_construction(target: Building) -> void:
 func notify_idle_builder(builder: Builder) -> void:
 	if _construction_queue.is_empty():
 		return
-	var idx := _find_closest_construction_idx(builder.position)
-	var target := _construction_queue[idx] as Building
-	_construction_queue.remove_at(idx)
+	var target := _construction_queue.pop_front() as Building
 	builder.assign_build_task(target)
 
 # --- Resource collection queue ---
@@ -187,14 +185,3 @@ func _find_closest_free_builder(pos: Vector2) -> Builder:
 				closest = builder
 	return closest
 
-func _find_closest_construction_idx(pos: Vector2) -> int:
-	var best_idx := 0
-	var min_dist := INF
-	for i in _construction_queue.size():
-		var building := _construction_queue[i] as Building
-		if building != null:
-			var d := building.position.distance_to(pos)
-			if d < min_dist:
-				min_dist = d
-				best_idx = i
-	return best_idx
