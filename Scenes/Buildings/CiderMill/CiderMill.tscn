@@ -1,8 +1,46 @@
-[gd_scene load_steps=4 format=3 uid="uid://cf6v5nvk7rgct"]
+[gd_scene load_steps=7 format=3 uid="uid://cf6v5nvk7rgct"]
 
 [ext_resource type="Script" uid="uid://xcb605pkrxvc" path="res://Scenes/Buildings/CiderMill/cider_mill.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cag3erqh0pxxx" path="res://Textures/watermill.png" id="2_mill"]
 [ext_resource type="PackedScene" uid="uid://c7e72ujaqkmo7" path="res://Scenes/Resources/ResourcePile/ResourcePile.tscn" id="3_pile"]
+
+[sub_resource type="Animation" id="Animation_8o4t5"]
+resource_name = "new_animation"
+length = 10.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 10),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.265732014659643]
+}
+
+[sub_resource type="Animation" id="Animation_sqmid"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_834qi"]
+_data = {
+&"RESET": SubResource("Animation_sqmid"),
+&"new_animation": SubResource("Animation_8o4t5")
+}
 
 [node name="CiderMill" type="Node2D"]
 script = ExtResource("1_script")
@@ -24,3 +62,9 @@ position = Vector2(-32, 16)
 
 [node name="OutputPile" parent="." instance=ExtResource("3_pile")]
 position = Vector2(32, 16)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_834qi")
+}
+autoplay = "new_animation"
