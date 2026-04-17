@@ -5,6 +5,7 @@ const WoodcutterHutScene = preload("res://Scenes/Buildings/WoodcutterHut/Woodcut
 const BuilderHutScene = preload("res://Scenes/Buildings/BuilderHut/BuilderHut.tscn")
 const SawmillScene = preload("res://Scenes/Buildings/Sawmill/Sawmill.tscn")
 const AppleFarmScene = preload("res://Scenes/Buildings/AppleFarm/AppleFarm.tscn")
+const CiderMillScene = preload("res://Scenes/Buildings/CiderMill/CiderMill.tscn")
 
 var _map: Map = null
 var _spawn_parent: Node2D = null
@@ -19,6 +20,7 @@ var _forest: Forest = null
 @onready var _build_builder_button: Button = $UI/BuildBuilderHutButton
 @onready var _build_sawmill_button: Button = $UI/BuildSawmillButton
 @onready var _build_apple_farm_button: Button = $UI/BuildAppleFarmButton
+@onready var _build_cider_mill_button: Button = $UI/BuildCiderMillButton
 
 func setup(map: Map, coordination_manager: Node, forest: Forest) -> void:
 	_map = map
@@ -35,6 +37,8 @@ func _ready() -> void:
 		func(): _start_building(SawmillScene, Vector2i(Sawmill.SIZE_X, Sawmill.SIZE_Y)))
 	_build_apple_farm_button.pressed.connect(
 		func(): _start_building(AppleFarmScene, Vector2i(AppleFarm.SIZE_X, AppleFarm.SIZE_Y)))
+	_build_cider_mill_button.pressed.connect(
+		func(): _start_building(CiderMillScene, Vector2i(CiderMill.SIZE_X, CiderMill.SIZE_Y)))
 
 func _start_building(scene: PackedScene, size: Vector2i) -> void:
 	if _building_mode:
@@ -61,7 +65,7 @@ func _place_building() -> void:
 	var top_left := _get_footprint_top_left()
 	if _is_footprint_blocked(top_left):
 		return
-	if _active_scene == SawmillScene and not _is_adjacent_to_river(top_left):
+	if (_active_scene == SawmillScene or _active_scene == CiderMillScene) and not _is_adjacent_to_river(top_left):
 		return
 	var building := _active_scene.instantiate()
 	building.position = _footprint_position(top_left)
@@ -71,7 +75,7 @@ func _place_building() -> void:
 			_map.occupied_tiles[Vector2i(top_left.x + dx, top_left.y + dy)] = building
 	_coordination_manager.register_building(building)
 	building.on_placed(_spawn_parent, _map, _coordination_manager, _forest)
-	if building is WoodcutterHut or building is Sawmill or building is AppleFarm:
+	if building is WoodcutterHut or building is Sawmill or building is AppleFarm or building is CiderMill:
 		_coordination_manager.queue_construction(building)
 	_cancel_building()
 
@@ -109,7 +113,7 @@ func _process(_delta: float) -> void:
 func _update_preview() -> void:
 	var top_left := _get_footprint_top_left()
 	var blocked := _is_footprint_blocked(top_left)
-	if not blocked and _active_scene == SawmillScene:
+	if not blocked and (_active_scene == SawmillScene or _active_scene == CiderMillScene):
 		blocked = not _is_adjacent_to_river(top_left)
 	_preview.position = _footprint_position(top_left)
 	_preview.modulate = Color(1, 0, 0, 0.7) if blocked else Color(0, 1, 0, 0.7)

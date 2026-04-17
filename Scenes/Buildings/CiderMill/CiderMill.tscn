@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://Scenes/Buildings/CiderMill/cider_mill.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://Textures/watermill.png" id="2_mill"]
+[ext_resource type="PackedScene" uid="uid://c7e72ujaqkmo7" path="res://Scenes/Resources/ResourcePile/ResourcePile.tscn" id="3_pile"]
+
+[node name="CiderMill" type="Node2D"]
+script = ExtResource("1_script")
+building_name = "CiderMill"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_mill")
+position = Vector2(0, -104)
+
+[node name="NameLabel" type="Label" parent="."]
+position = Vector2(-100, -225)
+size = Vector2(200, 26)
+horizontal_alignment = 1
+text = ""
+
+[node name="InputPile" parent="." instance=ExtResource("3_pile")]
+position = Vector2(-32, 16)
+
+[node name="OutputPile" parent="." instance=ExtResource("3_pile")]
+position = Vector2(32, 16)
