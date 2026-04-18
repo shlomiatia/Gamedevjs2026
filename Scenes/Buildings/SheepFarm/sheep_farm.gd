@@ -38,6 +38,6 @@ func complete_construction() -> void:
 
 	var farmer := SheepFarmerScene.instantiate() as SheepFarmer
 	farmer.position = farmer_pos
-	farmer.setup(self, _map, sheep, _coordination_manager)
+	farmer.setup(self, _map, sheep, _spawn_parent, _coordination_manager)
 	_spawn_parent.add_child(farmer)
 

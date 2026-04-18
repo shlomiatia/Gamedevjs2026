@@ -50,9 +50,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ss1")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_ogxwu")
 }, {
 "duration": 1.0,
@@ -60,10 +57,13 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_15its")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ss1")
 }],
 "loop": true,
 "name": &"sheared_walk",
-"speed": 4.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -78,9 +78,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_us1")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_uw1")
 }, {
 "duration": 1.0,
@@ -88,10 +85,13 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fuv2o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_us1")
 }],
 "loop": true,
 "name": &"unsheared_walk",
-"speed": 4.0
+"speed": 6.0
 }]
 
 [node name="Sheep" type="Node2D"]
@@ -102,4 +102,4 @@ position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_sheep")
 animation = &"sheared_stand"
 autoplay = "unsheared_stand"
-frame_progress = 0.7563512
+frame_progress = 0.8075565

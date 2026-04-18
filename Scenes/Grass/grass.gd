@@ -38,19 +38,19 @@ func eat_grass(tile: Vector2i) -> void:
 		if _eaten_tiles.has(neighbor):
 			_update_dirt_tile(neighbor)
 
-func find_grass_tile(near_pos: Vector2, occupied_tiles: Dictionary) -> Vector2i:
+func find_grass_tile(near_pos: Vector2, occupied_tiles: Dictionary, extra_occupied: Dictionary = {}) -> Vector2i:
 	var start := _grass_layer.local_to_map(near_pos)
 	var bounds := _grass_layer.get_used_rect()
 	var queue: Array[Vector2i] = [start]
 	var visited: Dictionary = {start: true}
 	while not queue.is_empty():
 		var tile: Vector2i = queue.pop_front()
-		var occupied := occupied_tiles.has(tile)
-		if occupied:
+		var occupied := occupied_tiles.has(tile) or extra_occupied.has(tile)
+		if occupied and occupied_tiles.has(tile):
 			var occupant = occupied_tiles[tile]
 			if not (occupant is bool) and not is_instance_valid(occupant):
 				occupied_tiles.erase(tile)
-				occupied = false
+				occupied = extra_occupied.has(tile)
 		if not occupied and _grass_layer.get_cell_atlas_coords(tile) == Vector2i(0, 0):
 			return tile
 		for offset: Vector2i in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:

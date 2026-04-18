@@ -2,31 +2,45 @@ class_name SheepFarmer
 extends Node2D
 
 const OUTPUT_PILE_CAPACITY := 8
+const MAX_HERD := 8
 const SHEEP_EAT_TIME := 4000.0
-const SHEEP_SHEAR_TIME := 3000.0
+const SHEEP_SHEAR_TIME := 1000.0
 
 const WoolScene = preload("res://Scenes/Resources/Wool/Wool.tscn")
+const SheepScene = preload("res://Scenes/Sheep/Sheep.tscn")
 
-enum State { IDLE, GO_TO_GRASS, GRAZE, GO_HOME, SHEAR }
+enum State { IDLE, GO_TO_NEXT_TILE, GRAZE, GO_HOME, SHEAR }
 
 var _state := State.IDLE
 var _sheep_farm: SheepFarm = null
 var _map: Map = null
-var _sheep: Sheep = null
-var _target_tile := Vector2i(-1, -1)
-var _action_elapsed := 0.0
+var _spawn_parent: Node2D = null
+var _herd: Array[Sheep] = []
 
-func setup(sheep_farm: SheepFarm, map: Map, sheep: Sheep, coordination_manager: Node) -> void:
+var _pending_deliveries: Array = []   # Array of {sheep: Sheep, tile: Vector2i}
+var _graze_tiles: Array[Vector2i] = []
+var _delivered_sheep: Dictionary = {} # Sheep -> true
+
+var _action_elapsed := 0.0
+var _shear_elapsed := 0.0
+var _shear_queue: Array = []          # Array of Sheep
+var _spawn_new_sheep := false
+var _first_return_done := false
+
+func setup(sheep_farm: SheepFarm, map: Map, sheep: Sheep, spawn_parent: Node2D, coordination_manager: Node) -> void:
 	_sheep_farm = sheep_farm
 	_map = map
-	_sheep = sheep
+	_spawn_parent = spawn_parent
+	_herd.append(sheep)
 	$Worker.setup(sheep_farm, map, coordination_manager)
 
 func resume_work() -> void:
 	match _state:
-		State.GO_TO_GRASS, State.GRAZE:
-			_state = State.GO_TO_GRASS
-			$Worker.navigate_to(_map.tile_to_world(_target_tile))
+		State.GO_TO_NEXT_TILE:
+			if not _pending_deliveries.is_empty():
+				$Worker.navigate_to(_map.tile_to_world((_pending_deliveries[0] as Dictionary).tile))
+		State.GRAZE:
+			pass
 		State.GO_HOME, State.SHEAR:
 			_state = State.GO_HOME
 			$Worker.navigate_to($Worker.home_world_pos())
@@ -37,58 +51,124 @@ func _process(delta: float) -> void:
 		return
 	match _state:
 		State.IDLE:
-			_try_find_grass()
-		State.GO_TO_GRASS, State.GO_HOME:
+			_try_find_tiles()
+		State.GO_TO_NEXT_TILE:
+			_follow_undelivered(delta)
 			if $Worker.tick_movement(delta):
-				_on_path_finished()
-			elif is_instance_valid(_sheep):
-				_sheep.follow_toward(position, delta)
+				_on_arrived_at_tile()
 		State.GRAZE:
 			_action_elapsed += delta * 1000.0
 			if _action_elapsed >= SHEEP_EAT_TIME:
-				_action_elapsed = 0.0
 				_finish_graze()
+		State.GO_HOME:
+			_follow_all_sheep(delta)
+			if $Worker.tick_movement(delta):
+				_on_arrived_home()
 		State.SHEAR:
-			_action_elapsed += delta * 1000.0
-			if _action_elapsed >= SHEEP_SHEAR_TIME:
-				_action_elapsed = 0.0
-				_finish_shear()
+			_do_shear(delta)
 
 func _output_pile() -> ResourcePile:
 	return _sheep_farm.get_node("Building/OutputPile") as ResourcePile
 
-func _try_find_grass() -> void:
-	if $Worker.is_output_full(_output_pile(), OUTPUT_PILE_CAPACITY):
+func _should_go_out() -> bool:
+	if not _first_return_done:
+		return true
+	if _herd.size() < MAX_HERD:
+		return true
+	return not $Worker.is_output_full(_output_pile(), OUTPUT_PILE_CAPACITY)
+
+func _try_find_tiles() -> void:
+	if not _should_go_out():
 		return
-	var tile := _map.find_grass_tile(position)
-	if tile == Vector2i(-1, -1):
-		return
-	_target_tile = tile
-	$Worker.navigate_to(_map.tile_to_world(tile))
-	_state = State.GO_TO_GRASS
+	var reserved: Dictionary = {}
+	var deliveries: Array = []
+	for sheep: Sheep in _herd:
+		var tile := _map.find_grass_tile(_sheep_farm.position, reserved)
+		if tile == Vector2i(-1, -1):
+			return
+		reserved[tile] = true
+		deliveries.append({sheep = sheep, tile = tile})
+	_pending_deliveries = deliveries
+	_graze_tiles.clear()
+	_delivered_sheep.clear()
+	$Worker.navigate_to(_map.tile_to_world((_pending_deliveries[0] as Dictionary).tile))
+	_state = State.GO_TO_NEXT_TILE
+
+func _follow_undelivered(delta: float) -> void:
+	for sheep: Sheep in _herd:
+		if not _delivered_sheep.has(sheep):
+			sheep.follow_toward(position, delta)
+
+func _follow_all_sheep(delta: float) -> void:
+	for sheep: Sheep in _herd:
+		sheep.follow_toward(position, delta)
+
+func _on_arrived_at_tile() -> void:
+	var delivery := _pending_deliveries.pop_front() as Dictionary
+	var sheep := delivery.sheep as Sheep
+	var tile := delivery.tile as Vector2i
+	_graze_tiles.append(tile)
+	_delivered_sheep[sheep] = true
+	sheep.set_walking(false)
+	if not _pending_deliveries.is_empty():
+		$Worker.navigate_to(_map.tile_to_world((_pending_deliveries[0] as Dictionary).tile))
+	else:
+		_action_elapsed = 0.0
+		_state = State.GRAZE
 
 func _finish_graze() -> void:
-	_map.eat_grass(_target_tile)
-	_target_tile = Vector2i(-1, -1)
-	if is_instance_valid(_sheep):
-		_sheep.regrow()
+	for tile in _graze_tiles:
+		_map.eat_grass(tile)
+	for sheep: Sheep in _herd:
+		sheep.regrow()
+	_delivered_sheep.clear()
 	$Worker.navigate_to($Worker.home_world_pos())
 	_state = State.GO_HOME
 
-func _finish_shear() -> void:
-	if is_instance_valid(_sheep):
-		_sheep.shear()
-		_sheep.set_walking(false)
-	_output_pile().add_resource(WoolScene)
-	_state = State.IDLE
+func _on_arrived_home() -> void:
+	for sheep: Sheep in _herd:
+		sheep.set_walking(false)
+	if _shear_queue.is_empty():
+		_setup_shear_cycle()
+	if not _shear_queue.is_empty():
+		_shear_elapsed = 0.0
+		_state = State.SHEAR
+	else:
+		_do_spawn_if_needed()
 
-func _on_path_finished() -> void:
-	if is_instance_valid(_sheep):
-		_sheep.set_walking(false)
-	match _state:
-		State.GO_TO_GRASS:
-			_state = State.GRAZE
-			_action_elapsed = 0.0
-		State.GO_HOME:
-			_state = State.SHEAR
-			_action_elapsed = 0.0
+func _setup_shear_cycle() -> void:
+	_shear_queue.clear()
+	if not _first_return_done:
+		for sheep in _herd:
+			_shear_queue.append(sheep)
+		_spawn_new_sheep = false
+		_first_return_done = true
+	elif _herd.size() < MAX_HERD:
+		for i in _herd.size() - 1:
+			_shear_queue.append(_herd[i])
+		_spawn_new_sheep = true
+	else:
+		for sheep in _herd:
+			_shear_queue.append(sheep)
+		_spawn_new_sheep = false
+
+func _do_shear(delta: float) -> void:
+	_shear_elapsed += delta * 1000.0
+	if _shear_elapsed < SHEEP_SHEAR_TIME:
+		return
+	_shear_elapsed = 0.0
+	var sheep := _shear_queue.pop_front() as Sheep
+	if not $Worker.is_output_full(_output_pile(), OUTPUT_PILE_CAPACITY):
+		_output_pile().add_resource(WoolScene)
+		sheep.shear()
+	if _shear_queue.is_empty():
+		_do_spawn_if_needed()
+
+func _do_spawn_if_needed() -> void:
+	if _spawn_new_sheep:
+		_spawn_new_sheep = false
+		var baby := SheepScene.instantiate() as Sheep
+		baby.position = position
+		_spawn_parent.add_child(baby)
+		_herd.append(baby)
+	_state = State.IDLE
