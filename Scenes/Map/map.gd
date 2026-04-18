@@ -10,11 +10,14 @@ var eaten_tiles: Dictionary = {}
 
 @onready var _grass: Grass = $Grass
 @onready var _river: River = $River
+@onready var _mountain: Mountain = $Mountain
 
 func _ready() -> void:
 	_grass.setup(LEVEL_WIDTH, LEVEL_HEIGHT, RIVER_ROW)
 	_river.setup(LEVEL_WIDTH, RIVER_ROW)
+	_mountain.setup(LEVEL_WIDTH, LEVEL_HEIGHT, get_tile_size())
 	set_occupied_tiles_rect(Vector2i(0, 0), Vector2i(LEVEL_WIDTH, RIVER_ROW + 1), true)
+	set_occupied_tiles_rect(Vector2i(0, LEVEL_HEIGHT - 1), Vector2i(LEVEL_WIDTH, 1), true)
 
 func set_occupied_tiles_rect(top_left: Vector2i, size: Vector2i, value) -> void:
 	for dx in size.x:

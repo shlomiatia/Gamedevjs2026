@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bv4pf242m2a10"]
+[gd_scene load_steps=5 format=3 uid="uid://bv4pf242m2a10"]
 
 [ext_resource type="Script" uid="uid://dk6u8o6v23cvk" path="res://Scenes/Map/map.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://b1eg8a2ym8d0h" path="res://Scenes/Grass/Grass.tscn" id="2_grass"]
 [ext_resource type="PackedScene" path="res://Scenes/River/River.tscn" id="3_river"]
+[ext_resource type="PackedScene" path="res://Scenes/Mountain/Mountain.tscn" id="4_mountain"]
 
 [node name="Map" type="Node2D"]
 script = ExtResource("1_script")
@@ -10,3 +11,5 @@ script = ExtResource("1_script")
 [node name="River" parent="." instance=ExtResource("3_river")]
 
 [node name="Grass" parent="." instance=ExtResource("2_grass")]
+
+[node name="Mountain" parent="." instance=ExtResource("4_mountain")]

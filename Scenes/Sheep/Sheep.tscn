@@ -102,4 +102,4 @@ position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_sheep")
 animation = &"sheared_stand"
 autoplay = "unsheared_stand"
-frame_progress = 0.8075565
+frame_progress = 0.5534444

@@ -17,6 +17,7 @@ func home_world_pos() -> Vector2:
 
 func navigate_to(world_pos: Vector2) -> void:
 	_path = _map.find_path(_mover.position, world_pos)
+	assert(not _path.is_empty(), "WorkerNavigator: no path found to %s" % world_pos)
 
 func tick(delta: float) -> bool:
 	return _move_along_path(delta)
