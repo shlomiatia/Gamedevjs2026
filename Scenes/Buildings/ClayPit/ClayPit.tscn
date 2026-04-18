@@ -14,4 +14,4 @@ building_name = "ClayPit"
 texture = ExtResource("3_mine")
 
 [node name="OutputPile" parent="Building"]
-position = Vector2(64, -16)
+position = Vector2(96, -16)
