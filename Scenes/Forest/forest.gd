@@ -46,8 +46,7 @@ func find_tree(from: Vector2, require_apples: bool) -> Dictionary:
 		var tile: Vector2i = queue.pop_front()
 		if trees.has(tile):
 			var tree := trees[tile] as GameTree
-			var usable := (require_apples and not tree.apple_targeted and tree.has_apples) or \
-						  (not require_apples and not tree.targeted)
+			var usable := not tree.targeted and (not require_apples or tree.has_apples)
 			if usable:
 				return {tree = tree, tile = tile}
 		for offset: Vector2i in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:

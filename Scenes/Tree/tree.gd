@@ -3,7 +3,6 @@ extends Node2D
 
 var targeted := false
 var has_apples := true
-var apple_targeted := false
 
 var _map: Map = null
 var _tile_pos: Vector2i
@@ -24,5 +23,5 @@ func set_chop_progress(progress: float) -> void:
 
 func remove_apples() -> void:
 	has_apples = false
-	apple_targeted = false
+	targeted = false
 	$ApplesSprite.visible = false

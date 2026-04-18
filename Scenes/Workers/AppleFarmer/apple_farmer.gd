@@ -57,7 +57,7 @@ func _try_find_tree() -> void:
         return
     var best_tree := result["tree"] as GameTree
     var best_tile := result["tile"] as Vector2i
-    best_tree.apple_targeted = true
+    best_tree.targeted = true
     _target_tree = best_tree
     _target_tree_tile = best_tile
     $Worker.navigate_to(_map.tile_to_world(_target_tree_tile))
