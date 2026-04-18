@@ -35,5 +35,6 @@ func _process(delta: float) -> void:
 		State.MINE:
 			_mine_elapsed += delta * 1000.0
 			if _mine_elapsed >= Constants.mine_duration_ms:
-				_mine_elapsed = 0.0
-				_pile.add_resource(_output_scene)
+				if not $Worker.is_output_full(_pile, Constants.output_pile_capacity):
+					_mine_elapsed = 0.0
+					_pile.add_resource(_output_scene)

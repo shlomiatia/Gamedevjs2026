@@ -57,6 +57,7 @@ func _process(delta: float) -> void:
 	$Worker.set_working(working)
 	if _building.has_method("set_smoking"):
 		_building.set_smoking(working)
+	(_building.get_node("Building") as BuildingComponent).set_milling(working)
 	if $Worker.is_satisfying_need():
 		return
 	match _state:

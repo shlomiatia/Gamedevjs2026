@@ -27,6 +27,9 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 	$Building.start_construction()
 	coordination_manager.queue_construction(self)
 
+func set_smoking(value: bool) -> void:
+	($Smoke as CPUParticles2D).emitting = value
+
 func complete_construction() -> void:
 	$Building.complete_construction()
 	var worker := KilnWorkerScene.instantiate() as KilnWorker
