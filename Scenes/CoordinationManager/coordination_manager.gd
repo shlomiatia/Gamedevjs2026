@@ -3,7 +3,7 @@ extends Node
 
 signal game_over
 
-enum ResourceType { LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY }
+enum ResourceType { LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK }
 
 const RESOURCE_TO_NEED := {
 	ResourceType.APPLE: Worker.NeedType.FOOD,

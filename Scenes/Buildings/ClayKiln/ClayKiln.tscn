@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://Scenes/Buildings/ClayKiln/clay_kiln.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bap1qcvbb4owg" path="res://Scenes/Buildings/Building/Building.tscn" id="2_building"]
+[ext_resource type="Texture2D" path="res://Textures/bricks_house.png" id="3_texture"]
+
+[node name="ClayKiln" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Building" parent="." instance=ExtResource("2_building")]
+building_name = "ClayKiln"
+
+[node name="Sprite2D" parent="Building"]
+texture = ExtResource("3_texture")
+
+[node name="Smoke" type="CPUParticles2D" parent="."]
+position = Vector2(0, -190)
+emitting = false
+amount = 8
+lifetime = 2.0
+direction = Vector2(0, -1)
+spread = 15.0
+gravity = Vector2(3.0, -10.0)
+initial_velocity_min = 8.0
+initial_velocity_max = 15.0
+scale_amount_min = 2.0
+scale_amount_max = 4.0
+color = Color(0.55, 0.55, 0.55, 0.7)

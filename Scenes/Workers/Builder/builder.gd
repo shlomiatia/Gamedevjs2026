@@ -28,7 +28,8 @@ func assign_build_task(target) -> void:
 	assert(is_free(), "assign_build_task called on a non-free builder")
 	_target_hut = target
 	_state = State.WAIT_FOR_RESOURCE_GO_HOME
-	_coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.PLANK)
+	var res_type: int = _target_hut.get("CONSTRUCTION_RESOURCE_TYPE") if _target_hut.get("CONSTRUCTION_RESOURCE_TYPE") != null else CoordinationManager.ResourceType.PLANK
+	_coordination_manager.queue_resource_collection(self, res_type)
 	if _state == State.WAIT_FOR_RESOURCE_GO_HOME and not $Worker.is_satisfying_need():
 		$Worker.navigate_to($Worker.home_world_pos())
 
