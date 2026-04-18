@@ -19,7 +19,7 @@ func get_pile_for_type(type: int) -> ResourcePile:
 	return $Building.get_output_pile() if type == output_resource_type else null
 
 func validate_placement(top_left: Vector2i, map: Map) -> bool:
-	return top_left.y + SIZE_Y == map.LEVEL_HEIGHT - 1 and $Building.validate_placement(top_left, map)
+	return top_left.y + SIZE_Y == map.LEVEL_HEIGHT - 6 and $Building.validate_placement(top_left, map)
 
 func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _forest: Forest) -> void:
 	_spawn_parent = spawn_parent

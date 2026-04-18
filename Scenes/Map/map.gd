@@ -1,8 +1,8 @@
 class_name Map
 extends Node2D
 
-const LEVEL_WIDTH := 60
-const LEVEL_HEIGHT := 30
+const LEVEL_WIDTH := 70
+const LEVEL_HEIGHT := 40
 const RIVER_ROW := 4
 
 enum OccupiedType {BLOCK_BUILDING = 1, BLOCK_WORKERS = 2}
@@ -19,7 +19,7 @@ func _ready() -> void:
 	_river.setup(LEVEL_WIDTH, RIVER_ROW, 2)
 	_mountain.setup(LEVEL_WIDTH, LEVEL_HEIGHT, get_tile_size())
 	set_occupied_tiles_rect(Vector2i(0, 0), Vector2i(LEVEL_WIDTH, RIVER_ROW + 2), OccupiedType.BLOCK_WORKERS)
-	set_occupied_tiles_rect(Vector2i(0, LEVEL_HEIGHT - 1), Vector2i(LEVEL_WIDTH, 1), OccupiedType.BLOCK_WORKERS)
+	set_occupied_tiles_rect(Vector2i(0, LEVEL_HEIGHT - 6), Vector2i(LEVEL_WIDTH, 6), OccupiedType.BLOCK_WORKERS)
 
 func set_occupied_tiles_rect(top_left: Vector2i, size: Vector2i, value) -> void:
 	for dx in size.x:

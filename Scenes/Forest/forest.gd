@@ -19,7 +19,9 @@ func setup(map: Map, spawn_parent: Node2D) -> void:
 func _spawn_trees() -> void:
 	var tile_size := _map.get_tile_size()
 	var start_x := randi_range(0, Map.LEVEL_WIDTH - TREE_AREA_WIDTH)
-	var start_y := randi_range(0, Map.LEVEL_HEIGHT - TREE_AREA_HEIGHT)
+	var valid_y_min := Map.RIVER_ROW + 2
+	var valid_y_max := Map.LEVEL_HEIGHT - 6 - TREE_AREA_HEIGHT
+	var start_y := randi_range(valid_y_min, valid_y_max)
 
 	var positions: Array[Vector2i] = []
 	for x in TREE_AREA_WIDTH:

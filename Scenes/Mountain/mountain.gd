@@ -7,7 +7,7 @@ func setup(level_width: int, level_height: int, tile_size: Vector2i) -> void:
 	z_index = 100
 	y_sort_enabled = true
 	var ore_half_h := OreTexture.get_height() / 2.0
-	for row in [level_height - 1, level_height]:
+	for row in range(level_height - 5, level_height + 1):
 		for x in level_width:
 			var tile_center := Vector2(
 				x * tile_size.x + tile_size.x * 0.5,
