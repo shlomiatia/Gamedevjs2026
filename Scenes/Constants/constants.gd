@@ -23,7 +23,7 @@ var clothing_drain := 1.0
 
 # Tool (blocks worker at 0, no threshold replenishment)
 var initial_tool := 300.0
-var tool_drain := 1.0
+var tool_drain := 2.0
 
 # Need satisfaction
 var need_satisfaction_value := 200.0

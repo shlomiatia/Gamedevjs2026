@@ -96,12 +96,14 @@ func _process(delta: float) -> void:
     if _is_dead:
         return
 
-    var hunger_drain := Constants.hunger_drain_working if _is_working else Constants.hunger_drain_normal
+    var is_working := _is_working && !is_satisfying_need()
+
+    var hunger_drain := Constants.hunger_drain_working if is_working else Constants.hunger_drain_normal
     hunger = maxf(0.0, hunger - hunger_drain * delta)
     var thirst_drain := Constants.thirst_drain_walking if _navigator.is_moving() else Constants.thirst_drain_normal
     thirst = maxf(0.0, thirst - thirst_drain * delta)
     clothing = maxf(0.0, clothing - Constants.clothing_drain * delta)
-    if _is_working:
+    if is_working:
         _tool = maxf(0.0, _tool - Constants.tool_drain * 2.0 * delta)
 
     if hunger == 0.0 or thirst == 0.0:
