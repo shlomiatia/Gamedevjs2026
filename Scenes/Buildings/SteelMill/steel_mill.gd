@@ -2,7 +2,7 @@ class_name SteelMill
 extends Node2D
 
 const SIZE_X := 5
-const SIZE_Y := 2
+const SIZE_Y := 1
 const BUILDING_NAME := "SteelMill"
 const CONSTRUCTION_RESOURCE_TYPE := CoordinationManager.ResourceType.BRICK
 

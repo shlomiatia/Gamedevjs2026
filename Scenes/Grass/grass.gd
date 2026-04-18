@@ -6,14 +6,16 @@ extends Node2D
 
 var _eaten_tiles: Dictionary = {}
 
-func setup(level_width: int, level_height: int, river_row: int) -> void:
+func setup(level_width: int, level_height: int, river_row: int, river_rows: int = 1) -> void:
 	for x in level_width:
 		for y in level_height:
 			_grass_layer.set_cell(Vector2i(x, y), 0, Vector2i(0, 0))
-			if y != river_row:
+			if y < river_row or y >= river_row + river_rows:
 				_dirt_layer.set_cell(Vector2i(x, y), 0, Vector2i(1, 0))
 	for x in level_width:
-		_grass_layer.set_cell(Vector2i(x, river_row), 0, Vector2i(0, 1))
+		_grass_layer.set_cell(Vector2i(x, river_row), 0, Vector2i(5, 3))
+		for r in range(1, river_rows):
+			_grass_layer.set_cell(Vector2i(x, river_row + r), 0, Vector2i(5, 1))
 
 func get_tile_size() -> Vector2i:
 	return _grass_layer.tile_set.tile_size

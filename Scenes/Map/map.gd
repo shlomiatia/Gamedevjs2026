@@ -3,9 +3,9 @@ extends Node2D
 
 const LEVEL_WIDTH := 60
 const LEVEL_HEIGHT := 30
-const RIVER_ROW := 3
+const RIVER_ROW := 4
 
-enum OccupiedType { BLOCK_BUILDING = 1, BLOCK_WORKERS = 2 }
+enum OccupiedType {BLOCK_BUILDING = 1, BLOCK_WORKERS = 2}
 
 var occupied_tiles: Dictionary = {}
 var eaten_tiles: Dictionary = {}
@@ -15,10 +15,10 @@ var eaten_tiles: Dictionary = {}
 @onready var _mountain: Mountain = $Mountain
 
 func _ready() -> void:
-	_grass.setup(LEVEL_WIDTH, LEVEL_HEIGHT, RIVER_ROW)
-	_river.setup(LEVEL_WIDTH, RIVER_ROW)
+	_grass.setup(LEVEL_WIDTH, LEVEL_HEIGHT, RIVER_ROW, 2)
+	_river.setup(LEVEL_WIDTH, RIVER_ROW, 2)
 	_mountain.setup(LEVEL_WIDTH, LEVEL_HEIGHT, get_tile_size())
-	set_occupied_tiles_rect(Vector2i(0, 0), Vector2i(LEVEL_WIDTH, RIVER_ROW + 1), OccupiedType.BLOCK_WORKERS)
+	set_occupied_tiles_rect(Vector2i(0, 0), Vector2i(LEVEL_WIDTH, RIVER_ROW + 2), OccupiedType.BLOCK_WORKERS)
 	set_occupied_tiles_rect(Vector2i(0, LEVEL_HEIGHT - 1), Vector2i(LEVEL_WIDTH, 1), OccupiedType.BLOCK_WORKERS)
 
 func set_occupied_tiles_rect(top_left: Vector2i, size: Vector2i, value) -> void:

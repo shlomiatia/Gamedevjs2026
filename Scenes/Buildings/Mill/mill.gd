@@ -5,7 +5,7 @@ const WHEEL_ROTATION_SPEED := TAU / 10.0
 var _is_milling := false
 
 func validate_placement(top_left: Vector2i, _map: Map) -> bool:
-	return top_left.y == Map.RIVER_ROW + 1
+	return top_left.y == Map.RIVER_ROW + 2
 
 func set_milling(val: bool) -> void:
 	_is_milling = val
