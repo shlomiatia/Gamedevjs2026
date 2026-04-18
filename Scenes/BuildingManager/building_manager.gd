@@ -81,6 +81,7 @@ func _place_building() -> void:
     building.position = _footprint_position(top_left)
     _spawn_parent.add_child(building)
     _map.set_occupied_tiles_rect(top_left, _active_size, Map.OccupiedType.BLOCK_WORKERS)
+    _map.set_occupied_ring(top_left, _active_size, Map.OccupiedType.BLOCK_BUILDING)
     _coordination_manager.register_building(building)
     building.on_placed(_spawn_parent, _map, _coordination_manager, _forest)
     _cancel_building()

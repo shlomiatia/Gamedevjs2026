@@ -10,6 +10,8 @@ enum OccupiedType { BLOCK_BUILDING = 1, BLOCK_WORKERS = 2 }
 var occupied_tiles: Dictionary = {}
 var eaten_tiles: Dictionary = {}
 
+@onready var _debug_overlay: Node2D = $DebugOverlay
+
 @onready var _grass: Grass = $Grass
 @onready var _river: River = $River
 @onready var _mountain: Mountain = $Mountain
@@ -20,11 +22,26 @@ func _ready() -> void:
 	_mountain.setup(LEVEL_WIDTH, LEVEL_HEIGHT, get_tile_size())
 	set_occupied_tiles_rect(Vector2i(0, 0), Vector2i(LEVEL_WIDTH, RIVER_ROW + 1), OccupiedType.BLOCK_WORKERS)
 	set_occupied_tiles_rect(Vector2i(0, LEVEL_HEIGHT - 1), Vector2i(LEVEL_WIDTH, 1), OccupiedType.BLOCK_WORKERS)
+	_debug_overlay.setup(self)
+	_debug_overlay.queue_redraw()
 
 func set_occupied_tiles_rect(top_left: Vector2i, size: Vector2i, value) -> void:
 	for dx in size.x:
 		for dy in size.y:
 			occupied_tiles[Vector2i(top_left.x + dx, top_left.y + dy)] = value
+	if is_node_ready():
+		_debug_overlay.queue_redraw()
+
+func set_occupied_ring(top_left: Vector2i, size: Vector2i, value: int) -> void:
+	for x in range(top_left.x - 1, top_left.x + size.x + 1):
+		for y in range(top_left.y - 1, top_left.y + size.y + 1):
+			var tile := Vector2i(x, y)
+			if x >= top_left.x and x < top_left.x + size.x and y >= top_left.y and y < top_left.y + size.y:
+				continue
+			if occupied_tiles.get(tile, 0) < value:
+				occupied_tiles[tile] = value
+	if is_node_ready():
+		_debug_overlay.queue_redraw()
 
 func get_tile_size() -> Vector2i:
 	return _grass.get_tile_size()

@@ -66,7 +66,27 @@ func _process(delta: float) -> void:
 			_do_build(delta)
 
 func _site_world_pos() -> Vector2:
-	return _target_hut.position + Vector2(0, float(_map.get_tile_size().y) * 0.5)
+	var tile_size := _map.get_tile_size()
+	var size_x: int = _target_hut.SIZE_X
+	var size_y: int = _target_hut.SIZE_Y
+	var top_left := Vector2i(
+		roundi(_target_hut.position.x / tile_size.x - size_x / 2.0),
+		roundi(_target_hut.position.y / tile_size.y) - size_y
+	)
+	var best := Vector2i(-1, -1)
+	var best_dist := INF
+	for x in range(top_left.x - 1, top_left.x + size_x + 1):
+		for y in range(top_left.y - 1, top_left.y + size_y + 1):
+			if x >= top_left.x and x < top_left.x + size_x and y >= top_left.y and y < top_left.y + size_y:
+				continue
+			var tile := Vector2i(x, y)
+			if _map.occupied_tiles.get(tile, 0) == Map.OccupiedType.BLOCK_WORKERS:
+				continue
+			var d := position.distance_to(_map.tile_to_world(tile))
+			if d < best_dist:
+				best_dist = d
+				best = tile
+	return _map.tile_to_world(best) if best != Vector2i(-1, -1) else _target_hut.position
 
 func _on_path_finished() -> void:
 	match _state:
