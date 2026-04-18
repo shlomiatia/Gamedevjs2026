@@ -17,10 +17,13 @@ var thirst_drain_normal := 1.0
 var thirst_drain_walking := 2.0
 var thirst_threshold := 100.0
 
-# Clothing
+# Clothing (blocks worker at 0, no threshold replenishment)
 var initial_clothing := 200.0
 var clothing_drain := 1.0
-var clothing_threshold := 100.0
+
+# Tool (blocks worker at 0, no threshold replenishment)
+var initial_tool := 200.0
+var tool_drain := 1.0
 
 # Need satisfaction
 var need_satisfaction_value := 200.0
@@ -82,11 +85,12 @@ func _ready():
 			]
 		},
 		{
-			"name": "Clothing",
+			"name": "Clothing & Tool",
 			"properties": [
 				["initial_clothing", 10],
 				["clothing_drain", 0.1],
-				["clothing_threshold", 10],
+				["initial_tool", 10],
+				["tool_drain", 0.1],
 			]
 		},
 		{

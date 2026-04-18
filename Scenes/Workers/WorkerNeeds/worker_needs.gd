@@ -9,11 +9,15 @@ const BAR_HEIGHT := 4.0
 const BAR_Y := -68.0
 const THIRST_BAR_Y := BAR_Y - BAR_HEIGHT - 2.0
 const CLOTHING_BAR_Y := THIRST_BAR_Y - BAR_HEIGHT - 2.0
+const TOOL_BAR_Y := CLOTHING_BAR_Y - BAR_HEIGHT - 2.0
 const DEBUG_FONT_SIZE := 9
 
 var hunger := 0.0
 var thirst := 0.0
 var clothing := 0.0
+var _tool := 0.0
+
+var _blocked_by_needs: Dictionary = {}
 
 var _mover: Node2D = null
 var _map: Map = null
@@ -32,18 +36,20 @@ func setup(mover: Node2D, map: Map, coordination_manager: Node, navigator: Worke
     hunger = Constants.initial_hunger
     thirst = Constants.initial_thirst
     clothing = Constants.initial_clothing
+    _tool = Constants.initial_tool
 
 func set_working(val: bool) -> void:
     _is_working = val
 
 func is_satisfying_need() -> bool:
-    return not _active_needs.is_empty()
+    return not _active_needs.is_empty() or not _blocked_by_needs.is_empty()
 
 func get_need_value(need: int) -> float:
     match need:
         Worker.NeedType.FOOD: return hunger
         Worker.NeedType.DRINK: return thirst
         Worker.NeedType.CLOTHING: return clothing
+        Worker.NeedType.TOOL: return _tool
     return INF
 
 func handle_need(need: int, pile: ResourcePile) -> void:
@@ -76,12 +82,14 @@ func _finish_need_trip() -> void:
         Worker.NeedType.FOOD: hunger = minf(Constants.initial_hunger, hunger + satisfaction)
         Worker.NeedType.DRINK: thirst = minf(Constants.initial_thirst, thirst + satisfaction)
         Worker.NeedType.CLOTHING: clothing = minf(Constants.initial_clothing, clothing + satisfaction)
+        Worker.NeedType.TOOL: _tool = minf(Constants.initial_tool, _tool + satisfaction)
+    _blocked_by_needs.erase(entry.need)
     _need_requested[entry.need] = false
     _active_needs.remove_at(0)
 
     if not _active_needs.is_empty():
         _navigator.navigate_to(_active_needs[0].pile.global_position)
-    else:
+    elif _blocked_by_needs.is_empty():
         needs_satisfied.emit()
 
 func _process(delta: float) -> void:
@@ -93,8 +101,10 @@ func _process(delta: float) -> void:
     var thirst_drain := Constants.thirst_drain_walking if _navigator.is_moving() else Constants.thirst_drain_normal
     thirst = maxf(0.0, thirst - thirst_drain * delta)
     clothing = maxf(0.0, clothing - Constants.clothing_drain * delta)
+    if _is_working:
+        _tool = maxf(0.0, _tool - Constants.tool_drain * 2.0 * delta)
 
-    if hunger == 0.0 or thirst == 0.0 or clothing == 0.0:
+    if hunger == 0.0 or thirst == 0.0:
         _is_dead = true
         died.emit()
         return
@@ -106,9 +116,14 @@ func _process(delta: float) -> void:
         if not _need_requested.get(Worker.NeedType.DRINK, false) and thirst < Constants.thirst_threshold:
             _need_requested[Worker.NeedType.DRINK] = true
             _coordination_manager.queue_need_collection(_mover, Worker.NeedType.DRINK)
-        if not _need_requested.get(Worker.NeedType.CLOTHING, false) and clothing < Constants.clothing_threshold:
+        if not _need_requested.get(Worker.NeedType.CLOTHING, false) and clothing == 0.0:
             _need_requested[Worker.NeedType.CLOTHING] = true
+            _blocked_by_needs[Worker.NeedType.CLOTHING] = true
             _coordination_manager.queue_need_collection(_mover, Worker.NeedType.CLOTHING)
+        if not _need_requested.get(Worker.NeedType.TOOL, false) and _tool == 0.0:
+            _need_requested[Worker.NeedType.TOOL] = true
+            _blocked_by_needs[Worker.NeedType.TOOL] = true
+            _coordination_manager.queue_need_collection(_mover, Worker.NeedType.TOOL)
 
     if not _active_needs.is_empty():
         if _navigator.tick(delta):
@@ -121,6 +136,7 @@ func _draw() -> void:
     draw_rect(Rect2(bx, BAR_Y, BAR_WIDTH, BAR_HEIGHT), Color(0.15, 0.15, 0.15, 0.85))
     draw_rect(Rect2(bx, THIRST_BAR_Y, BAR_WIDTH, BAR_HEIGHT), Color(0.15, 0.15, 0.15, 0.85))
     draw_rect(Rect2(bx, CLOTHING_BAR_Y, BAR_WIDTH, BAR_HEIGHT), Color(0.15, 0.15, 0.15, 0.85))
+    draw_rect(Rect2(bx, TOOL_BAR_Y, BAR_WIDTH, BAR_HEIGHT), Color(0.15, 0.15, 0.15, 0.85))
 
     var hr := hunger / Constants.initial_hunger
     if hr > 0.0:
@@ -137,18 +153,24 @@ func _draw() -> void:
         var cc := Color(0.7, 0.3, 0.9) if cr > 0.5 else (Color(0.9, 0.7, 0.1) if cr > 0.25 else Color(0.9, 0.2, 0.2))
         draw_rect(Rect2(bx, CLOTHING_BAR_Y, BAR_WIDTH * cr, BAR_HEIGHT), cc)
 
+    var tool_r := _tool / Constants.initial_tool
+    if tool_r > 0.0:
+        var tc2 := Color(0.8, 0.6, 0.2) if tool_r > 0.5 else (Color(0.9, 0.7, 0.1) if tool_r > 0.25 else Color(0.9, 0.2, 0.2))
+        draw_rect(Rect2(bx, TOOL_BAR_Y, BAR_WIDTH * tool_r, BAR_HEIGHT), tc2)
+
     if _mover == null:
         return
     var font := ThemeDB.fallback_font
     var line_h := DEBUG_FONT_SIZE + 2.0
 
-    var name_y := CLOTHING_BAR_Y - 2.0
+    var name_y := TOOL_BAR_Y - 2.0
     draw_string(font, Vector2(bx, name_y), _mover.name, HORIZONTAL_ALIGNMENT_LEFT, -1, DEBUG_FONT_SIZE, Color.WHITE)
 
     var req_f := "F" if _need_requested.get(Worker.NeedType.FOOD, false) else "f"
     var req_d := "D" if _need_requested.get(Worker.NeedType.DRINK, false) else "d"
     var req_c := "C" if _need_requested.get(Worker.NeedType.CLOTHING, false) else "c"
-    draw_string(font, Vector2(bx, name_y - line_h), "req:%s%s%s" % [req_f, req_d, req_c], HORIZONTAL_ALIGNMENT_LEFT, -1, DEBUG_FONT_SIZE, Color.YELLOW)
+    var req_t := "T" if _need_requested.get(Worker.NeedType.TOOL, false) else "t"
+    draw_string(font, Vector2(bx, name_y - line_h), "req:%s%s%s%s" % [req_f, req_d, req_c, req_t], HORIZONTAL_ALIGNMENT_LEFT, -1, DEBUG_FONT_SIZE, Color.YELLOW)
 
     var active_str := ""
     for entry in _active_needs:
@@ -162,4 +184,5 @@ func _need_short_name(need: int) -> String:
         Worker.NeedType.FOOD: return "Food"
         Worker.NeedType.DRINK: return "Drnk"
         Worker.NeedType.CLOTHING: return "Clth"
+        Worker.NeedType.TOOL: return "Tool"
     return "?"

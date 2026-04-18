@@ -3,7 +3,7 @@ extends Node2D
 
 signal died
 
-enum NeedType { FOOD = 0, DRINK = 1, CLOTHING = 2 }
+enum NeedType { FOOD = 0, DRINK = 1, CLOTHING = 2, TOOL = 3 }
 const NO_NEED := -1
 
 var _navigator: WorkerNavigator = null

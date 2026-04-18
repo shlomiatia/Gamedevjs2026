@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scenes/Resources/Tool/tool.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cg6sx23mpb63c" path="res://Textures/brick.png" id="2_placeholder"]
+
+[node name="Tool" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+modulate = Color(0.3, 0.6, 0.9, 1)
+texture = ExtResource("2_placeholder")

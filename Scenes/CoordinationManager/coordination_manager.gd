@@ -3,18 +3,20 @@ extends Node
 
 signal game_over
 
-enum ResourceType { LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR }
+enum ResourceType { LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR, TOOL }
 
 const RESOURCE_TO_NEED := {
 	ResourceType.APPLE: Worker.NeedType.FOOD,
 	ResourceType.CIDER: Worker.NeedType.DRINK,
 	ResourceType.CLOTHES: Worker.NeedType.CLOTHING,
+	ResourceType.TOOL: Worker.NeedType.TOOL,
 }
 
 const NEED_TO_RESOURCE := {
 	Worker.NeedType.FOOD: ResourceType.APPLE,
 	Worker.NeedType.DRINK: ResourceType.CIDER,
 	Worker.NeedType.CLOTHING: ResourceType.CLOTHES,
+	Worker.NeedType.TOOL: ResourceType.TOOL,
 }
 
 var _builders: Array = []
@@ -29,6 +31,7 @@ func _ready() -> void:
 	_need_queues[Worker.NeedType.FOOD] = []
 	_need_queues[Worker.NeedType.DRINK] = []
 	_need_queues[Worker.NeedType.CLOTHING] = []
+	_need_queues[Worker.NeedType.TOOL] = []
 
 # --- Builder / building registration ---
 

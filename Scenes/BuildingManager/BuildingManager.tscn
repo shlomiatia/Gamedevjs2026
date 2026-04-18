@@ -7,146 +7,84 @@ script = ExtResource("1_script")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="BuildCoalMineButton" type="Button" parent="UI"]
-anchors_preset = 7
-anchor_left = 0.5
+[node name="ButtonPanel" type="VBoxContainer" parent="UI"]
+anchors_preset = 8
+anchor_left = 0.0
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = -185.0
-offset_right = -100.0
-offset_bottom = -145.0
-text = "Build CoalMine"
+offset_top = -95.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_vertical = 0
 
-[node name="BuildIronMineButton" type="Button" parent="UI"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -90.0
-offset_top = -185.0
-offset_right = 90.0
-offset_bottom = -145.0
-text = "Build IronMine"
+[node name="Row1" type="HBoxContainer" parent="UI/ButtonPanel"]
+size_flags_vertical = 3
 
-[node name="BuildSteelMillButton" type="Button" parent="UI"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 100.0
-offset_top = -185.0
-offset_right = 280.0
-offset_bottom = -145.0
-text = "Build SteelMill"
-
-[node name="BuildWoodcutterHutButton" type="Button" parent="UI"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = -140.0
-offset_right = -100.0
-offset_bottom = -100.0
+[node name="BuildWoodcutterHutButton" type="Button" parent="UI/ButtonPanel/Row1"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
 text = "Build WoodcutterHut"
 
-[node name="BuildBuilderHutButton" type="Button" parent="UI"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -90.0
-offset_top = -140.0
-offset_right = 90.0
-offset_bottom = -100.0
+[node name="BuildBuilderHutButton" type="Button" parent="UI/ButtonPanel/Row1"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
 text = "Build BuilderHut"
 
-[node name="BuildSawmillButton" type="Button" parent="UI"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 100.0
-offset_top = -140.0
-offset_right = 280.0
-offset_bottom = -100.0
+[node name="BuildSawmillButton" type="Button" parent="UI/ButtonPanel/Row1"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
 text = "Build Sawmill"
 
-[node name="BuildAppleFarmButton" type="Button" parent="UI"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = -95.0
-offset_right = -100.0
-offset_bottom = -55.0
+[node name="BuildAppleFarmButton" type="Button" parent="UI/ButtonPanel/Row1"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
 text = "Build AppleFarm"
 
-[node name="BuildCiderMillButton" type="Button" parent="UI"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -90.0
-offset_top = -95.0
-offset_right = 90.0
-offset_bottom = -55.0
+[node name="BuildCiderMillButton" type="Button" parent="UI/ButtonPanel/Row1"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
 text = "Build CiderMill"
 
-[node name="BuildSheepFarmButton" type="Button" parent="UI"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 100.0
-offset_top = -95.0
-offset_right = 280.0
-offset_bottom = -55.0
+[node name="BuildSheepFarmButton" type="Button" parent="UI/ButtonPanel/Row1"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
 text = "Build SheepFarm"
 
-[node name="BuildWoolMillButton" type="Button" parent="UI"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -90.0
-offset_top = -50.0
-offset_right = 90.0
-offset_bottom = -10.0
+[node name="BuildWoolMillButton" type="Button" parent="UI/ButtonPanel/Row1"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
 text = "Build WoolMill"
 
-[node name="BuildClayPitButton" type="Button" parent="UI"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 100.0
-offset_top = -50.0
-offset_right = 280.0
-offset_bottom = -10.0
+[node name="Row2" type="HBoxContainer" parent="UI/ButtonPanel"]
+size_flags_vertical = 3
+
+[node name="BuildClayPitButton" type="Button" parent="UI/ButtonPanel/Row2"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
 text = "Build ClayPit"
 
-[node name="BuildClayKilnButton" type="Button" parent="UI"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = -50.0
-offset_right = -100.0
-offset_bottom = -10.0
+[node name="BuildClayKilnButton" type="Button" parent="UI/ButtonPanel/Row2"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
 text = "Build ClayKiln"
+
+[node name="BuildCoalMineButton" type="Button" parent="UI/ButtonPanel/Row2"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
+text = "Build CoalMine"
+
+[node name="BuildIronMineButton" type="Button" parent="UI/ButtonPanel/Row2"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
+text = "Build IronMine"
+
+[node name="BuildSteelMillButton" type="Button" parent="UI/ButtonPanel/Row2"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
+text = "Build SteelMill"
+
+[node name="BuildToolsmithButton" type="Button" parent="UI/ButtonPanel/Row2"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
+text = "Build Toolsmith"

@@ -13,6 +13,7 @@ const ClayKilnScene = preload("res://Scenes/Buildings/ClayKiln/ClayKiln.tscn")
 const CoalMineScene = preload("res://Scenes/Buildings/CoalMine/CoalMine.tscn")
 const IronMineScene = preload("res://Scenes/Buildings/IronMine/IronMine.tscn")
 const SteelMillScene = preload("res://Scenes/Buildings/SteelMill/SteelMill.tscn")
+const ToolsmithScene = preload("res://Scenes/Buildings/Toolsmith/Toolsmith.tscn")
 
 var _map: Map = null
 var _spawn_parent: Node2D = null
@@ -23,18 +24,19 @@ var _active_size: Vector2i = Vector2i.ZERO
 var _coordination_manager: Node = null
 var _forest: Forest = null
 
-@onready var _build_woodcutter_button: Button = $UI/BuildWoodcutterHutButton
-@onready var _build_builder_button: Button = $UI/BuildBuilderHutButton
-@onready var _build_sawmill_button: Button = $UI/BuildSawmillButton
-@onready var _build_apple_farm_button: Button = $UI/BuildAppleFarmButton
-@onready var _build_cider_mill_button: Button = $UI/BuildCiderMillButton
-@onready var _build_sheep_farm_button: Button = $UI/BuildSheepFarmButton
-@onready var _build_wool_mill_button: Button = $UI/BuildWoolMillButton
-@onready var _build_clay_pit_button: Button = $UI/BuildClayPitButton
-@onready var _build_clay_kiln_button: Button = $UI/BuildClayKilnButton
-@onready var _build_coal_mine_button: Button = $UI/BuildCoalMineButton
-@onready var _build_iron_mine_button: Button = $UI/BuildIronMineButton
-@onready var _build_steel_mill_button: Button = $UI/BuildSteelMillButton
+@onready var _build_woodcutter_button: Button = $UI/ButtonPanel/Row1/BuildWoodcutterHutButton
+@onready var _build_builder_button: Button = $UI/ButtonPanel/Row1/BuildBuilderHutButton
+@onready var _build_sawmill_button: Button = $UI/ButtonPanel/Row1/BuildSawmillButton
+@onready var _build_apple_farm_button: Button = $UI/ButtonPanel/Row1/BuildAppleFarmButton
+@onready var _build_cider_mill_button: Button = $UI/ButtonPanel/Row1/BuildCiderMillButton
+@onready var _build_sheep_farm_button: Button = $UI/ButtonPanel/Row1/BuildSheepFarmButton
+@onready var _build_wool_mill_button: Button = $UI/ButtonPanel/Row1/BuildWoolMillButton
+@onready var _build_clay_pit_button: Button = $UI/ButtonPanel/Row2/BuildClayPitButton
+@onready var _build_clay_kiln_button: Button = $UI/ButtonPanel/Row2/BuildClayKilnButton
+@onready var _build_coal_mine_button: Button = $UI/ButtonPanel/Row2/BuildCoalMineButton
+@onready var _build_iron_mine_button: Button = $UI/ButtonPanel/Row2/BuildIronMineButton
+@onready var _build_steel_mill_button: Button = $UI/ButtonPanel/Row2/BuildSteelMillButton
+@onready var _build_toolsmith_button: Button = $UI/ButtonPanel/Row2/BuildToolsmithButton
 
 func setup(map: Map, coordination_manager: Node, forest: Forest) -> void:
     _map = map
@@ -67,6 +69,8 @@ func _ready() -> void:
         func(): _start_building(IronMineScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y)))
     _build_steel_mill_button.pressed.connect(
         func(): _start_building(SteelMillScene, Vector2i(SteelMill.SIZE_X, SteelMill.SIZE_Y)))
+    _build_toolsmith_button.pressed.connect(
+        func(): _start_building(ToolsmithScene, Vector2i(Toolsmith.SIZE_X, Toolsmith.SIZE_Y)))
 
 func _start_building(scene: PackedScene, size: Vector2i) -> void:
     if _building_mode:
