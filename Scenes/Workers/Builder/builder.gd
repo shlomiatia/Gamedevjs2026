@@ -40,9 +40,11 @@ func resume_work() -> void:
 	match _state:
 		State.GO_TO_RESOURCE:
 			$Worker.navigate_to(_target_pile.global_position)
-		State.GO_TO_SITE:
+		State.GO_TO_SITE, State.BUILD:
+			_state = State.GO_TO_SITE
 			$Worker.navigate_to(_site_world_pos())
-		State.WAIT_FOR_RESOURCE_GO_HOME, State.GO_HOME:
+		State.WAIT_FOR_RESOURCE_GO_HOME, State.WAIT_FOR_RESOURCE_IDLE, State.GO_HOME:
+			_state = State.WAIT_FOR_RESOURCE_GO_HOME
 			$Worker.navigate_to($Worker.home_world_pos())
 
 func _process(delta: float) -> void:

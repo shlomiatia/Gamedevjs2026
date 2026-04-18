@@ -80,7 +80,7 @@ func _astar(from: Vector2i, to: Vector2i) -> Array[Vector2i]:
 				g_score[neighbor] = tentative_g
 				_heap_push(open_heap, [tentative_g + _heuristic(neighbor, to), neighbor])
 
-	return [to]
+	return []
 
 func _heap_push(heap: Array, entry: Array) -> void:
 	heap.append(entry)

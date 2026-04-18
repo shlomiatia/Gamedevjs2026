@@ -34,7 +34,8 @@ func resume_work() -> void:
 	match _state:
 		State.GO_TO_RESOURCE:
 			$Worker.navigate_to(_target_pile.global_position)
-		State.GO_HOME:
+		State.GO_HOME, State.WORK, State.WAIT_FOR_RESOURCE:
+			_state = State.GO_HOME
 			$Worker.navigate_to($Worker.home_world_pos())
 
 func _process(delta: float) -> void:

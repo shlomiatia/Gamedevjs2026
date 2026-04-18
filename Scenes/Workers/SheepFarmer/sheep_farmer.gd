@@ -24,9 +24,11 @@ func setup(sheep_farm: SheepFarm, map: Map, sheep: Sheep, coordination_manager: 
 
 func resume_work() -> void:
 	match _state:
-		State.GO_TO_GRASS:
+		State.GO_TO_GRASS, State.GRAZE:
+			_state = State.GO_TO_GRASS
 			$Worker.navigate_to(_map.tile_to_world(_target_tile))
-		State.GO_HOME:
+		State.GO_HOME, State.SHEAR:
+			_state = State.GO_HOME
 			$Worker.navigate_to($Worker.home_world_pos())
 
 func _process(delta: float) -> void:

@@ -24,9 +24,11 @@ func setup(woodcutter_hut: WoodcutterHut, map: Map, forest: Forest, coordination
 
 func resume_work() -> void:
 	match _state:
-		State.GO_TO_TREE:
+		State.GO_TO_TREE, State.CHOP:
+			_state = State.GO_TO_TREE
 			$Worker.navigate_to(_map.tile_to_world(_target_tree_tile))
-		State.GO_HOME:
+		State.GO_HOME, State.DEPOSIT:
+			_state = State.GO_HOME
 			$Worker.navigate_to($Worker.home_world_pos())
 
 func _process(delta: float) -> void:
