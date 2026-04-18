@@ -9,11 +9,14 @@ const NO_NEED := -1
 var _navigator: WorkerNavigator = null
 var _needs: WorkerNeeds = null
 var _backpack: WorkerBackpack = null
+var _anim: AnimatedSprite2D = null
+var _working := false
 
 func setup(home: Node2D, map: Map, coordination_manager: Node) -> void:
     _navigator = $WorkerNavigator
     _needs = $WorkerNeeds
     _backpack = $WorkerBackpack
+    _anim = $AnimatedSprite2D
     _navigator.setup(get_parent(), home, map)
     _needs.setup(get_parent(), map, coordination_manager, _navigator)
     _backpack.setup(get_parent())
@@ -43,7 +46,27 @@ func get_need_value(need: int) -> float:
     return _needs.get_need_value(need)
 
 func set_working(val: bool) -> void:
+    _working = val
     _needs.set_working(val)
+
+func _process(_delta: float) -> void:
+    if _navigator == null or _anim == null:
+        return
+    var facing := _navigator.get_facing()
+    var prefix: String
+    var flip := false
+    if abs(facing.x) > abs(facing.y):
+        prefix = "side"
+        flip = facing.x < 0
+    elif facing.y < 0:
+        prefix = "up"
+    else:
+        prefix = "down"
+    var suffix := "work" if _working else ("walk" if _navigator.is_moving() else "stand")
+    var anim_name := prefix + "_" + suffix
+    if _anim.animation != anim_name:
+        _anim.play(anim_name)
+    _anim.flip_h = flip
 
 func carry(resource: Node2D) -> void:
     _backpack.carry(resource)

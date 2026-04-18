@@ -5,6 +5,7 @@ var _mover: Node2D = null
 var _home: Node2D = null
 var _map: Map = null
 var _path: Array[Vector2] = []
+var _facing: Vector2 = Vector2(0, 1)
 
 func setup(mover: Node2D, home: Node2D, map: Map) -> void:
 	_mover = mover
@@ -24,12 +25,17 @@ func tick(delta: float) -> bool:
 func is_moving() -> bool:
 	return not _path.is_empty()
 
+func get_facing() -> Vector2:
+	return _facing
+
 func _move_along_path(delta: float) -> bool:
 	if _path.is_empty():
 		return true
 	var target := _path[0]
 	var dir := target - _mover.position
 	var dist := dir.length()
+	if dist > 0.01:
+		_facing = dir.normalized()
 	var step := Constants.worker_move_speed * delta
 	if step >= dist:
 		_mover.position = target
