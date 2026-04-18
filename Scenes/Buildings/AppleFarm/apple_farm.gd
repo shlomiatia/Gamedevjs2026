@@ -12,6 +12,12 @@ var _map: Map = null
 var _forest: Forest = null
 var _coordination_manager: Node = null
 
+func get_pile_for_type(type: int) -> ResourcePile:
+	return $Building.get_output_pile() if type == CoordinationManager.ResourceType.APPLE else null
+
+func validate_placement(top_left: Vector2i, map: Map) -> bool:
+	return $Building.validate_placement(top_left, map)
+
 func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, forest: Forest) -> void:
 	_spawn_parent = spawn_parent
 	_map = map
@@ -19,9 +25,7 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, fores
 	_coordination_manager = coordination_manager
 	$Building.get_output_pile().setup(coordination_manager, CoordinationManager.ResourceType.APPLE)
 	$Building.start_construction()
-
-func set_construction_progress(progress: float) -> void:
-	$Building.set_construction_progress(progress)
+	coordination_manager.queue_construction(self)
 
 func complete_construction() -> void:
 	$Building.complete_construction()
@@ -30,5 +34,3 @@ func complete_construction() -> void:
 	farmer.setup(self, _map, _forest, _coordination_manager)
 	_spawn_parent.add_child(farmer)
 
-func on_worker_died() -> void:
-	$Building.on_worker_died()

@@ -10,6 +10,12 @@ const PlankScene = preload("res://Scenes/Resources/Plank/Plank.tscn")
 
 var _map: Map = null
 
+func get_pile_for_type(type: int) -> ResourcePile:
+    return $Building.get_output_pile() if type == CoordinationManager.ResourceType.PLANK else null
+
+func validate_placement(top_left: Vector2i, map: Map) -> bool:
+    return $Building.validate_placement(top_left, map)
+
 func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _forest: Forest) -> void:
     _map = map
     var builder := BuilderScene.instantiate() as Builder
@@ -21,5 +27,3 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
     pile.add_resource(PlankScene)
     pile.add_resource(PlankScene)
 
-func on_worker_died() -> void:
-    $Building.on_worker_died()

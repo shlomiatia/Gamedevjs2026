@@ -34,32 +34,29 @@ func _spawn_trees() -> void:
 		var tree := TreeScene.instantiate() as GameTree
 		tree.position = _map.tile_to_world(tile_pos) + Vector2(0, tile_size.y / 2.0)
 		_spawn_parent.add_child(tree)
-		_map.occupied_tiles[tile_pos] = tree
+		tree.setup(_map, tile_pos)
 		trees[tile_pos] = tree
 
 func find_tree(from: Vector2, require_apples: bool) -> Dictionary:
-	var best_tree: GameTree = null
-	var best_dist := INF
-	var best_tile := Vector2i.ZERO
-
-	for tile: Vector2i in trees:
-		var tree := trees[tile] as GameTree
-		if require_apples:
-			if tree.apple_targeted or not tree.has_apples:
-				continue
-		else:
-			if tree.targeted:
-				continue
-		var dist: float = tree.position.distance_to(from)
-		if dist < best_dist:
-			best_dist = dist
-			best_tree = tree
-			best_tile = tile
-
-	if best_tree == null:
-		return {}
-	return {tree = best_tree, tile = best_tile}
+	var start := _map.world_to_tile(from)
+	var bounds := _map.get_tile_bounds()
+	var queue: Array[Vector2i] = [start]
+	var visited: Dictionary = {start: true}
+	while not queue.is_empty():
+		var tile: Vector2i = queue.pop_front()
+		if trees.has(tile):
+			var tree := trees[tile] as GameTree
+			var usable := (require_apples and not tree.apple_targeted and tree.has_apples) or \
+						  (not require_apples and not tree.targeted)
+			if usable:
+				return {tree = tree, tile = tile}
+		for offset: Vector2i in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
+			var neighbor := tile + offset
+			if not visited.has(neighbor) and bounds.has_point(neighbor):
+				visited[neighbor] = true
+				queue.append(neighbor)
+	return {}
 
 func remove_tree(tile: Vector2i) -> void:
+	trees[tile].remove_from_map()
 	trees.erase(tile)
-	_map.occupied_tiles.erase(tile)

@@ -1,0 +1,92 @@
+class_name Grass
+extends Node2D
+
+@onready var _grass_layer: TileMapLayer = $GrassLayer
+@onready var _dirt_layer: TileMapLayer = $DirtLayer
+
+var _eaten_tiles: Dictionary = {}
+
+func setup(level_width: int, level_height: int, river_row: int) -> void:
+	for x in level_width:
+		for y in level_height:
+			_grass_layer.set_cell(Vector2i(x, y), 0, Vector2i(0, 0))
+			if y != river_row:
+				_dirt_layer.set_cell(Vector2i(x, y), 0, Vector2i(1, 0))
+	for x in level_width:
+		_grass_layer.set_cell(Vector2i(x, river_row), 0, Vector2i(0, 1))
+
+func get_tile_size() -> Vector2i:
+	return _grass_layer.tile_set.tile_size
+
+func local_to_map(pos: Vector2) -> Vector2i:
+	return _grass_layer.local_to_map(pos)
+
+func map_to_local(tile: Vector2i) -> Vector2:
+	return _grass_layer.map_to_local(tile)
+
+func get_used_rect() -> Rect2i:
+	return _grass_layer.get_used_rect()
+
+func get_mouse_tile() -> Vector2i:
+	return _grass_layer.local_to_map(_grass_layer.get_local_mouse_position())
+
+func eat_grass(tile: Vector2i, occupied_tiles: Dictionary) -> void:
+	_eaten_tiles[tile] = true
+	occupied_tiles[tile] = true
+	_update_dirt_tile(tile)
+	for offset: Vector2i in [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]:
+		var neighbor: Vector2i = tile + offset
+		if _eaten_tiles.has(neighbor):
+			_update_dirt_tile(neighbor)
+
+func find_grass_tile(near_pos: Vector2, occupied_tiles: Dictionary) -> Vector2i:
+	var start := _grass_layer.local_to_map(near_pos)
+	var bounds := _grass_layer.get_used_rect()
+	var queue: Array[Vector2i] = [start]
+	var visited: Dictionary = {start: true}
+	while not queue.is_empty():
+		var tile: Vector2i = queue.pop_front()
+		var occupied := occupied_tiles.has(tile)
+		if occupied:
+			var occupant = occupied_tiles[tile]
+			if not (occupant is bool) and not is_instance_valid(occupant):
+				occupied_tiles.erase(tile)
+				occupied = false
+		if not occupied and _grass_layer.get_cell_atlas_coords(tile) == Vector2i(0, 0):
+			return tile
+		for offset: Vector2i in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
+			var neighbor := tile + offset
+			if not visited.has(neighbor) and bounds.has_point(neighbor):
+				visited[neighbor] = true
+				queue.append(neighbor)
+	return Vector2i(-1, -1)
+
+func _update_dirt_tile(tile: Vector2i) -> void:
+	var mask := 0
+	if _eaten_tiles.has(tile + Vector2i(0, -1)): mask |= 1
+	if _eaten_tiles.has(tile + Vector2i(1,  0)): mask |= 2
+	if _eaten_tiles.has(tile + Vector2i(0,  1)): mask |= 4
+	if _eaten_tiles.has(tile + Vector2i(-1, 0)): mask |= 8
+	if mask == 15:
+		_grass_layer.erase_cell(tile)
+	else:
+		_grass_layer.set_cell(tile, 0, _dirt_tile_for_mask(mask))
+
+func _dirt_tile_for_mask(mask: int) -> Vector2i:
+	match mask:
+		0:  return Vector2i(5, 0)
+		1:  return Vector2i(2, 2)
+		2:  return Vector2i(3, 2)
+		4:  return Vector2i(2, 3)
+		8:  return Vector2i(3, 3)
+		3:  return Vector2i(0, 5)
+		5:  return Vector2i(1, 1)
+		6:  return Vector2i(0, 4)
+		9:  return Vector2i(1, 5)
+		10: return Vector2i(0, 1)
+		12: return Vector2i(1, 4)
+		7:  return Vector2i(6, 2)
+		11: return Vector2i(5, 1)
+		13: return Vector2i(4, 2)
+		14: return Vector2i(5, 3)
+		_:  return Vector2i(1, 0)

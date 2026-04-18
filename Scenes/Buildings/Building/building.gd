@@ -15,7 +15,6 @@ func _ready() -> void:
 	$Mill.visible = false
 
 func start_construction() -> void:
-	$NameLabel.visible = false
 	$OutputPile.visible = false
 	set_construction_progress(0.01)
 
@@ -37,7 +36,6 @@ func set_construction_progress(progress: float) -> void:
 func complete_construction() -> void:
 	$Sprite2D.region_enabled = false
 	$Sprite2D.position = Vector2(0, SPRITE_OFFSET_Y)
-	$NameLabel.visible = true
 	$OutputPile.visible = true
 	if has_mill:
 		$Mill.complete_construction()
@@ -48,6 +46,11 @@ func on_worker_died() -> void:
 func set_milling(val: bool) -> void:
 	if has_mill:
 		$Mill.set_milling(val)
+
+func validate_placement(top_left: Vector2i, map: Map) -> bool:
+	if has_mill:
+		return $Mill.validate_placement(top_left, map)
+	return true
 
 func get_output_pile() -> ResourcePile:
 	return $OutputPile as ResourcePile

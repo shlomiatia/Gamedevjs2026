@@ -49,8 +49,7 @@ func _ready() -> void:
 		func(): _start_building(WoolMillScene, Vector2i(WoolMill.SIZE_X, WoolMill.SIZE_Y)))
 
 func _start_building(scene: PackedScene, size: Vector2i) -> void:
-	if _building_mode:
-		return
+	assert(not _building_mode, "_start_building called while already in building mode")
 	_active_scene = scene
 	_active_size = size
 	_building_mode = true
@@ -71,24 +70,15 @@ func _get_footprint_top_left() -> Vector2i:
 
 func _place_building() -> void:
 	var top_left := _get_footprint_top_left()
-	if _is_footprint_blocked(top_left):
-		return
-	if (_active_scene == SawmillScene or _active_scene == CiderMillScene or _active_scene == WoolMillScene) and not _is_adjacent_to_river(top_left):
+	if _is_footprint_blocked(top_left) or not _preview.validate_placement(top_left, _map):
 		return
 	var building := _active_scene.instantiate()
 	building.position = _footprint_position(top_left)
 	_spawn_parent.add_child(building)
-	for dx in _active_size.x:
-		for dy in _active_size.y:
-			_map.occupied_tiles[Vector2i(top_left.x + dx, top_left.y + dy)] = building
+	_map.set_occupied_tiles_rect(top_left, _active_size, building)
 	_coordination_manager.register_building(building)
 	building.on_placed(_spawn_parent, _map, _coordination_manager, _forest)
-	if building is WoodcutterHut or building is Sawmill or building is AppleFarm or building is CiderMill or building is SheepFarm or building is WoolMill:
-		_coordination_manager.queue_construction(building)
 	_cancel_building()
-
-func _is_adjacent_to_river(top_left: Vector2i) -> bool:
-	return top_left.y == Map.RIVER_ROW + 1
 
 func _footprint_position(top_left_tile: Vector2i) -> Vector2:
 	var tl := _map.tile_to_world(top_left_tile)
@@ -120,8 +110,6 @@ func _process(_delta: float) -> void:
 
 func _update_preview() -> void:
 	var top_left := _get_footprint_top_left()
-	var blocked := _is_footprint_blocked(top_left)
-	if not blocked and (_active_scene == SawmillScene or _active_scene == CiderMillScene or _active_scene == WoolMillScene):
-		blocked = not _is_adjacent_to_river(top_left)
+	var blocked: bool = _is_footprint_blocked(top_left) or not _preview.validate_placement(top_left, _map)
 	_preview.position = _footprint_position(top_left)
 	_preview.modulate = Color(1, 0, 0, 0.7) if blocked else Color(0, 1, 0, 0.7)

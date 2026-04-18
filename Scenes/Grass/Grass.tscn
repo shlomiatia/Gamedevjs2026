@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1eg8a2ym8d0h"]
+
+[ext_resource type="Script" uid="uid://kf24dxx3lhib" path="res://Scenes/Grass/grass.gd" id="1_script"]
+[ext_resource type="TileSet" uid="uid://bvnoyr7mkjuo4" path="res://Textures/tileset.tres" id="2_tileset"]
+
+[node name="Grass" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="DirtLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("2_tileset")
+
+[node name="GrassLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("2_tileset")
