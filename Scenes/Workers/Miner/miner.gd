@@ -1,7 +1,6 @@
 class_name Miner
 extends Node2D
 
-const MINE_DURATION_MS := 3000.0
 
 enum State { GO_TO_PILE, MINE }
 
@@ -35,6 +34,6 @@ func _process(delta: float) -> void:
 				_mine_elapsed = 0.0
 		State.MINE:
 			_mine_elapsed += delta * 1000.0
-			if _mine_elapsed >= MINE_DURATION_MS:
+			if _mine_elapsed >= Constants.mine_duration_ms:
 				_mine_elapsed = 0.0
 				_pile.add_resource(_output_scene)

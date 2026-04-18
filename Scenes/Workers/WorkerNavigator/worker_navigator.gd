@@ -1,7 +1,6 @@
 class_name WorkerNavigator
 extends Node
 
-var move_speed := 80.0
 var _mover: Node2D = null
 var _home: Node2D = null
 var _map: Map = null
@@ -31,7 +30,7 @@ func _move_along_path(delta: float) -> bool:
 	var target := _path[0]
 	var dir := target - _mover.position
 	var dist := dir.length()
-	var step := move_speed * delta
+	var step := Constants.worker_move_speed * delta
 	if step >= dist:
 		_mover.position = target
 		_path.remove_at(0)

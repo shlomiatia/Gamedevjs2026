@@ -1,11 +1,6 @@
 class_name SheepFarmer
 extends Node2D
 
-const OUTPUT_PILE_CAPACITY := 8
-const MAX_HERD := 8
-const SHEEP_EAT_TIME := 4000.0
-const SHEEP_SHEAR_TIME := 1000.0
-
 const WoolScene = preload("res://Scenes/Resources/Wool/Wool.tscn")
 const SheepScene = preload("res://Scenes/Sheep/Sheep.tscn")
 
@@ -58,7 +53,7 @@ func _process(delta: float) -> void:
 				_on_arrived_at_tile()
 		State.GRAZE:
 			_action_elapsed += delta * 1000.0
-			if _action_elapsed >= SHEEP_EAT_TIME:
+			if _action_elapsed >= Constants.sheep_eat_time_ms:
 				_finish_graze()
 		State.GO_HOME:
 			_follow_all_sheep(delta)
@@ -73,9 +68,9 @@ func _output_pile() -> ResourcePile:
 func _should_go_out() -> bool:
 	if not _first_return_done:
 		return true
-	if _herd.size() < MAX_HERD:
+	if _herd.size() < Constants.max_herd_size:
 		return true
-	return not $Worker.is_output_full(_output_pile(), OUTPUT_PILE_CAPACITY)
+	return not $Worker.is_output_full(_output_pile(), Constants.output_pile_capacity)
 
 func _try_find_tiles() -> void:
 	if not _should_go_out():
@@ -143,7 +138,7 @@ func _setup_shear_cycle() -> void:
 			_shear_queue.append(sheep)
 		_spawn_new_sheep = false
 		_first_return_done = true
-	elif _herd.size() < MAX_HERD:
+	elif _herd.size() < Constants.max_herd_size:
 		for i in _herd.size() - 1:
 			_shear_queue.append(_herd[i])
 		_spawn_new_sheep = true
@@ -154,11 +149,11 @@ func _setup_shear_cycle() -> void:
 
 func _do_shear(delta: float) -> void:
 	_shear_elapsed += delta * 1000.0
-	if _shear_elapsed < SHEEP_SHEAR_TIME:
+	if _shear_elapsed < Constants.sheep_shear_time_ms:
 		return
 	_shear_elapsed = 0.0
 	var sheep := _shear_queue.pop_front() as Sheep
-	if not $Worker.is_output_full(_output_pile(), OUTPUT_PILE_CAPACITY):
+	if not $Worker.is_output_full(_output_pile(), Constants.output_pile_capacity):
 		_output_pile().add_resource(WoolScene)
 		sheep.shear()
 	if _shear_queue.is_empty():

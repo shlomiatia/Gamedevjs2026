@@ -1,7 +1,6 @@
 class_name KilnWorker
 extends Node2D
 
-const WORK_DURATION_MS := 5000.0
 
 enum State {
 	WAIT_FOR_CLAY, GO_TO_CLAY, GO_HOME_WITH_CLAY,
@@ -87,7 +86,7 @@ func _on_path_finished() -> void:
 
 func _do_work(delta: float) -> void:
 	_work_elapsed += delta * 1000.0
-	if _work_elapsed >= WORK_DURATION_MS:
+	if _work_elapsed >= Constants.kiln_work_duration_ms:
 		(_clay_kiln.get_node("Building/OutputPile") as ResourcePile).add_resource(_output_scene)
 		_state = State.WAIT_FOR_CLAY
 		_coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.CLAY)

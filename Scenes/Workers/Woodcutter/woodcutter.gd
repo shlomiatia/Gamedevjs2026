@@ -1,8 +1,6 @@
 class_name Woodcutter
 extends Node2D
 
-const OUTPUT_PILE_CAPACITY := 8
-const CHOP_DURATION_MS := 3000.0
 
 const LogScene = preload("res://Scenes/Resources/Log/Log.tscn")
 
@@ -50,7 +48,7 @@ func _output_pile() -> ResourcePile:
 	return _woodcutter_hut.get_node("Building/OutputPile") as ResourcePile
 
 func _try_find_tree() -> void:
-	if $Worker.is_output_full(_output_pile(), OUTPUT_PILE_CAPACITY):
+	if $Worker.is_output_full(_output_pile(), Constants.output_pile_capacity):
 		return
 	var result := _forest.find_tree(_woodcutter_hut.position, false)
 	if result.is_empty():
@@ -66,7 +64,7 @@ func _try_find_tree() -> void:
 func _do_chop(delta: float) -> void:
 	assert(is_instance_valid(_target_tree), "target tree freed while chopping")
 	_chop_elapsed += delta * 1000.0
-	var progress: float = clampf(_chop_elapsed / CHOP_DURATION_MS, 0.0, 1.0)
+	var progress: float = clampf(_chop_elapsed / Constants.chop_duration_ms, 0.0, 1.0)
 	_target_tree.set_chop_progress(progress)
 	if progress >= 1.0:
 		_finish_chop()
@@ -80,7 +78,7 @@ func _finish_chop() -> void:
 	_state = State.GO_HOME
 
 func _try_deposit() -> void:
-	assert(not $Worker.is_output_full(_output_pile(), OUTPUT_PILE_CAPACITY), "_try_deposit: output pile is full")
+	assert(not $Worker.is_output_full(_output_pile(), Constants.output_pile_capacity), "_try_deposit: output pile is full")
 	_output_pile().add_existing_resource($Worker.drop())
 	_state = State.IDLE
 

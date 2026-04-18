@@ -1,7 +1,6 @@
 class_name Miller
 extends Node2D
 
-const WORK_DURATION_MS := 5000.0
 
 enum State { WAIT_FOR_RESOURCE, GO_TO_RESOURCE, GO_HOME, GO_HOME_TO_WORK, WORK }
 
@@ -71,7 +70,7 @@ func _on_path_finished() -> void:
 
 func _do_work(delta: float) -> void:
 	_work_elapsed += delta * 1000.0
-	if _work_elapsed >= WORK_DURATION_MS:
+	if _work_elapsed >= Constants.mill_work_duration_ms:
 		(_building.get_node("Building/OutputPile") as ResourcePile).add_resource(_output_scene)
 		_state = State.WAIT_FOR_RESOURCE
 		_coordination_manager.queue_resource_collection(self, _input_resource_type)

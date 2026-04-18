@@ -1,7 +1,6 @@
 class_name Builder
 extends Node2D
 
-const BUILD_DURATION_MS := 5000.0
 
 enum State { IDLE, WAIT_FOR_RESOURCE_GO_HOME, WAIT_FOR_RESOURCE_IDLE, GO_TO_RESOURCE, GO_TO_SITE, GO_TO_BUILD, BUILD, GO_HOME }
 
@@ -109,7 +108,7 @@ func _on_path_finished() -> void:
 
 func _do_build(delta: float) -> void:
 	_build_elapsed += delta * 1000.0
-	var progress: float = clampf(_build_elapsed / BUILD_DURATION_MS, 0.0, 1.0)
+	var progress: float = clampf(_build_elapsed / Constants.build_duration_ms, 0.0, 1.0)
 	(_target_hut.get_node("Building") as BuildingComponent).set_construction_progress(progress)
 	if progress >= 1.0:
 		_finish_build()

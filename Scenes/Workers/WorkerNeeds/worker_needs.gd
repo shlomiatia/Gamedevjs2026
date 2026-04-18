@@ -4,20 +4,6 @@ extends Node2D
 signal needs_satisfied
 signal died
 
-const INITIAL_HUNGER := 200.0
-const HUNGER_DRAIN_NORMAL := 1.0
-const HUNGER_DRAIN_WORKING := 2.0
-const HUNGER_EAT_THRESHOLD := INITIAL_HUNGER * 0.5
-
-const INITIAL_THIRST := 200.0
-const THIRST_DRAIN_NORMAL := 1.0
-const THIRST_DRAIN_WALKING := 2.0
-const THIRST_DRINK_THRESHOLD := INITIAL_THIRST * 0.5
-
-const INITIAL_CLOTHING := 200.0
-const CLOTHING_DRAIN := 1.0
-const CLOTHING_WEAR_THRESHOLD := INITIAL_CLOTHING * 0.5
-
 const BAR_WIDTH := 32.0
 const BAR_HEIGHT := 4.0
 const BAR_Y := -68.0
@@ -25,9 +11,9 @@ const THIRST_BAR_Y := BAR_Y - BAR_HEIGHT - 2.0
 const CLOTHING_BAR_Y := THIRST_BAR_Y - BAR_HEIGHT - 2.0
 const DEBUG_FONT_SIZE := 9
 
-var hunger := INITIAL_HUNGER
-var thirst := INITIAL_THIRST
-var clothing := INITIAL_CLOTHING
+var hunger := 0.0
+var thirst := 0.0
+var clothing := 0.0
 
 var _mover: Node2D = null
 var _map: Map = null
@@ -43,6 +29,9 @@ func setup(mover: Node2D, map: Map, coordination_manager: Node, navigator: Worke
     _map = map
     _coordination_manager = coordination_manager
     _navigator = navigator
+    hunger = Constants.initial_hunger
+    thirst = Constants.initial_thirst
+    clothing = Constants.initial_clothing
 
 func set_working(val: bool) -> void:
     _is_working = val
@@ -81,12 +70,12 @@ func _finish_need_trip() -> void:
     var entry: Dictionary = _active_needs[0]
     assert(is_instance_valid(entry.pile), "need pile is no longer valid")
     var resource: Node2D = (entry.pile as ResourcePile).collect(_mover)
-    var satisfaction: float = resource.NEED_SATISFACTION_VALUE
     resource.queue_free()
+    var satisfaction: float = Constants.need_satisfaction_value
     match entry.need:
-        Worker.NeedType.FOOD: hunger = minf(INITIAL_HUNGER, hunger + satisfaction)
-        Worker.NeedType.DRINK: thirst = minf(INITIAL_THIRST, thirst + satisfaction)
-        Worker.NeedType.CLOTHING: clothing = minf(INITIAL_CLOTHING, clothing + satisfaction)
+        Worker.NeedType.FOOD: hunger = minf(Constants.initial_hunger, hunger + satisfaction)
+        Worker.NeedType.DRINK: thirst = minf(Constants.initial_thirst, thirst + satisfaction)
+        Worker.NeedType.CLOTHING: clothing = minf(Constants.initial_clothing, clothing + satisfaction)
     _need_requested[entry.need] = false
     _active_needs.remove_at(0)
 
@@ -99,11 +88,11 @@ func _process(delta: float) -> void:
     if _is_dead:
         return
 
-    var hunger_drain := HUNGER_DRAIN_WORKING if _is_working else HUNGER_DRAIN_NORMAL
+    var hunger_drain := Constants.hunger_drain_working if _is_working else Constants.hunger_drain_normal
     hunger = maxf(0.0, hunger - hunger_drain * delta)
-    var thirst_drain := THIRST_DRAIN_WALKING if _navigator.is_moving() else THIRST_DRAIN_NORMAL
+    var thirst_drain := Constants.thirst_drain_walking if _navigator.is_moving() else Constants.thirst_drain_normal
     thirst = maxf(0.0, thirst - thirst_drain * delta)
-    clothing = maxf(0.0, clothing - CLOTHING_DRAIN * delta)
+    clothing = maxf(0.0, clothing - Constants.clothing_drain * delta)
 
     if hunger == 0.0 or thirst == 0.0 or clothing == 0.0:
         _is_dead = true
@@ -111,13 +100,13 @@ func _process(delta: float) -> void:
         return
 
     if _coordination_manager != null:
-        if not _need_requested.get(Worker.NeedType.FOOD, false) and hunger < HUNGER_EAT_THRESHOLD:
+        if not _need_requested.get(Worker.NeedType.FOOD, false) and hunger < Constants.hunger_threshold:
             _need_requested[Worker.NeedType.FOOD] = true
             _coordination_manager.queue_need_collection(_mover, Worker.NeedType.FOOD)
-        if not _need_requested.get(Worker.NeedType.DRINK, false) and thirst < THIRST_DRINK_THRESHOLD:
+        if not _need_requested.get(Worker.NeedType.DRINK, false) and thirst < Constants.thirst_threshold:
             _need_requested[Worker.NeedType.DRINK] = true
             _coordination_manager.queue_need_collection(_mover, Worker.NeedType.DRINK)
-        if not _need_requested.get(Worker.NeedType.CLOTHING, false) and clothing < CLOTHING_WEAR_THRESHOLD:
+        if not _need_requested.get(Worker.NeedType.CLOTHING, false) and clothing < Constants.clothing_threshold:
             _need_requested[Worker.NeedType.CLOTHING] = true
             _coordination_manager.queue_need_collection(_mover, Worker.NeedType.CLOTHING)
 
@@ -133,17 +122,17 @@ func _draw() -> void:
     draw_rect(Rect2(bx, THIRST_BAR_Y, BAR_WIDTH, BAR_HEIGHT), Color(0.15, 0.15, 0.15, 0.85))
     draw_rect(Rect2(bx, CLOTHING_BAR_Y, BAR_WIDTH, BAR_HEIGHT), Color(0.15, 0.15, 0.15, 0.85))
 
-    var hr := hunger / INITIAL_HUNGER
+    var hr := hunger / Constants.initial_hunger
     if hr > 0.0:
         var hc := Color(0.25, 0.8, 0.25) if hr > 0.5 else (Color(0.9, 0.7, 0.1) if hr > 0.25 else Color(0.9, 0.2, 0.2))
         draw_rect(Rect2(bx, BAR_Y, BAR_WIDTH * hr, BAR_HEIGHT), hc)
 
-    var tr_ratio := thirst / INITIAL_THIRST
+    var tr_ratio := thirst / Constants.initial_thirst
     if tr_ratio > 0.0:
         var tc := Color(0.2, 0.6, 0.9) if tr_ratio > 0.5 else (Color(0.9, 0.8, 0.2) if tr_ratio > 0.25 else Color(0.9, 0.3, 0.1))
         draw_rect(Rect2(bx, THIRST_BAR_Y, BAR_WIDTH * tr_ratio, BAR_HEIGHT), tc)
 
-    var cr := clothing / INITIAL_CLOTHING
+    var cr := clothing / Constants.initial_clothing
     if cr > 0.0:
         var cc := Color(0.7, 0.3, 0.9) if cr > 0.5 else (Color(0.9, 0.7, 0.1) if cr > 0.25 else Color(0.9, 0.2, 0.2))
         draw_rect(Rect2(bx, CLOTHING_BAR_Y, BAR_WIDTH * cr, BAR_HEIGHT), cc)

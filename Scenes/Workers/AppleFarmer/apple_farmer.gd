@@ -1,8 +1,6 @@
 class_name AppleFarmer
 extends Node2D
 
-const OUTPUT_PILE_CAPACITY := 8
-const PICK_DURATION_MS := 2000.0
 
 const AppleScene = preload("res://Scenes/Resources/Apple/Apple.tscn")
 
@@ -50,7 +48,7 @@ func _output_pile() -> ResourcePile:
     return _apple_farm.get_node("Building/OutputPile") as ResourcePile
 
 func _try_find_tree() -> void:
-    if $Worker.is_output_full(_output_pile(), OUTPUT_PILE_CAPACITY):
+    if $Worker.is_output_full(_output_pile(), Constants.output_pile_capacity):
         return
     var result := _forest.find_tree(_apple_farm.position, true)
     if result.is_empty():
@@ -66,7 +64,7 @@ func _try_find_tree() -> void:
 func _do_pick(delta: float) -> void:
     assert(is_instance_valid(_target_tree), "target tree freed while picking")
     _pick_elapsed += delta * 1000.0
-    if _pick_elapsed >= PICK_DURATION_MS:
+    if _pick_elapsed >= Constants.pick_duration_ms:
         _finish_pick()
 
 func _finish_pick() -> void:
@@ -77,7 +75,7 @@ func _finish_pick() -> void:
     _state = State.GO_HOME
 
 func _try_deposit() -> void:
-    assert(not $Worker.is_output_full(_output_pile(), OUTPUT_PILE_CAPACITY), "_try_deposit: output pile is full")
+    assert(not $Worker.is_output_full(_output_pile(), Constants.output_pile_capacity), "_try_deposit: output pile is full")
     _output_pile().add_existing_resource($Worker.drop())
     _state = State.IDLE
 

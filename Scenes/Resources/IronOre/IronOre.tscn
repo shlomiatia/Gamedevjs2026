@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://cuvdcgajjesw7"]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" uid="uid://bnctftv2nxcm8" path="res://Scenes/Resources/Clay/clay.gd" id="1_script"]
+[ext_resource type="Script" path="res://Scenes/Resources/IronOre/iron_ore.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://c8ji2hknbyp7g" path="res://Textures/ore.png" id="2_ore"]
 
-[node name="Clay" type="Node2D"]
+[node name="IronOre" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
