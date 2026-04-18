@@ -64,6 +64,10 @@ func home_world_pos() -> Vector2:
 	return _home.position + Vector2(0.0, float(_map.get_tile_size().y) * 0.5)
 
 func navigate_to(world_pos: Vector2) -> void:
+	if is_satisfying_need():
+		_has_saved_destination = true
+		_saved_destination = world_pos
+		return
 	var parent := get_parent() as Node2D
 	_path = _map.find_path(parent.position, world_pos)
 
