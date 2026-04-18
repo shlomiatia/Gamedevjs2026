@@ -87,18 +87,8 @@ func _on_path_finished() -> void:
 		_sheep.set_walking(false)
 	match _state:
 		State.GO_TO_GRASS:
-			if _map.occupied_tiles.has(_target_tile):
-				var new_tile := _map.find_grass_tile(position)
-				if new_tile == Vector2i(-1, -1):
-					_target_tile = Vector2i(-1, -1)
-					_state = State.IDLE
-				else:
-					_target_tile = new_tile
-					$Worker.navigate_to(_map.tile_to_world(new_tile))
-			else:
-				_map.occupied_tiles[_target_tile] = self
-				_state = State.GRAZE
-				_action_elapsed = 0.0
+			_state = State.GRAZE
+			_action_elapsed = 0.0
 		State.GO_HOME:
 			_state = State.SHEAR
 			_action_elapsed = 0.0

@@ -30,9 +30,8 @@ func get_used_rect() -> Rect2i:
 func get_mouse_tile() -> Vector2i:
 	return _grass_layer.local_to_map(_grass_layer.get_local_mouse_position())
 
-func eat_grass(tile: Vector2i, occupied_tiles: Dictionary) -> void:
+func eat_grass(tile: Vector2i) -> void:
 	_eaten_tiles[tile] = true
-	occupied_tiles[tile] = true
 	_update_dirt_tile(tile)
 	for offset: Vector2i in [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]:
 		var neighbor: Vector2i = tile + offset

@@ -40,7 +40,7 @@ func find_grass_tile(near_pos: Vector2) -> Vector2i:
 	return _grass.find_grass_tile(near_pos, occupied_tiles)
 
 func eat_grass(tile: Vector2i) -> void:
-	_grass.eat_grass(tile, occupied_tiles)
+	_grass.eat_grass(tile)
 
 func find_path(from_world: Vector2, to_world: Vector2) -> Array[Vector2]:
 	var from_tile := world_to_tile(from_world)

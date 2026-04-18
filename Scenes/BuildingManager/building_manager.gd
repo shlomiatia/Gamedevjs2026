@@ -49,7 +49,8 @@ func _ready() -> void:
         func(): _start_building(WoolMillScene, Vector2i(WoolMill.SIZE_X, WoolMill.SIZE_Y)))
 
 func _start_building(scene: PackedScene, size: Vector2i) -> void:
-    assert(not _building_mode, "_start_building called while already in building mode")
+    if _building_mode:
+        _cancel_building()
     _active_scene = scene
     _active_size = size
     _building_mode = true
