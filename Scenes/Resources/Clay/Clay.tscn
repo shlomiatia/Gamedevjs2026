@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scenes/Resources/Clay/clay.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://c8ji2hknbyp7g" path="res://Textures/ore.png" id="2_ore"]
+
+[node name="Clay" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+texture = ExtResource("2_ore")

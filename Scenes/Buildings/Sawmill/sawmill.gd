@@ -2,7 +2,7 @@ class_name Sawmill
 extends Node2D
 
 const SIZE_X := 5
-const SIZE_Y := 3
+const SIZE_Y := 2
 const BUILDING_NAME := "Sawmill"
 
 const MillerScene = preload("res://Scenes/Workers/Miller/Miller.tscn")

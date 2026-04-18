@@ -1,0 +1,40 @@
+class_name Miner
+extends Node2D
+
+const MINE_DURATION_MS := 3000.0
+
+enum State { GO_TO_PILE, MINE }
+
+var _state := State.GO_TO_PILE
+var _clay_pit: Node2D = null
+var _pile: ResourcePile = null
+var _output_scene: PackedScene = null
+var _mine_elapsed := 0.0
+
+func setup(clay_pit: Node2D, pile: ResourcePile, output_scene: PackedScene, map: Map, coordination_manager: Node) -> void:
+	_clay_pit = clay_pit
+	_pile = pile
+	_output_scene = output_scene
+	$Worker.setup(clay_pit, map, coordination_manager)
+
+func _ready() -> void:
+	$Worker.navigate_to(_pile.global_position)
+
+func resume_work() -> void:
+	_state = State.GO_TO_PILE
+	$Worker.navigate_to(_pile.global_position)
+
+func _process(delta: float) -> void:
+	$Worker.set_working(_state == State.MINE)
+	if $Worker.is_satisfying_need():
+		return
+	match _state:
+		State.GO_TO_PILE:
+			if $Worker.tick_movement(delta):
+				_state = State.MINE
+				_mine_elapsed = 0.0
+		State.MINE:
+			_mine_elapsed += delta * 1000.0
+			if _mine_elapsed >= MINE_DURATION_MS:
+				_mine_elapsed = 0.0
+				_pile.add_resource(_output_scene)

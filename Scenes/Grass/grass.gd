@@ -45,13 +45,7 @@ func find_grass_tile(near_pos: Vector2, occupied_tiles: Dictionary, extra_occupi
 	var visited: Dictionary = {start: true}
 	while not queue.is_empty():
 		var tile: Vector2i = queue.pop_front()
-		var occupied := occupied_tiles.has(tile) or extra_occupied.has(tile)
-		if occupied and occupied_tiles.has(tile):
-			var occupant = occupied_tiles[tile]
-			if not (occupant is bool) and not is_instance_valid(occupant):
-				occupied_tiles.erase(tile)
-				occupied = extra_occupied.has(tile)
-		if not occupied and _grass_layer.get_cell_atlas_coords(tile) == Vector2i(0, 0):
+		if not occupied_tiles.has(tile) and not extra_occupied.has(tile) and _grass_layer.get_cell_atlas_coords(tile) == Vector2i(0, 0):
 			return tile
 		for offset: Vector2i in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
 			var neighbor := tile + offset

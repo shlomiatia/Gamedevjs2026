@@ -4,6 +4,7 @@ extends Node2D
 const OreTexture = preload("res://Textures/ore.png")
 
 func setup(level_width: int, level_height: int, tile_size: Vector2i) -> void:
+	z_index = 100
 	y_sort_enabled = true
 	var ore_half_h := OreTexture.get_height() / 2.0
 	for row in [level_height - 1, level_height]:

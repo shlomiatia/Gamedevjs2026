@@ -5,6 +5,8 @@ const LEVEL_WIDTH := 60
 const LEVEL_HEIGHT := 30
 const RIVER_ROW := 3
 
+enum OccupiedType { BLOCK_BUILDING = 1, BLOCK_WORKERS = 2 }
+
 var occupied_tiles: Dictionary = {}
 var eaten_tiles: Dictionary = {}
 
@@ -16,8 +18,8 @@ func _ready() -> void:
 	_grass.setup(LEVEL_WIDTH, LEVEL_HEIGHT, RIVER_ROW)
 	_river.setup(LEVEL_WIDTH, RIVER_ROW)
 	_mountain.setup(LEVEL_WIDTH, LEVEL_HEIGHT, get_tile_size())
-	set_occupied_tiles_rect(Vector2i(0, 0), Vector2i(LEVEL_WIDTH, RIVER_ROW + 1), true)
-	set_occupied_tiles_rect(Vector2i(0, LEVEL_HEIGHT - 1), Vector2i(LEVEL_WIDTH, 1), true)
+	set_occupied_tiles_rect(Vector2i(0, 0), Vector2i(LEVEL_WIDTH, RIVER_ROW + 1), OccupiedType.BLOCK_WORKERS)
+	set_occupied_tiles_rect(Vector2i(0, LEVEL_HEIGHT - 1), Vector2i(LEVEL_WIDTH, 1), OccupiedType.BLOCK_WORKERS)
 
 func set_occupied_tiles_rect(top_left: Vector2i, size: Vector2i, value) -> void:
 	for dx in size.x:
@@ -73,7 +75,7 @@ func _astar(from: Vector2i, to: Vector2i) -> Array[Vector2i]:
 		if current == to:
 			return _reconstruct_path(came_from, current)
 		for neighbor in _get_neighbors(current, bounds):
-			if occupied_tiles.has(neighbor) and neighbor != to:
+			if occupied_tiles.get(neighbor, 0) == OccupiedType.BLOCK_WORKERS and neighbor != to:
 				continue
 			if closed.has(neighbor):
 				continue

@@ -10,7 +10,7 @@ var _tile_pos: Vector2i
 func setup(map: Map, tile_pos: Vector2i) -> void:
 	_map = map
 	_tile_pos = tile_pos
-	_map.occupied_tiles[tile_pos] = self
+	_map.occupied_tiles[tile_pos] = Map.OccupiedType.BLOCK_BUILDING
 
 func remove_from_map() -> void:
 	_map.occupied_tiles.erase(_tile_pos)
