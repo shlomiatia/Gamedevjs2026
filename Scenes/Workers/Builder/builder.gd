@@ -3,7 +3,7 @@ extends Node2D
 
 const BUILD_DURATION_MS := 5000.0
 
-enum State { IDLE, WAIT_FOR_RESOURCE_GO_HOME, WAIT_FOR_RESOURCE_IDLE, GO_TO_RESOURCE, GO_TO_SITE, BUILD, GO_HOME }
+enum State { IDLE, WAIT_FOR_RESOURCE_GO_HOME, WAIT_FOR_RESOURCE_IDLE, GO_TO_RESOURCE, GO_TO_SITE, GO_TO_BUILD, BUILD, GO_HOME }
 
 var _state := State.IDLE
 var _target_hut = null
@@ -28,20 +28,23 @@ func assign_build_task(target) -> void:
 	_target_hut = target
 	_state = State.WAIT_FOR_RESOURCE_GO_HOME
 	_coordination_manager.queue_resource_collection(self, CoordinationManager.ResourceType.PLANK)
-	if _state == State.WAIT_FOR_RESOURCE_GO_HOME:
+	if _state == State.WAIT_FOR_RESOURCE_GO_HOME and not $Worker.is_satisfying_need():
 		$Worker.navigate_to($Worker.home_world_pos())
 
 func go_collect_resource(pile: ResourcePile) -> void:
 	_target_pile = pile
-	$Worker.navigate_to(pile.global_position)
 	_state = State.GO_TO_RESOURCE
+	if not $Worker.is_satisfying_need():
+		$Worker.navigate_to(pile.global_position)
 
 func resume_work() -> void:
 	match _state:
 		State.GO_TO_RESOURCE:
 			$Worker.navigate_to(_target_pile.global_position)
-		State.GO_TO_SITE, State.BUILD:
-			_state = State.GO_TO_SITE
+		State.GO_TO_SITE:
+			$Worker.navigate_to(_site_world_pos())
+		State.BUILD, State.GO_TO_BUILD:
+			_state = State.GO_TO_BUILD
 			$Worker.navigate_to(_site_world_pos())
 		State.WAIT_FOR_RESOURCE_GO_HOME, State.WAIT_FOR_RESOURCE_IDLE, State.GO_HOME:
 			_state = State.WAIT_FOR_RESOURCE_GO_HOME
@@ -55,7 +58,7 @@ func _process(delta: float) -> void:
 		State.WAIT_FOR_RESOURCE_GO_HOME:
 			if $Worker.tick_movement(delta):
 				_state = State.WAIT_FOR_RESOURCE_IDLE
-		State.GO_TO_RESOURCE, State.GO_TO_SITE, State.GO_HOME:
+		State.GO_TO_RESOURCE, State.GO_TO_SITE, State.GO_TO_BUILD, State.GO_HOME:
 			if $Worker.tick_movement(delta):
 				_on_path_finished()
 		State.BUILD:
@@ -73,6 +76,9 @@ func _on_path_finished() -> void:
 			_state = State.GO_TO_SITE
 		State.GO_TO_SITE:
 			$Worker.drop().queue_free()
+			_state = State.BUILD
+			_build_elapsed = 0.0
+		State.GO_TO_BUILD:
 			_state = State.BUILD
 			_build_elapsed = 0.0
 		State.GO_HOME:

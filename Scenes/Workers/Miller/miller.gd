@@ -3,7 +3,7 @@ extends Node2D
 
 const WORK_DURATION_MS := 5000.0
 
-enum State { WAIT_FOR_RESOURCE, GO_TO_RESOURCE, GO_HOME, WORK }
+enum State { WAIT_FOR_RESOURCE, GO_TO_RESOURCE, GO_HOME, GO_HOME_TO_WORK, WORK }
 
 var _state := State.WAIT_FOR_RESOURCE
 var _building: Node2D = null
@@ -24,8 +24,9 @@ func setup(building: Node2D, map: Map, coordination_manager: Node, input_resourc
 
 func go_collect_resource(pile: ResourcePile) -> void:
 	_target_pile = pile
-	$Worker.navigate_to(pile.global_position)
 	_state = State.GO_TO_RESOURCE
+	if not $Worker.is_satisfying_need():
+		$Worker.navigate_to(pile.global_position)
 
 func _ready() -> void:
 	_coordination_manager.queue_resource_collection(self, _input_resource_type)
@@ -34,8 +35,10 @@ func resume_work() -> void:
 	match _state:
 		State.GO_TO_RESOURCE:
 			$Worker.navigate_to(_target_pile.global_position)
-		State.GO_HOME, State.WORK, State.WAIT_FOR_RESOURCE:
-			_state = State.GO_HOME
+		State.GO_HOME:
+			$Worker.navigate_to($Worker.home_world_pos())
+		State.WORK, State.GO_HOME_TO_WORK, State.WAIT_FOR_RESOURCE:
+			_state = State.GO_HOME_TO_WORK
 			$Worker.navigate_to($Worker.home_world_pos())
 
 func _process(delta: float) -> void:
@@ -45,7 +48,7 @@ func _process(delta: float) -> void:
 	if $Worker.is_satisfying_need():
 		return
 	match _state:
-		State.GO_TO_RESOURCE, State.GO_HOME:
+		State.GO_TO_RESOURCE, State.GO_HOME, State.GO_HOME_TO_WORK:
 			if $Worker.tick_movement(delta):
 				_on_path_finished()
 		State.WORK:
@@ -60,6 +63,9 @@ func _on_path_finished() -> void:
 			_state = State.GO_HOME
 		State.GO_HOME:
 			$Worker.drop().queue_free()
+			_state = State.WORK
+			_work_elapsed = 0.0
+		State.GO_HOME_TO_WORK:
 			_state = State.WORK
 			_work_elapsed = 0.0
 
