@@ -1,6 +1,8 @@
 class_name Worker
 extends Node2D
 
+signal died
+
 enum NeedType { FOOD = 0, DRINK = 1, CLOTHING = 2 }
 const NO_NEED := -1
 
@@ -13,10 +15,11 @@ func setup(home: Node2D, map: Map, coordination_manager: Node) -> void:
     _needs = $WorkerNeeds
     _backpack = $WorkerBackpack
     _navigator.setup(get_parent(), home, map)
-    _needs.setup(get_parent(), map, coordination_manager)
+    _needs.setup(get_parent(), map, coordination_manager, _navigator)
     _backpack.setup(get_parent())
     _needs.died.connect(func():
         (home.get_node("Building") as BuildingComponent).on_worker_died()
+        died.emit()
         get_parent().queue_free()
     )
     _needs.needs_satisfied.connect(func(): get_parent().resume_work())

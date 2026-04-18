@@ -23,7 +23,7 @@ const BAR_HEIGHT := 4.0
 const BAR_Y := -68.0
 const THIRST_BAR_Y := BAR_Y - BAR_HEIGHT - 2.0
 const CLOTHING_BAR_Y := THIRST_BAR_Y - BAR_HEIGHT - 2.0
-const MOVE_SPEED := 80.0
+const DEBUG_FONT_SIZE := 9
 
 var hunger := INITIAL_HUNGER
 var thirst := INITIAL_THIRST
@@ -32,16 +32,17 @@ var clothing := INITIAL_CLOTHING
 var _mover: Node2D = null
 var _map: Map = null
 var _coordination_manager: Node = null
+var _navigator: WorkerNavigator = null
 var _is_working := false
 var _is_dead := false
 var _need_requested: Dictionary = {}
 var _active_needs: Array = []
-var _path: Array[Vector2] = []
 
-func setup(mover: Node2D, map: Map, coordination_manager: Node) -> void:
+func setup(mover: Node2D, map: Map, coordination_manager: Node, navigator: WorkerNavigator) -> void:
     _mover = mover
     _map = map
     _coordination_manager = coordination_manager
+    _navigator = navigator
 
 func set_working(val: bool) -> void:
     _is_working = val
@@ -74,7 +75,7 @@ func _receive_need(need: int, pile: ResourcePile) -> void:
     _active_needs.insert(insert_at, {need = need, pile = pile})
 
     if insert_at == 0:
-        _path = _map.find_path(_mover.position, pile.global_position)
+        _navigator.navigate_to(pile.global_position)
 
 func _finish_need_trip() -> void:
     var entry: Dictionary = _active_needs[0]
@@ -88,10 +89,9 @@ func _finish_need_trip() -> void:
         Worker.NeedType.CLOTHING: clothing = minf(INITIAL_CLOTHING, clothing + satisfaction)
     _need_requested[entry.need] = false
     _active_needs.remove_at(0)
-    _path.clear()
 
     if not _active_needs.is_empty():
-        _path = _map.find_path(_mover.position, _active_needs[0].pile.global_position)
+        _navigator.navigate_to(_active_needs[0].pile.global_position)
     else:
         needs_satisfied.emit()
 
@@ -101,7 +101,7 @@ func _process(delta: float) -> void:
 
     var hunger_drain := HUNGER_DRAIN_WORKING if _is_working else HUNGER_DRAIN_NORMAL
     hunger = maxf(0.0, hunger - hunger_drain * delta)
-    var thirst_drain := THIRST_DRAIN_WALKING if not _path.is_empty() else THIRST_DRAIN_NORMAL
+    var thirst_drain := THIRST_DRAIN_WALKING if _navigator.is_moving() else THIRST_DRAIN_NORMAL
     thirst = maxf(0.0, thirst - thirst_drain * delta)
     clothing = maxf(0.0, clothing - CLOTHING_DRAIN * delta)
 
@@ -122,25 +122,10 @@ func _process(delta: float) -> void:
             _coordination_manager.queue_need_collection(_mover, Worker.NeedType.CLOTHING)
 
     if not _active_needs.is_empty():
-        if _move_along_path(delta):
+        if _navigator.tick(delta):
             _finish_need_trip()
 
     queue_redraw()
-
-func _move_along_path(delta: float) -> bool:
-    if _path.is_empty():
-        return true
-    var target := _path[0]
-    var dir := target - _mover.position
-    var dist := dir.length()
-    var step := MOVE_SPEED * delta
-    if step >= dist:
-        _mover.position = target
-        _path.remove_at(0)
-        return _path.is_empty()
-    else:
-        _mover.position += dir.normalized() * step
-        return false
 
 func _draw() -> void:
     var bx := -BAR_WIDTH * 0.5
@@ -162,3 +147,30 @@ func _draw() -> void:
     if cr > 0.0:
         var cc := Color(0.7, 0.3, 0.9) if cr > 0.5 else (Color(0.9, 0.7, 0.1) if cr > 0.25 else Color(0.9, 0.2, 0.2))
         draw_rect(Rect2(bx, CLOTHING_BAR_Y, BAR_WIDTH * cr, BAR_HEIGHT), cc)
+
+    if _mover == null:
+        return
+    var font := ThemeDB.fallback_font
+    var line_h := DEBUG_FONT_SIZE + 2.0
+
+    var name_y := CLOTHING_BAR_Y - 2.0
+    draw_string(font, Vector2(bx, name_y), _mover.name, HORIZONTAL_ALIGNMENT_LEFT, -1, DEBUG_FONT_SIZE, Color.WHITE)
+
+    var req_f := "F" if _need_requested.get(Worker.NeedType.FOOD, false) else "f"
+    var req_d := "D" if _need_requested.get(Worker.NeedType.DRINK, false) else "d"
+    var req_c := "C" if _need_requested.get(Worker.NeedType.CLOTHING, false) else "c"
+    draw_string(font, Vector2(bx, name_y - line_h), "req:%s%s%s" % [req_f, req_d, req_c], HORIZONTAL_ALIGNMENT_LEFT, -1, DEBUG_FONT_SIZE, Color.YELLOW)
+
+    var active_str := ""
+    for entry in _active_needs:
+        active_str += _need_short_name(entry.need) + " "
+    if active_str.is_empty():
+        active_str = "-"
+    draw_string(font, Vector2(bx, name_y - line_h * 2.0), "act:" + active_str.strip_edges(), HORIZONTAL_ALIGNMENT_LEFT, -1, DEBUG_FONT_SIZE, Color.CYAN)
+
+func _need_short_name(need: int) -> String:
+    match need:
+        Worker.NeedType.FOOD: return "Food"
+        Worker.NeedType.DRINK: return "Drnk"
+        Worker.NeedType.CLOTHING: return "Clth"
+    return "?"
