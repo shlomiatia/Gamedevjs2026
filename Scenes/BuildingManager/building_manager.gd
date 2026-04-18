@@ -10,6 +10,9 @@ const SheepFarmScene = preload("res://Scenes/Buildings/SheepFarm/SheepFarm.tscn"
 const WoolMillScene = preload("res://Scenes/Buildings/WoolMill/WoolMill.tscn")
 const ClayPitScene = preload("res://Scenes/Buildings/ClayPit/ClayPit.tscn")
 const ClayKilnScene = preload("res://Scenes/Buildings/ClayKiln/ClayKiln.tscn")
+const CoalMineScene = preload("res://Scenes/Buildings/CoalMine/CoalMine.tscn")
+const IronMineScene = preload("res://Scenes/Buildings/IronMine/IronMine.tscn")
+const SteelMillScene = preload("res://Scenes/Buildings/SteelMill/SteelMill.tscn")
 
 var _map: Map = null
 var _spawn_parent: Node2D = null
@@ -29,6 +32,9 @@ var _forest: Forest = null
 @onready var _build_wool_mill_button: Button = $UI/BuildWoolMillButton
 @onready var _build_clay_pit_button: Button = $UI/BuildClayPitButton
 @onready var _build_clay_kiln_button: Button = $UI/BuildClayKilnButton
+@onready var _build_coal_mine_button: Button = $UI/BuildCoalMineButton
+@onready var _build_iron_mine_button: Button = $UI/BuildIronMineButton
+@onready var _build_steel_mill_button: Button = $UI/BuildSteelMillButton
 
 func setup(map: Map, coordination_manager: Node, forest: Forest) -> void:
     _map = map
@@ -52,9 +58,15 @@ func _ready() -> void:
     _build_wool_mill_button.pressed.connect(
         func(): _start_building(WoolMillScene, Vector2i(WoolMill.SIZE_X, WoolMill.SIZE_Y)))
     _build_clay_pit_button.pressed.connect(
-        func(): _start_building(ClayPitScene, Vector2i(ClayPit.SIZE_X, ClayPit.SIZE_Y)))
+        func(): _start_building(ClayPitScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y)))
     _build_clay_kiln_button.pressed.connect(
         func(): _start_building(ClayKilnScene, Vector2i(ClayKiln.SIZE_X, ClayKiln.SIZE_Y)))
+    _build_coal_mine_button.pressed.connect(
+        func(): _start_building(CoalMineScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y)))
+    _build_iron_mine_button.pressed.connect(
+        func(): _start_building(IronMineScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y)))
+    _build_steel_mill_button.pressed.connect(
+        func(): _start_building(SteelMillScene, Vector2i(SteelMill.SIZE_X, SteelMill.SIZE_Y)))
 
 func _start_building(scene: PackedScene, size: Vector2i) -> void:
     if _building_mode:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://betxj4dtyekg0"]
+[gd_scene load_steps=7 format=3 uid="uid://betxj4dtyekg0"]
 
 [ext_resource type="Script" uid="uid://be0w7s1al5enk" path="res://Scenes/main.gd" id="1_r150o"]
 [ext_resource type="PackedScene" uid="uid://bp3k8n6q2r4s7" path="res://Scenes/Camera/Camera.tscn" id="3_camera"]
@@ -6,9 +6,6 @@
 [ext_resource type="PackedScene" path="res://Scenes/CoordinationManager/CoordinationManager.tscn" id="5_cm"]
 [ext_resource type="PackedScene" uid="uid://bv4pf242m2a10" path="res://Scenes/Map/Map.tscn" id="6_map"]
 [ext_resource type="PackedScene" path="res://Scenes/Forest/Forest.tscn" id="7_forest"]
-[ext_resource type="PackedScene" uid="uid://c5y83qnbq8poy" path="res://Scenes/Resources/Coal/Coal.tscn" id="7_jw32o"]
-[ext_resource type="PackedScene" path="res://Scenes/Resources/IronBar/IronBar.tscn" id="8_vy5pj"]
-[ext_resource type="PackedScene" path="res://Scenes/Resources/IronOre/IronOre.tscn" id="9_bmxlf"]
 
 [node name="Main" type="Node2D"]
 y_sort_enabled = true
@@ -47,12 +44,3 @@ theme_override_font_sizes/font_size = 48
 text = "GAME OVER"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Coal" parent="." instance=ExtResource("7_jw32o")]
-position = Vector2(733, 550)
-
-[node name="IronBar" parent="." instance=ExtResource("8_vy5pj")]
-position = Vector2(791, 554)
-
-[node name="IronOre" parent="." instance=ExtResource("9_bmxlf")]
-position = Vector2(801, 490)
