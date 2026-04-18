@@ -1,23 +1,43 @@
-[gd_scene load_steps=12 format=3 uid="uid://bgyh71jiybprg"]
+[gd_scene load_steps=17 format=3 uid="uid://bgyh71jiybprg"]
 
 [ext_resource type="Texture2D" uid="uid://cyqbopsbhae80" path="res://Textures/sheep.png" id="1_sheep_tex"]
 [ext_resource type="Script" uid="uid://dq2k04mppnjr" path="res://Scenes/Sheep/sheep.gd" id="2_script"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ss1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_fwbsn"]
 atlas = ExtResource("1_sheep_tex")
-region = Rect2(32, 32, 32, 32)
+region = Rect2(128, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xbw8u"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(160, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l8prm"]
 atlas = ExtResource("1_sheep_tex")
-region = Rect2(64, 32, 32, 32)
+region = Rect2(0, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ogxwu"]
 atlas = ExtResource("1_sheep_tex")
-region = Rect2(0, 64, 32, 32)
+region = Rect2(32, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_15its"]
 atlas = ExtResource("1_sheep_tex")
-region = Rect2(32, 64, 32, 32)
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fuv2o"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j8p5b"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cj8bi"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_27vvu"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(160, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_us1"]
 atlas = ExtResource("1_sheep_tex")
@@ -31,18 +51,29 @@ region = Rect2(32, 0, 32, 32)
 atlas = ExtResource("1_sheep_tex")
 region = Rect2(64, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fuv2o"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_y8hp0"]
 atlas = ExtResource("1_sheep_tex")
-region = Rect2(0, 32, 32, 32)
+region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_sheep"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ss1")
+"texture": SubResource("AtlasTexture_fwbsn")
 }, {
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_xbw8u")
+}],
+"loop": true,
+"name": &"sheared_eat",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_l8prm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ogxwu")
 }],
 "loop": true,
 "name": &"sheared_stand",
@@ -50,20 +81,31 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ogxwu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ss1")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_15its")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ss1")
+"texture": SubResource("AtlasTexture_fuv2o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j8p5b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fuv2o")
 }],
 "loop": true,
 "name": &"sheared_walk",
 "speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cj8bi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_27vvu")
+}],
+"loop": true,
+"name": &"unsheared_eat",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -84,7 +126,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_us1")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_fuv2o")
+"texture": SubResource("AtlasTexture_y8hp0")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_us1")
@@ -100,6 +142,6 @@ script = ExtResource("2_script")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_sheep")
-animation = &"sheared_stand"
+animation = &"unsheared_walk"
 autoplay = "unsheared_stand"
-frame_progress = 0.5534444
+frame_progress = 0.8954787
