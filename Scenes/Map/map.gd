@@ -148,20 +148,23 @@ func _reconstruct_path(came_from: Dictionary, current: Vector2i) -> Array[Vector
 		path.push_front(current)
 	return path
 
-func find_building_spawn_tiles(building_pos: Vector2, size: Vector2i) -> Array[Vector2i]:
+func find_building_spawn_tiles(building_pos: Vector2, size: Vector2i, count: int = 2) -> Array[Vector2i]:
 	var tile_size := get_tile_size()
 	var tl_world := Vector2(
 		building_pos.x - (size.x - 1) * tile_size.x / 2.0,
 		building_pos.y - (size.y - 0.5) * tile_size.y
 	)
 	var top_left := world_to_tile(tl_world)
-	var result: Array[Vector2i] = []
+	var run: Array[Vector2i] = []
 	for tile in _ring_clockwise(top_left, size):
 		if occupied_tiles.get(tile, 0) != OccupiedType.BLOCK_WORKERS:
-			result.append(tile)
-			if result.size() == 2:
-				break
-	return result
+			run.append(tile)
+			if run.size() == count:
+				return run
+		else:
+			run.clear()
+	assert(false, "find_building_spawn_tiles: could not find %d consecutive free tiles" % count)
+	return []
 
 func _ring_clockwise(top_left: Vector2i, size: Vector2i) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []

@@ -12,9 +12,10 @@ var _map: Map = null
 var _forest: Forest = null
 var _coordination_manager: Node = null
 var _spawn_pos: Vector2
+var _output_pile: ResourcePile
 
 func get_pile_for_type(type: int) -> ResourcePile:
-	return $Building.get_output_pile() if type == CoordinationManager.ResourceType.APPLE else null
+	return _output_pile if type == CoordinationManager.ResourceType.APPLE else null
 
 func validate_placement(top_left: Vector2i, map: Map) -> bool:
 	return $Building.validate_placement(top_left, map)
@@ -24,12 +25,12 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, fores
 	_map = map
 	_forest = forest
 	_coordination_manager = coordination_manager
-	$Building.get_output_pile().setup(coordination_manager, CoordinationManager.ResourceType.APPLE)
+	_output_pile = $Building.get_output_pile()
+	_output_pile.setup(coordination_manager, CoordinationManager.ResourceType.APPLE)
 	var tiles := map.find_building_spawn_tiles(position, Vector2i(SIZE_X, SIZE_Y))
-	if tiles.size() >= 1:
-		_spawn_pos = map.tile_to_world(tiles[0])
-	if tiles.size() >= 2:
-		$Building.get_output_pile().position = map.tile_to_world(tiles[1]) - position
+	_spawn_pos = map.tile_to_world(tiles[0])
+	_output_pile.reparent(spawn_parent)
+	_output_pile.global_position = map.tile_to_world(tiles[1])
 	$Building.start_construction()
 	coordination_manager.queue_construction(self)
 

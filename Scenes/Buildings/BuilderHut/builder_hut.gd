@@ -15,12 +15,14 @@ var _map: Map = null
 var _spawn_parent: Node2D = null
 var _coordination_manager: Node = null
 var _spawn_pos: Vector2
+var _plank_pile: ResourcePile
+var _brick_pile: ResourcePile
 
 func get_pile_for_type(type: int) -> ResourcePile:
 	if type == CoordinationManager.ResourceType.PLANK:
-		return $Building.get_output_pile()
+		return _plank_pile
 	if type == CoordinationManager.ResourceType.BRICK:
-		return $BrickPile
+		return _brick_pile
 	return null
 
 func validate_placement(top_left: Vector2i, map: Map) -> bool:
@@ -32,21 +34,22 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 	_coordination_manager = coordination_manager
 	_placed_count += 1
 
-	var plank_pile: ResourcePile = $Building.get_output_pile()
-	plank_pile.setup(coordination_manager, CoordinationManager.ResourceType.PLANK)
-	var brick_pile: ResourcePile = $BrickPile
-	brick_pile.setup(coordination_manager, CoordinationManager.ResourceType.BRICK)
+	_plank_pile = $Building.get_output_pile()
+	_brick_pile = $BrickPile
+	_plank_pile.setup(coordination_manager, CoordinationManager.ResourceType.PLANK)
+	_brick_pile.setup(coordination_manager, CoordinationManager.ResourceType.BRICK)
 
-	var tiles := map.find_building_spawn_tiles(position, Vector2i(SIZE_X, SIZE_Y))
-	if tiles.size() >= 1:
-		_spawn_pos = map.tile_to_world(tiles[0])
-	if tiles.size() >= 2:
-		plank_pile.position = map.tile_to_world(tiles[1]) - position
+	var tiles := map.find_building_spawn_tiles(position, Vector2i(SIZE_X, SIZE_Y), 3)
+	_spawn_pos = map.tile_to_world(tiles[0])
+	_plank_pile.reparent(spawn_parent)
+	_plank_pile.global_position = map.tile_to_world(tiles[1])
+	_brick_pile.reparent(spawn_parent)
+	_brick_pile.global_position = map.tile_to_world(tiles[2])
 
 	if _placed_count == 1:
-		plank_pile.add_resource(PlankScene)
-		plank_pile.add_resource(PlankScene)
-		brick_pile.add_resource(BrickScene)
+		_plank_pile.add_resource(PlankScene)
+		_plank_pile.add_resource(PlankScene)
+		_brick_pile.add_resource(BrickScene)
 		_spawn_builder()
 	else:
 		$Building.start_construction()
