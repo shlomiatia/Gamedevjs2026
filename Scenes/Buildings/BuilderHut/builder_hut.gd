@@ -14,6 +14,7 @@ static var _placed_count := 0
 var _map: Map = null
 var _spawn_parent: Node2D = null
 var _coordination_manager: Node = null
+var _spawn_pos: Vector2
 
 func get_pile_for_type(type: int) -> ResourcePile:
 	if type == CoordinationManager.ResourceType.PLANK:
@@ -36,6 +37,12 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 	var brick_pile: ResourcePile = $BrickPile
 	brick_pile.setup(coordination_manager, CoordinationManager.ResourceType.BRICK)
 
+	var tiles := map.find_building_spawn_tiles(position, Vector2i(SIZE_X, SIZE_Y))
+	if tiles.size() >= 1:
+		_spawn_pos = map.tile_to_world(tiles[0])
+	if tiles.size() >= 2:
+		plank_pile.position = map.tile_to_world(tiles[1]) - position
+
 	if _placed_count == 1:
 		plank_pile.add_resource(PlankScene)
 		plank_pile.add_resource(PlankScene)
@@ -51,6 +58,6 @@ func complete_construction() -> void:
 
 func _spawn_builder() -> void:
 	var builder := BuilderScene.instantiate() as Builder
-	builder.position = position + Vector2(0, _map.get_tile_size().y / 2.0)
+	builder.position = _spawn_pos
 	builder.setup(self, _map, _coordination_manager)
 	_spawn_parent.add_child(builder)

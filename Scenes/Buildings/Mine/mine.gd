@@ -14,6 +14,7 @@ const MinerScene = preload("res://Scenes/Workers/Miner/Miner.tscn")
 var _spawn_parent: Node2D = null
 var _map: Map = null
 var _coordination_manager: Node = null
+var _spawn_pos: Vector2
 
 func get_pile_for_type(type: int) -> ResourcePile:
 	return $Building.get_output_pile() if type == output_resource_type else null
@@ -26,14 +27,17 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 	_map = map
 	_coordination_manager = coordination_manager
 	$Building.get_output_pile().setup(coordination_manager, output_resource_type)
+	var tiles := map.find_building_spawn_tiles(position, Vector2i(SIZE_X, SIZE_Y))
+	if tiles.size() >= 1:
+		_spawn_pos = map.tile_to_world(tiles[0])
+	if tiles.size() >= 2:
+		$Building.get_output_pile().position = map.tile_to_world(tiles[1]) - position
 	$Building.start_construction()
 	coordination_manager.queue_construction(self)
 
 func complete_construction() -> void:
 	$Building.complete_construction()
-	var tile_size := _map.get_tile_size()
-	var pile_offset := Vector2((SIZE_X / 2.0 + 0.5) * tile_size.x, -1.5 * tile_size.y)
 	var miner := MinerScene.instantiate() as Miner
-	miner.position = position + pile_offset
+	miner.position = _spawn_pos
 	miner.setup(self, $Building.get_output_pile(), output_scene, _map, _coordination_manager)
 	_spawn_parent.add_child(miner)

@@ -11,6 +11,7 @@ const SheepScene = preload("res://Scenes/Sheep/Sheep.tscn")
 var _spawn_parent: Node2D = null
 var _map: Map = null
 var _coordination_manager: Node = null
+var _spawn_pos: Vector2
 
 func get_pile_for_type(type: int) -> ResourcePile:
 	return $Building.get_output_pile() if type == CoordinationManager.ResourceType.WOOL else null
@@ -23,21 +24,24 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, fores
 	_map = map
 	_coordination_manager = coordination_manager
 	$Building.get_output_pile().setup(coordination_manager, CoordinationManager.ResourceType.WOOL)
+	var tiles := map.find_building_spawn_tiles(position, Vector2i(SIZE_X, SIZE_Y))
+	if tiles.size() >= 1:
+		_spawn_pos = map.tile_to_world(tiles[0])
+	if tiles.size() >= 2:
+		$Building.get_output_pile().position = map.tile_to_world(tiles[1]) - position
 	$Building.start_construction()
 	coordination_manager.queue_construction(self)
 
 func complete_construction() -> void:
 	$Building.complete_construction()
 
-	var farmer_pos := position + Vector2(0.0, float(_map.get_tile_size().y) * 0.5)
-
 	var sheep := SheepScene.instantiate() as Sheep
-	sheep.position = farmer_pos
+	sheep.position = _spawn_pos
 	_spawn_parent.add_child(sheep)
 	sheep.shear()
 
 	var farmer := SheepFarmerScene.instantiate() as SheepFarmer
-	farmer.position = farmer_pos
+	farmer.position = _spawn_pos
 	farmer.setup(self, _map, sheep, _spawn_parent, _coordination_manager)
 	_spawn_parent.add_child(farmer)
 

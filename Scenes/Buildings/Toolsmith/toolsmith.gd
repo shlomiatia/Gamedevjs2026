@@ -12,6 +12,7 @@ const ToolScene = preload("res://Scenes/Resources/Tool/Tool.tscn")
 var _spawn_parent: Node2D = null
 var _map: Map = null
 var _coordination_manager: Node = null
+var _spawn_pos: Vector2
 
 func get_pile_for_type(type: int) -> ResourcePile:
 	return $Building.get_output_pile() if type == CoordinationManager.ResourceType.TOOL else null
@@ -24,6 +25,11 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 	_map = map
 	_coordination_manager = coordination_manager
 	$Building.get_output_pile().setup(coordination_manager, CoordinationManager.ResourceType.TOOL)
+	var tiles := map.find_building_spawn_tiles(position, Vector2i(SIZE_X, SIZE_Y))
+	if tiles.size() >= 1:
+		_spawn_pos = map.tile_to_world(tiles[0])
+	if tiles.size() >= 2:
+		$Building.get_output_pile().position = map.tile_to_world(tiles[1]) - position
 	$Building.start_construction()
 	coordination_manager.queue_construction(self)
 
@@ -33,6 +39,6 @@ func set_smoking(value: bool) -> void:
 func complete_construction() -> void:
 	$Building.complete_construction()
 	var worker := KilnWorkerScene.instantiate() as KilnWorker
-	worker.position = position + Vector2(0.0, float(_map.get_tile_size().y) * 0.5)
+	worker.position = _spawn_pos
 	worker.setup(self, _map, _coordination_manager, ToolScene, CoordinationManager.ResourceType.COAL, CoordinationManager.ResourceType.IRON_BAR)
 	_spawn_parent.add_child(worker)

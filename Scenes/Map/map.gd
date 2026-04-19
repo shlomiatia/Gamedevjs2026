@@ -147,3 +147,37 @@ func _reconstruct_path(came_from: Dictionary, current: Vector2i) -> Array[Vector
 		current = came_from[current]
 		path.push_front(current)
 	return path
+
+func find_building_spawn_tiles(building_pos: Vector2, size: Vector2i) -> Array[Vector2i]:
+	var tile_size := get_tile_size()
+	var tl_world := Vector2(
+		building_pos.x - (size.x - 1) * tile_size.x / 2.0,
+		building_pos.y - (size.y - 0.5) * tile_size.y
+	)
+	var top_left := world_to_tile(tl_world)
+	var result: Array[Vector2i] = []
+	for tile in _ring_clockwise(top_left, size):
+		if occupied_tiles.get(tile, 0) != OccupiedType.BLOCK_WORKERS:
+			result.append(tile)
+			if result.size() == 2:
+				break
+	return result
+
+func _ring_clockwise(top_left: Vector2i, size: Vector2i) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+	var right := top_left.x + size.x
+	var bottom := top_left.y + size.y
+	var left := top_left.x - 1
+	var top := top_left.y - 1
+	var center_x := top_left.x + size.x / 2
+	for x in range(center_x, right + 1):
+		result.append(Vector2i(x, bottom))
+	for y in range(bottom - 1, top - 1, -1):
+		result.append(Vector2i(right, y))
+	for x in range(right - 1, left - 1, -1):
+		result.append(Vector2i(x, top))
+	for y in range(top + 1, bottom + 1):
+		result.append(Vector2i(left, y))
+	for x in range(left + 1, center_x):
+		result.append(Vector2i(x, bottom))
+	return result
