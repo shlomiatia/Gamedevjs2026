@@ -20,7 +20,9 @@ func setup(home: Node2D, map: Map, coordination_manager: Node) -> void:
     _navigator.setup(get_parent(), home, map)
     _needs.setup(get_parent(), map, coordination_manager, _navigator)
     _backpack.setup(get_parent())
+    coordination_manager.register_worker(get_parent())
     _needs.died.connect(func():
+        coordination_manager.deregister_worker(get_parent())
         (home.get_node("Building") as BuildingComponent).on_worker_died()
         died.emit()
         get_parent().queue_free()

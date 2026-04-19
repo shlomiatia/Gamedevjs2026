@@ -20,8 +20,11 @@ const NEED_TO_RESOURCE := {
 }
 
 var _builders: Array = []
+var _all_workers: Array = []
+var _dead_count: int = 0
 var _buildings: Array = []
 var _construction_queue: Array = []
+var _active_constructions: int = 0
 var _resource_queues: Dictionary = {}
 var _need_queues: Dictionary = {}
 
@@ -44,17 +47,64 @@ func deregister_builder(builder: Builder) -> void:
 	if _builders.is_empty():
 		game_over.emit()
 
+func register_worker(worker_node: Node2D) -> void:
+	_all_workers.append(worker_node)
+
+func deregister_worker(worker_node: Node2D) -> void:
+	_all_workers.erase(worker_node)
+	_dead_count += 1
+
 func register_building(building: Node2D) -> void:
 	_buildings.append(building)
+
+func get_hud_stats() -> Dictionary:
+	var hungry := 0
+	var thirsty := 0
+	var no_clothing := 0
+	var no_tool := 0
+	_all_workers = _all_workers.filter(func(w): return is_instance_valid(w))
+	for entity in _all_workers:
+		var wn := entity.get_node_or_null("Worker/WorkerNeeds") as WorkerNeeds
+		if wn == null:
+			continue
+		if wn.hunger < Constants.hunger_threshold:
+			hungry += 1
+		if wn.thirst < Constants.thirst_threshold:
+			thirsty += 1
+		if wn.clothing == 0.0:
+			no_clothing += 1
+		if wn.get_need_value(Worker.NeedType.TOOL) == 0.0:
+			no_tool += 1
+	var res: Dictionary = {}
+	for type in ResourceType.values():
+		var total := 0
+		for building in _buildings:
+			var pile: ResourcePile = building.get_pile_for_type(type)
+			if pile != null:
+				total += pile.get_child_count()
+		res[type] = total
+	return {
+		live_workers = _all_workers.size(),
+		sites = _active_constructions,
+		hungry = hungry,
+		thirsty = thirsty,
+		no_clothing = no_clothing,
+		no_tool = no_tool,
+		resources = res,
+	}
 
 # --- Construction queue ---
 
 func queue_construction(target: Node2D) -> void:
+	_active_constructions += 1
 	var builder := _find_closest_free_builder(target.position)
 	if builder != null:
 		builder.assign_build_task(target)
 	else:
 		_construction_queue.append(target)
+
+func notify_construction_complete() -> void:
+	_active_constructions = maxi(0, _active_constructions - 1)
 
 func notify_idle_builder(builder: Builder) -> void:
 	if _construction_queue.is_empty():

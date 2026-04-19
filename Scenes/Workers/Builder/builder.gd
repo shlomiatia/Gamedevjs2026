@@ -116,6 +116,7 @@ func _finish_build() -> void:
 	_target_hut.complete_construction()
 	_target_hut = null
 	_state = State.IDLE
+	_coordination_manager.notify_construction_complete()
 	_coordination_manager.notify_idle_builder(self)
 	if _state == State.IDLE:
 		_state = State.GO_HOME

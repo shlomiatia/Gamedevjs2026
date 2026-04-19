@@ -29,16 +29,16 @@ var tool_drain := 2.0
 var need_satisfaction_value := 200.0
 
 # Work durations (ms)
-var chop_duration_ms := 3000.0
-var pick_duration_ms := 2000.0
+var chop_duration_ms := 5000.0
+var pick_duration_ms := 5000.0
 var mill_work_duration_ms := 5000.0
 var build_duration_ms := 5000.0
-var mine_duration_ms := 3000.0
+var mine_duration_ms := 5000.0
 var kiln_work_duration_ms := 5000.0
 
 # Sheep
-var sheep_eat_time_ms := 4000.0
-var sheep_shear_time_ms := 1000.0
+var sheep_eat_time_ms := 5000.0
+var sheep_shear_time_ms := 5000.0
 var max_herd_size := 8
 var output_pile_capacity := 8
 
