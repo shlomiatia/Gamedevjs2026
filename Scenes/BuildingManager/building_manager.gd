@@ -25,6 +25,8 @@ var _active_tooltip_key: String = ""
 var _coordination_manager: Node = null
 var _forest: Forest = null
 var _tooltip_manager: BuildingTooltipManager = null
+var _placed_keys: Dictionary = {}
+var _button_key_pairs: Array = []
 
 # Swapped paths: Builder button is at position 1 (BuildWoodcutterHutButton node),
 # Woodcutter button is at position 2 (BuildBuilderHutButton node).
@@ -52,6 +54,22 @@ func _ready() -> void:
 
     _tooltip_manager = BuildingTooltipManager.new()
     add_child(_tooltip_manager)
+
+    _button_key_pairs = [
+        ["BuilderHut",    _build_builder_button],
+        ["WoodcutterHut", _build_woodcutter_button],
+        ["Sawmill",       _build_sawmill_button],
+        ["AppleFarm",     _build_apple_farm_button],
+        ["CiderMill",     _build_cider_mill_button],
+        ["SheepFarm",     _build_sheep_farm_button],
+        ["WoolMill",      _build_wool_mill_button],
+        ["ClayPit",       _build_clay_pit_button],
+        ["ClayKiln",      _build_clay_kiln_button],
+        ["CoalMine",      _build_coal_mine_button],
+        ["IronMine",      _build_iron_mine_button],
+        ["SteelMill",     _build_steel_mill_button],
+        ["Toolsmith",     _build_toolsmith_button],
+    ]
 
     _build_builder_button.pressed.connect(
         func(): _start_building(BuilderHutScene, Vector2i(BuilderHut.SIZE_X, BuilderHut.SIZE_Y), "BuilderHut"))
@@ -94,6 +112,31 @@ func _ready() -> void:
     _tooltip_manager.connect_button(_build_steel_mill_button, "SteelMill")
     _tooltip_manager.connect_button(_build_toolsmith_button, "Toolsmith")
 
+    _update_buttons()
+
+func _update_buttons() -> void:
+    var builder_placed   := _placed_keys.has("BuilderHut")
+    var woodcutter_placed := _placed_keys.has("WoodcutterHut")
+    var sawmill_placed   := _placed_keys.has("Sawmill")
+    var clay_kiln_placed := _placed_keys.has("ClayKiln")
+
+    var enabled: Array = []
+    if not builder_placed:
+        enabled = ["BuilderHut"]
+    elif not (woodcutter_placed and sawmill_placed):
+        if not woodcutter_placed:
+            enabled.append("WoodcutterHut")
+        if not sawmill_placed:
+            enabled.append("Sawmill")
+    elif not clay_kiln_placed:
+        enabled = ["AppleFarm", "CiderMill", "SheepFarm", "WoolMill", "ClayPit", "ClayKiln"]
+    else:
+        enabled = ["AppleFarm", "CiderMill", "SheepFarm", "WoolMill", "ClayPit", "ClayKiln",
+                   "CoalMine", "IronMine", "SteelMill", "Toolsmith"]
+
+    for pair in _button_key_pairs:
+        (pair[1] as Button).disabled = pair[0] not in enabled
+
 func _start_building(scene: PackedScene, size: Vector2i, tooltip_key: String) -> void:
     if _building_mode:
         _cancel_building()
@@ -124,7 +167,9 @@ func _place_building() -> void:
     _coordination_manager.register_building(building)
     building.on_placed(_spawn_parent, _map, _coordination_manager, _forest)
     _tooltip_manager.attach_to_building(building, _active_tooltip_key)
+    _placed_keys[_active_tooltip_key] = true
     _cancel_building()
+    _update_buttons()
 
 func _get_footprint_top_left() -> Vector2i:
     # Offset so the cursor tracks the bottom-center tile of the footprint
