@@ -4,13 +4,8 @@ extends Node2D
 signal needs_satisfied
 signal died
 
-const BAR_WIDTH := 32.0
-const BAR_HEIGHT := 4.0
-const BAR_Y := -68.0
-const THIRST_BAR_Y := BAR_Y - BAR_HEIGHT - 2.0
-const CLOTHING_BAR_Y := THIRST_BAR_Y - BAR_HEIGHT - 2.0
-const TOOL_BAR_Y := CLOTHING_BAR_Y - BAR_HEIGHT - 2.0
-const DEBUG_FONT_SIZE := 9
+const FONT_SIZE := 9
+const NUM_Y := -72.0
 
 var hunger := 0.0
 var thirst := 0.0
@@ -133,58 +128,27 @@ func _process(delta: float) -> void:
 
     queue_redraw()
 
+func _need_color(ratio: float, high: Color, mid: Color, low: Color) -> Color:
+    return high if ratio > 0.5 else (mid if ratio > 0.25 else low)
+
 func _draw() -> void:
-    var bx := -BAR_WIDTH * 0.5
-    draw_rect(Rect2(bx, BAR_Y, BAR_WIDTH, BAR_HEIGHT), Color(0.15, 0.15, 0.15, 0.85))
-    draw_rect(Rect2(bx, THIRST_BAR_Y, BAR_WIDTH, BAR_HEIGHT), Color(0.15, 0.15, 0.15, 0.85))
-    draw_rect(Rect2(bx, CLOTHING_BAR_Y, BAR_WIDTH, BAR_HEIGHT), Color(0.15, 0.15, 0.15, 0.85))
-    draw_rect(Rect2(bx, TOOL_BAR_Y, BAR_WIDTH, BAR_HEIGHT), Color(0.15, 0.15, 0.15, 0.85))
+    var font := ThemeDB.fallback_font
+    var col_w := 16
+    var x0 := -col_w
 
     var hr := hunger / Constants.initial_hunger
-    if hr > 0.0:
-        var hc := Color(0.25, 0.8, 0.25) if hr > 0.5 else (Color(0.9, 0.7, 0.1) if hr > 0.25 else Color(0.9, 0.2, 0.2))
-        draw_rect(Rect2(bx, BAR_Y, BAR_WIDTH * hr, BAR_HEIGHT), hc)
+    var hc := _need_color(hr, Color(0.25, 0.8, 0.25), Color(0.9, 0.7, 0.1), Color(0.9, 0.2, 0.2))
+    draw_string(font, Vector2(x0, NUM_Y), "%d" % int(hunger), HORIZONTAL_ALIGNMENT_LEFT, col_w, FONT_SIZE, hc)
 
     var tr_ratio := thirst / Constants.initial_thirst
-    if tr_ratio > 0.0:
-        var tc := Color(0.2, 0.6, 0.9) if tr_ratio > 0.5 else (Color(0.9, 0.8, 0.2) if tr_ratio > 0.25 else Color(0.9, 0.3, 0.1))
-        draw_rect(Rect2(bx, THIRST_BAR_Y, BAR_WIDTH * tr_ratio, BAR_HEIGHT), tc)
+    var tc := _need_color(tr_ratio, Color(0.2, 0.6, 0.9), Color(0.9, 0.8, 0.2), Color(0.9, 0.3, 0.1))
+    draw_string(font, Vector2(x0 + col_w, NUM_Y), "%d" % int(thirst), HORIZONTAL_ALIGNMENT_LEFT, col_w, FONT_SIZE, tc)
 
     var cr := clothing / Constants.initial_clothing
-    if cr > 0.0:
-        var cc := Color(0.7, 0.3, 0.9) if cr > 0.5 else (Color(0.9, 0.7, 0.1) if cr > 0.25 else Color(0.9, 0.2, 0.2))
-        draw_rect(Rect2(bx, CLOTHING_BAR_Y, BAR_WIDTH * cr, BAR_HEIGHT), cc)
+    var cc := _need_color(cr, Color(0.7, 0.3, 0.9), Color(0.9, 0.7, 0.1), Color(0.9, 0.2, 0.2))
+    draw_string(font, Vector2(x0, NUM_Y - FONT_SIZE - 2), "%d" % int(clothing), HORIZONTAL_ALIGNMENT_LEFT, col_w, FONT_SIZE, cc)
 
     var tool_r := _tool / Constants.initial_tool
-    if tool_r > 0.0:
-        var tc2 := Color(0.8, 0.6, 0.2) if tool_r > 0.5 else (Color(0.9, 0.7, 0.1) if tool_r > 0.25 else Color(0.9, 0.2, 0.2))
-        draw_rect(Rect2(bx, TOOL_BAR_Y, BAR_WIDTH * tool_r, BAR_HEIGHT), tc2)
+    var tc2 := _need_color(tool_r, Color(0.8, 0.6, 0.2), Color(0.9, 0.7, 0.1), Color(0.9, 0.2, 0.2))
+    draw_string(font, Vector2(x0 + col_w, NUM_Y - FONT_SIZE - 2), "%d" % int(_tool), HORIZONTAL_ALIGNMENT_LEFT, col_w, FONT_SIZE, tc2)
 
-    if _mover == null:
-        return
-    var font := ThemeDB.fallback_font
-    var line_h := DEBUG_FONT_SIZE + 2.0
-
-    var name_y := TOOL_BAR_Y - 2.0
-    draw_string(font, Vector2(bx, name_y), _mover.name, HORIZONTAL_ALIGNMENT_LEFT, -1, DEBUG_FONT_SIZE, Color.WHITE)
-
-    var req_f := "F" if _need_requested.get(Worker.NeedType.FOOD, false) else "f"
-    var req_d := "D" if _need_requested.get(Worker.NeedType.DRINK, false) else "d"
-    var req_c := "C" if _need_requested.get(Worker.NeedType.CLOTHING, false) else "c"
-    var req_t := "T" if _need_requested.get(Worker.NeedType.TOOL, false) else "t"
-    draw_string(font, Vector2(bx, name_y - line_h), "req:%s%s%s%s" % [req_f, req_d, req_c, req_t], HORIZONTAL_ALIGNMENT_LEFT, -1, DEBUG_FONT_SIZE, Color.YELLOW)
-
-    var active_str := ""
-    for entry in _active_needs:
-        active_str += _need_short_name(entry.need) + " "
-    if active_str.is_empty():
-        active_str = "-"
-    draw_string(font, Vector2(bx, name_y - line_h * 2.0), "act:" + active_str.strip_edges(), HORIZONTAL_ALIGNMENT_LEFT, -1, DEBUG_FONT_SIZE, Color.CYAN)
-
-func _need_short_name(need: int) -> String:
-    match need:
-        Worker.NeedType.FOOD: return "Food"
-        Worker.NeedType.DRINK: return "Drnk"
-        Worker.NeedType.CLOTHING: return "Clth"
-        Worker.NeedType.TOOL: return "Tool"
-    return "?"
