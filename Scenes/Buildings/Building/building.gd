@@ -4,14 +4,9 @@ extends Node2D
 const SPRITE_OFFSET_Y := -104.0
 
 @export var has_mill: bool = false
-@export var building_name: String = "":
-	set(value):
-		building_name = value
-		if is_node_ready():
-			$NameLabel.text = value
+@export var building_name: String = ""
 
 func _ready() -> void:
-	$NameLabel.text = building_name
 	$Mill.visible = false
 
 func start_construction() -> void:

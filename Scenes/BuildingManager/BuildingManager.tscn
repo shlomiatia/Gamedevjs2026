@@ -24,12 +24,12 @@ size_flags_vertical = 3
 [node name="BuildWoodcutterHutButton" type="Button" parent="UI/ButtonPanel/Row1"]
 size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 40)
-text = "Build WoodcutterHut"
+text = "Build Builder"
 
 [node name="BuildBuilderHutButton" type="Button" parent="UI/ButtonPanel/Row1"]
 size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 40)
-text = "Build BuilderHut"
+text = "Build Woodcutter"
 
 [node name="BuildSawmillButton" type="Button" parent="UI/ButtonPanel/Row1"]
 size_flags_horizontal = 3
@@ -39,22 +39,22 @@ text = "Build Sawmill"
 [node name="BuildAppleFarmButton" type="Button" parent="UI/ButtonPanel/Row1"]
 size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 40)
-text = "Build AppleFarm"
+text = "Build Apple Farm"
 
 [node name="BuildCiderMillButton" type="Button" parent="UI/ButtonPanel/Row1"]
 size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 40)
-text = "Build CiderMill"
+text = "Build Cider Mill"
 
 [node name="BuildSheepFarmButton" type="Button" parent="UI/ButtonPanel/Row1"]
 size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 40)
-text = "Build SheepFarm"
+text = "Build Sheep Farm"
 
 [node name="BuildWoolMillButton" type="Button" parent="UI/ButtonPanel/Row1"]
 size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 40)
-text = "Build WoolMill"
+text = "Build Wool Mill"
 
 [node name="Row2" type="HBoxContainer" parent="UI/ButtonPanel"]
 size_flags_vertical = 3
@@ -62,27 +62,27 @@ size_flags_vertical = 3
 [node name="BuildClayPitButton" type="Button" parent="UI/ButtonPanel/Row2"]
 size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 40)
-text = "Build ClayPit"
+text = "Build Clay Pit"
 
 [node name="BuildClayKilnButton" type="Button" parent="UI/ButtonPanel/Row2"]
 size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 40)
-text = "Build ClayKiln"
+text = "Build Clay Kiln"
 
 [node name="BuildCoalMineButton" type="Button" parent="UI/ButtonPanel/Row2"]
 size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 40)
-text = "Build CoalMine"
+text = "Build Coal Mine"
 
 [node name="BuildIronMineButton" type="Button" parent="UI/ButtonPanel/Row2"]
 size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 40)
-text = "Build IronMine"
+text = "Build Iron Mine"
 
 [node name="BuildSteelMillButton" type="Button" parent="UI/ButtonPanel/Row2"]
 size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 40)
-text = "Build SteelMill"
+text = "Build Steel Mill"
 
 [node name="BuildToolsmithButton" type="Button" parent="UI/ButtonPanel/Row2"]
 size_flags_horizontal = 3

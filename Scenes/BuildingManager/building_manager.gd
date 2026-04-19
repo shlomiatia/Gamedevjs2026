@@ -21,11 +21,15 @@ var _building_mode := false
 var _preview: Node2D = null
 var _active_scene: PackedScene = null
 var _active_size: Vector2i = Vector2i.ZERO
+var _active_tooltip_key: String = ""
 var _coordination_manager: Node = null
 var _forest: Forest = null
+var _tooltip_manager: BuildingTooltipManager = null
 
-@onready var _build_woodcutter_button: Button = $UI/ButtonPanel/Row1/BuildWoodcutterHutButton
-@onready var _build_builder_button: Button = $UI/ButtonPanel/Row1/BuildBuilderHutButton
+# Swapped paths: Builder button is at position 1 (BuildWoodcutterHutButton node),
+# Woodcutter button is at position 2 (BuildBuilderHutButton node).
+@onready var _build_builder_button: Button = $UI/ButtonPanel/Row1/BuildWoodcutterHutButton
+@onready var _build_woodcutter_button: Button = $UI/ButtonPanel/Row1/BuildBuilderHutButton
 @onready var _build_sawmill_button: Button = $UI/ButtonPanel/Row1/BuildSawmillButton
 @onready var _build_apple_farm_button: Button = $UI/ButtonPanel/Row1/BuildAppleFarmButton
 @onready var _build_cider_mill_button: Button = $UI/ButtonPanel/Row1/BuildCiderMillButton
@@ -45,38 +49,57 @@ func setup(map: Map, coordination_manager: Node, forest: Forest) -> void:
 
 func _ready() -> void:
     _spawn_parent = get_parent() as Node2D
-    _build_woodcutter_button.pressed.connect(
-        func(): _start_building(WoodcutterHutScene, Vector2i(WoodcutterHut.SIZE_X, WoodcutterHut.SIZE_Y)))
-    _build_builder_button.pressed.connect(
-        func(): _start_building(BuilderHutScene, Vector2i(BuilderHut.SIZE_X, BuilderHut.SIZE_Y)))
-    _build_sawmill_button.pressed.connect(
-        func(): _start_building(SawmillScene, Vector2i(Sawmill.SIZE_X, Sawmill.SIZE_Y)))
-    _build_apple_farm_button.pressed.connect(
-        func(): _start_building(AppleFarmScene, Vector2i(AppleFarm.SIZE_X, AppleFarm.SIZE_Y)))
-    _build_cider_mill_button.pressed.connect(
-        func(): _start_building(CiderMillScene, Vector2i(CiderMill.SIZE_X, CiderMill.SIZE_Y)))
-    _build_sheep_farm_button.pressed.connect(
-        func(): _start_building(SheepFarmScene, Vector2i(SheepFarm.SIZE_X, SheepFarm.SIZE_Y)))
-    _build_wool_mill_button.pressed.connect(
-        func(): _start_building(WoolMillScene, Vector2i(WoolMill.SIZE_X, WoolMill.SIZE_Y)))
-    _build_clay_pit_button.pressed.connect(
-        func(): _start_building(ClayPitScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y)))
-    _build_clay_kiln_button.pressed.connect(
-        func(): _start_building(ClayKilnScene, Vector2i(ClayKiln.SIZE_X, ClayKiln.SIZE_Y)))
-    _build_coal_mine_button.pressed.connect(
-        func(): _start_building(CoalMineScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y)))
-    _build_iron_mine_button.pressed.connect(
-        func(): _start_building(IronMineScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y)))
-    _build_steel_mill_button.pressed.connect(
-        func(): _start_building(SteelMillScene, Vector2i(SteelMill.SIZE_X, SteelMill.SIZE_Y)))
-    _build_toolsmith_button.pressed.connect(
-        func(): _start_building(ToolsmithScene, Vector2i(Toolsmith.SIZE_X, Toolsmith.SIZE_Y)))
 
-func _start_building(scene: PackedScene, size: Vector2i) -> void:
+    _tooltip_manager = BuildingTooltipManager.new()
+    add_child(_tooltip_manager)
+
+    _build_builder_button.pressed.connect(
+        func(): _start_building(BuilderHutScene, Vector2i(BuilderHut.SIZE_X, BuilderHut.SIZE_Y), "BuilderHut"))
+    _build_woodcutter_button.pressed.connect(
+        func(): _start_building(WoodcutterHutScene, Vector2i(WoodcutterHut.SIZE_X, WoodcutterHut.SIZE_Y), "WoodcutterHut"))
+    _build_sawmill_button.pressed.connect(
+        func(): _start_building(SawmillScene, Vector2i(Sawmill.SIZE_X, Sawmill.SIZE_Y), "Sawmill"))
+    _build_apple_farm_button.pressed.connect(
+        func(): _start_building(AppleFarmScene, Vector2i(AppleFarm.SIZE_X, AppleFarm.SIZE_Y), "AppleFarm"))
+    _build_cider_mill_button.pressed.connect(
+        func(): _start_building(CiderMillScene, Vector2i(CiderMill.SIZE_X, CiderMill.SIZE_Y), "CiderMill"))
+    _build_sheep_farm_button.pressed.connect(
+        func(): _start_building(SheepFarmScene, Vector2i(SheepFarm.SIZE_X, SheepFarm.SIZE_Y), "SheepFarm"))
+    _build_wool_mill_button.pressed.connect(
+        func(): _start_building(WoolMillScene, Vector2i(WoolMill.SIZE_X, WoolMill.SIZE_Y), "WoolMill"))
+    _build_clay_pit_button.pressed.connect(
+        func(): _start_building(ClayPitScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y), "ClayPit"))
+    _build_clay_kiln_button.pressed.connect(
+        func(): _start_building(ClayKilnScene, Vector2i(ClayKiln.SIZE_X, ClayKiln.SIZE_Y), "ClayKiln"))
+    _build_coal_mine_button.pressed.connect(
+        func(): _start_building(CoalMineScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y), "CoalMine"))
+    _build_iron_mine_button.pressed.connect(
+        func(): _start_building(IronMineScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y), "IronMine"))
+    _build_steel_mill_button.pressed.connect(
+        func(): _start_building(SteelMillScene, Vector2i(SteelMill.SIZE_X, SteelMill.SIZE_Y), "SteelMill"))
+    _build_toolsmith_button.pressed.connect(
+        func(): _start_building(ToolsmithScene, Vector2i(Toolsmith.SIZE_X, Toolsmith.SIZE_Y), "Toolsmith"))
+
+    _tooltip_manager.connect_builder_button(_build_builder_button)
+    _tooltip_manager.connect_button(_build_woodcutter_button, "WoodcutterHut")
+    _tooltip_manager.connect_button(_build_sawmill_button, "Sawmill")
+    _tooltip_manager.connect_button(_build_apple_farm_button, "AppleFarm")
+    _tooltip_manager.connect_button(_build_cider_mill_button, "CiderMill")
+    _tooltip_manager.connect_button(_build_sheep_farm_button, "SheepFarm")
+    _tooltip_manager.connect_button(_build_wool_mill_button, "WoolMill")
+    _tooltip_manager.connect_button(_build_clay_pit_button, "ClayPit")
+    _tooltip_manager.connect_button(_build_clay_kiln_button, "ClayKiln")
+    _tooltip_manager.connect_button(_build_coal_mine_button, "CoalMine")
+    _tooltip_manager.connect_button(_build_iron_mine_button, "IronMine")
+    _tooltip_manager.connect_button(_build_steel_mill_button, "SteelMill")
+    _tooltip_manager.connect_button(_build_toolsmith_button, "Toolsmith")
+
+func _start_building(scene: PackedScene, size: Vector2i, tooltip_key: String) -> void:
     if _building_mode:
         _cancel_building()
     _active_scene = scene
     _active_size = size
+    _active_tooltip_key = tooltip_key
     _building_mode = true
     _preview = scene.instantiate()
     _spawn_parent.add_child(_preview)
@@ -87,11 +110,7 @@ func _cancel_building() -> void:
     _preview = null
     _active_scene = null
     _active_size = Vector2i.ZERO
-
-func _get_footprint_top_left() -> Vector2i:
-    # Offset so the cursor tracks the bottom-center tile of the footprint
-    var mouse_tile := _map.get_mouse_tile()
-    return mouse_tile - Vector2i(_active_size.x / 2, _active_size.y - 1)
+    _active_tooltip_key = ""
 
 func _place_building() -> void:
     var top_left := _get_footprint_top_left()
@@ -104,7 +123,13 @@ func _place_building() -> void:
     _map.set_occupied_ring(top_left, _active_size, Map.OccupiedType.BLOCK_BUILDING)
     _coordination_manager.register_building(building)
     building.on_placed(_spawn_parent, _map, _coordination_manager, _forest)
+    _tooltip_manager.attach_to_building(building, _active_tooltip_key)
     _cancel_building()
+
+func _get_footprint_top_left() -> Vector2i:
+    # Offset so the cursor tracks the bottom-center tile of the footprint
+    var mouse_tile := _map.get_mouse_tile()
+    return mouse_tile - Vector2i(_active_size.x / 2, _active_size.y - 1)
 
 func _footprint_position(top_left_tile: Vector2i) -> Vector2:
     var tl := _map.tile_to_world(top_left_tile)
