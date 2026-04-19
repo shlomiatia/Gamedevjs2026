@@ -41,7 +41,7 @@ func resume_work() -> void:
 			$Worker.navigate_to($Worker.home_world_pos())
 
 func _process(delta: float) -> void:
-	$Worker.set_working(_state == State.GRAZE or _state == State.SHEAR)
+	$Worker.set_working(_state == State.SHEAR)
 	if $Worker.is_satisfying_need():
 		return
 	match _state:

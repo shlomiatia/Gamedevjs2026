@@ -83,6 +83,8 @@ func _ready() -> void:
         ["SteelMill",     _build_steel_mill_button, CostTier.BRICK],
         ["Toolsmith",     _build_toolsmith_button,  CostTier.BRICK],
     ]
+    for pair in _button_key_pairs:
+        pair.append((pair[1] as Button).text)
 
     _build_builder_button.pressed.connect(
         func(): _start_building(BuilderHutScene, Vector2i(BuilderHut.SIZE_X, BuilderHut.SIZE_Y), "BuilderHut"))
@@ -131,7 +133,10 @@ func _update_buttons() -> void:
     var builder_placed := _placed_keys.has("BuilderHut")
     if not builder_placed:
         for pair in _button_key_pairs:
-            (pair[1] as Button).disabled = pair[0] != "BuilderHut"
+            var btn: Button = pair[1]
+            btn.disabled = pair[0] != "BuilderHut"
+            var count: int = _placed_keys.get(pair[0] as String, 0)
+            btn.text = "%s (%d)" % [pair[3] as String, count] if count > 0 else pair[3] as String
         return
 
     var wc_saw_placed := _placed_keys.has("WoodcutterHut") and _placed_keys.has("Sawmill")
@@ -149,6 +154,9 @@ func _update_buttons() -> void:
         var key: String = pair[0]
         var btn: Button = pair[1]
         var tier: int = pair[2]
+        var base_text: String = pair[3]
+        var count: int = _placed_keys.get(key, 0)
+        btn.text = "%s (%d)" % [base_text, count] if count > 0 else base_text
         if key == "BuilderHut":
             btn.disabled = not wc_saw_placed
         elif key == "WoodcutterHut" or key == "Sawmill":
@@ -191,7 +199,7 @@ func _place_building() -> void:
     _coordination_manager.register_building(building)
     building.on_placed(_spawn_parent, _map, _coordination_manager, _forest)
     _tooltip_manager.attach_to_building(building, _active_tooltip_key)
-    _placed_keys[_active_tooltip_key] = true
+    _placed_keys[_active_tooltip_key] = _placed_keys.get(_active_tooltip_key, 0) + 1
     _cancel_building()
     _update_buttons()
 
@@ -234,7 +242,11 @@ func _update_preview() -> void:
     var top_left := _get_footprint_top_left()
     var blocked: bool = _is_footprint_blocked(top_left) or not _preview.validate_placement(top_left, _map)
     _preview.position = _footprint_position(top_left)
-    _preview.modulate = Color(1, 0, 0, 0.7) if blocked else Color(0, 1, 0, 0.7)
+    _preview.modulate = Color(1, 1, 1, 0.5)
+    var tile_size := _map.get_tile_size()
+    var half := Vector2(tile_size) * 0.5
+    var tl_world := _map.tile_to_world(top_left) - half
+    _overlay.set_footprint(Rect2(tl_world, Vector2(_active_size) * Vector2(tile_size)), not blocked)
 
 func _update_arrow() -> void:
     if _valid_tiles.is_empty():

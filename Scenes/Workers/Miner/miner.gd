@@ -24,7 +24,8 @@ func resume_work() -> void:
 	$Worker.navigate_to(_pile.global_position)
 
 func _process(delta: float) -> void:
-	$Worker.set_working(_state == State.MINE)
+	var pile_full: bool = $Worker.is_output_full(_pile, Constants.output_pile_capacity)
+	$Worker.set_working(_state == State.MINE and not pile_full)
 	if $Worker.is_satisfying_need():
 		return
 	match _state:
@@ -33,8 +34,9 @@ func _process(delta: float) -> void:
 				_state = State.MINE
 				_mine_elapsed = 0.0
 		State.MINE:
+			if pile_full:
+				return
 			_mine_elapsed += delta * 1000.0
 			if _mine_elapsed >= Constants.mine_duration_ms:
-				if not $Worker.is_output_full(_pile, Constants.output_pile_capacity):
-					_mine_elapsed = 0.0
-					_pile.add_resource(_output_scene)
+				_mine_elapsed = 0.0
+				_pile.add_resource(_output_scene)
