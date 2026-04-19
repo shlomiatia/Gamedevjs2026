@@ -7,23 +7,17 @@ var sheep_follow_stop_distance := 16.0
 
 # Hunger
 var initial_hunger := 300.0
-var hunger_drain_normal := 1.0
-var hunger_drain_working := 2.0
 var hunger_threshold := initial_hunger / 2.0
 
 # Thirst
 var initial_thirst := 300.0
-var thirst_drain_normal := 1.0
-var thirst_drain_walking := 2.0
 var thirst_threshold := initial_thirst / 2.0
 
 # Clothing (blocks worker at 0, no threshold replenishment)
-var initial_clothing := 200.0
-var clothing_drain := 1.0
+var initial_clothing := 250.0
 
 # Tool (blocks worker at 0, no threshold replenishment)
 var initial_tool := 150.0
-var tool_drain := 2.0
 
 # Need satisfaction
 var need_satisfaction_value := 200.0
