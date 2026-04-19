@@ -63,7 +63,7 @@ func _process(delta: float) -> void:
 			_do_shear(delta)
 
 func _output_pile() -> ResourcePile:
-	return _sheep_farm.get_node("Building/OutputPile") as ResourcePile
+	return _sheep_farm.get_pile_for_type(CoordinationManager.ResourceType.WOOL)
 
 func _should_go_out() -> bool:
 	if not _first_return_done:

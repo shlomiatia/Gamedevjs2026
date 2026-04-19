@@ -10,15 +10,17 @@ var _map: Map = null
 var _coordination_manager: Node = null
 var _input_resource_type: int = -1
 var _output_scene: PackedScene = null
+var _output_pile: ResourcePile = null
 var _target_pile: ResourcePile = null
 var _work_elapsed := 0.0
 
-func setup(building: Node2D, map: Map, coordination_manager: Node, input_resource_type: int, output_scene: PackedScene) -> void:
+func setup(building: Node2D, map: Map, coordination_manager: Node, input_resource_type: int, output_scene: PackedScene, output_pile: ResourcePile) -> void:
 	_building = building
 	_map = map
 	_coordination_manager = coordination_manager
 	_input_resource_type = input_resource_type
 	_output_scene = output_scene
+	_output_pile = output_pile
 	$Worker.setup(building, map, coordination_manager)
 
 func go_collect_resource(pile: ResourcePile) -> void:
@@ -71,6 +73,6 @@ func _on_path_finished() -> void:
 func _do_work(delta: float) -> void:
 	_work_elapsed += delta * 1000.0
 	if _work_elapsed >= Constants.mill_work_duration_ms:
-		(_building.get_node("Building/OutputPile") as ResourcePile).add_resource(_output_scene)
+		_output_pile.add_resource(_output_scene)
 		_state = State.WAIT_FOR_RESOURCE
 		_coordination_manager.queue_resource_collection(self, _input_resource_type)

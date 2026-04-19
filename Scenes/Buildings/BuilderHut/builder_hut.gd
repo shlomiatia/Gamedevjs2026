@@ -52,11 +52,15 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 		_brick_pile.add_resource(BrickScene)
 		_spawn_builder()
 	else:
+		_plank_pile.visible = false
+		_brick_pile.visible = false
 		$Building.start_construction()
 		coordination_manager.queue_construction(self)
 
 func complete_construction() -> void:
 	$Building.complete_construction()
+	_plank_pile.visible = true
+	_brick_pile.visible = true
 	_spawn_builder()
 
 func _spawn_builder() -> void:

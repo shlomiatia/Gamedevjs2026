@@ -45,7 +45,7 @@ func _process(delta: float) -> void:
 			_try_deposit()
 
 func _output_pile() -> ResourcePile:
-	return _woodcutter_hut.get_node("Building/OutputPile") as ResourcePile
+	return _woodcutter_hut.get_pile_for_type(CoordinationManager.ResourceType.LOG)
 
 func _try_find_tree() -> void:
 	if $Worker.is_output_full(_output_pile(), Constants.output_pile_capacity):

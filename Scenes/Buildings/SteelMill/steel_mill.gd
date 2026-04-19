@@ -31,6 +31,7 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 	_spawn_pos = map.tile_to_world(tiles[0])
 	_output_pile.reparent(spawn_parent)
 	_output_pile.global_position = map.tile_to_world(tiles[1])
+	_output_pile.visible = false
 	$Building.start_construction()
 	coordination_manager.queue_construction(self)
 
@@ -39,7 +40,8 @@ func set_smoking(value: bool) -> void:
 
 func complete_construction() -> void:
 	$Building.complete_construction()
+	_output_pile.visible = true
 	var worker := KilnWorkerScene.instantiate() as KilnWorker
 	worker.position = _spawn_pos
-	worker.setup(self, _map, _coordination_manager, IronBarScene, CoordinationManager.ResourceType.IRON_ORE, CoordinationManager.ResourceType.COAL)
+	worker.setup(self, _map, _coordination_manager, IronBarScene, CoordinationManager.ResourceType.IRON_ORE, CoordinationManager.ResourceType.COAL, _output_pile)
 	_spawn_parent.add_child(worker)
