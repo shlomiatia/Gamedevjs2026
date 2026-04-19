@@ -1,5 +1,11 @@
 # Gamedevjs2026 — Project Guide
 
+## Development Workflow
+
+**After every code change, run the game and verify it starts without parser errors or crashes before reporting the task as done.** Use the `mcp__godot__run_project` tool, wait ~5 seconds, then call `mcp__godot__get_debug_output` and check for errors. Stop the project with `mcp__godot__stop_project` when done. Fix any errors found before finishing.
+
+---
+
 ## Scene Folder Convention
 
 Every scene lives in its own subfolder under `Scenes/`, named after the scene:
