@@ -1,6 +1,6 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=24 format=3 uid="uid://dgt4raq3utqpl"]
 
-[ext_resource type="Script" path="res://Scenes/Workers/Worker/worker.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bsrrpa1hvme71" path="res://Scenes/Workers/Worker/worker.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://dpyqgjwf7naac" path="res://Textures/worker.png" id="2_worker"]
 [ext_resource type="PackedScene" path="res://Scenes/Workers/WorkerNavigator/WorkerNavigator.tscn" id="3_navigator"]
 [ext_resource type="PackedScene" path="res://Scenes/Workers/WorkerNeeds/WorkerNeeds.tscn" id="4_needs"]
@@ -14,10 +14,6 @@ region = Rect2(0, 0, 32, 64)
 atlas = ExtResource("2_worker")
 region = Rect2(32, 0, 32, 64)
 
-[sub_resource type="AtlasTexture" id="d2"]
-atlas = ExtResource("2_worker")
-region = Rect2(64, 0, 32, 64)
-
 [sub_resource type="AtlasTexture" id="d3"]
 atlas = ExtResource("2_worker")
 region = Rect2(96, 0, 32, 64)
@@ -26,25 +22,13 @@ region = Rect2(96, 0, 32, 64)
 atlas = ExtResource("2_worker")
 region = Rect2(128, 0, 32, 64)
 
-[sub_resource type="AtlasTexture" id="u0"]
+[sub_resource type="AtlasTexture" id="d2"]
 atlas = ExtResource("2_worker")
-region = Rect2(0, 64, 32, 64)
+region = Rect2(64, 0, 32, 64)
 
-[sub_resource type="AtlasTexture" id="u1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_jdvju"]
 atlas = ExtResource("2_worker")
-region = Rect2(32, 64, 32, 64)
-
-[sub_resource type="AtlasTexture" id="u2"]
-atlas = ExtResource("2_worker")
-region = Rect2(64, 64, 32, 64)
-
-[sub_resource type="AtlasTexture" id="u3"]
-atlas = ExtResource("2_worker")
-region = Rect2(96, 64, 32, 64)
-
-[sub_resource type="AtlasTexture" id="u4"]
-atlas = ExtResource("2_worker")
-region = Rect2(128, 64, 32, 64)
+region = Rect2(32, 0, 32, 64)
 
 [sub_resource type="AtlasTexture" id="s0"]
 atlas = ExtResource("2_worker")
@@ -54,10 +38,6 @@ region = Rect2(0, 128, 32, 64)
 atlas = ExtResource("2_worker")
 region = Rect2(32, 128, 32, 64)
 
-[sub_resource type="AtlasTexture" id="s2"]
-atlas = ExtResource("2_worker")
-region = Rect2(64, 128, 32, 64)
-
 [sub_resource type="AtlasTexture" id="s3"]
 atlas = ExtResource("2_worker")
 region = Rect2(96, 128, 32, 64)
@@ -65,6 +45,34 @@ region = Rect2(96, 128, 32, 64)
 [sub_resource type="AtlasTexture" id="s4"]
 atlas = ExtResource("2_worker")
 region = Rect2(128, 128, 32, 64)
+
+[sub_resource type="AtlasTexture" id="s2"]
+atlas = ExtResource("2_worker")
+region = Rect2(64, 128, 32, 64)
+
+[sub_resource type="AtlasTexture" id="u0"]
+atlas = ExtResource("2_worker")
+region = Rect2(0, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="u1"]
+atlas = ExtResource("2_worker")
+region = Rect2(32, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="u3"]
+atlas = ExtResource("2_worker")
+region = Rect2(96, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="u4"]
+atlas = ExtResource("2_worker")
+region = Rect2(128, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="u2"]
+atlas = ExtResource("2_worker")
+region = Rect2(64, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kii70"]
+atlas = ExtResource("2_worker")
+region = Rect2(32, 64, 32, 64)
 
 [sub_resource type="SpriteFrames" id="frames"]
 animations = [{
@@ -77,28 +85,6 @@ animations = [{
 }],
 "loop": true,
 "name": &"down_stand",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("u0")
-}, {
-"duration": 1.0,
-"texture": SubResource("u1")
-}],
-"loop": true,
-"name": &"up_stand",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("s0")
-}, {
-"duration": 1.0,
-"texture": SubResource("s1")
-}],
-"loop": true,
-"name": &"side_stand",
 "speed": 5.0
 }, {
 "frames": [{
@@ -120,20 +106,25 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("u0")
+"texture": SubResource("d2")
 }, {
 "duration": 1.0,
-"texture": SubResource("u3")
-}, {
-"duration": 1.0,
-"texture": SubResource("u0")
-}, {
-"duration": 1.0,
-"texture": SubResource("u4")
+"texture": SubResource("AtlasTexture_jdvju")
 }],
 "loop": true,
-"name": &"up_walk",
-"speed": 8.0
+"name": &"down_work",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("s0")
+}, {
+"duration": 1.0,
+"texture": SubResource("s1")
+}],
+"loop": true,
+"name": &"side_stand",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -154,13 +145,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("d0")
+"texture": SubResource("s2")
 }, {
 "duration": 1.0,
-"texture": SubResource("d2")
+"texture": SubResource("s0")
 }],
 "loop": true,
-"name": &"down_work",
+"name": &"side_work",
 "speed": 4.0
 }, {
 "frames": [{
@@ -168,21 +159,38 @@ animations = [{
 "texture": SubResource("u0")
 }, {
 "duration": 1.0,
-"texture": SubResource("u2")
+"texture": SubResource("u1")
 }],
 "loop": true,
-"name": &"up_work",
-"speed": 4.0
+"name": &"up_stand",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("s0")
+"texture": SubResource("u0")
 }, {
 "duration": 1.0,
-"texture": SubResource("s2")
+"texture": SubResource("u3")
+}, {
+"duration": 1.0,
+"texture": SubResource("u0")
+}, {
+"duration": 1.0,
+"texture": SubResource("u4")
 }],
 "loop": true,
-"name": &"side_work",
+"name": &"up_walk",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("u2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kii70")
+}],
+"loop": true,
+"name": &"up_work",
 "speed": 4.0
 }]
 
@@ -198,5 +206,6 @@ script = ExtResource("1_script")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -32)
 sprite_frames = SubResource("frames")
-animation = &"down_stand"
+animation = &"up_work"
 autoplay = "down_stand"
+frame_progress = 0.248361

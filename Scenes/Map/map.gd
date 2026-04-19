@@ -20,6 +20,8 @@ func _ready() -> void:
 	_mountain.setup(LEVEL_WIDTH, LEVEL_HEIGHT, get_tile_size())
 	set_occupied_tiles_rect(Vector2i(0, 0), Vector2i(LEVEL_WIDTH, RIVER_ROW + 2), OccupiedType.BLOCK_WORKERS)
 	set_occupied_tiles_rect(Vector2i(0, LEVEL_HEIGHT - 6), Vector2i(LEVEL_WIDTH, 6), OccupiedType.BLOCK_WORKERS)
+	set_occupied_tiles_rect(Vector2i(-1, 0), Vector2i(1, LEVEL_HEIGHT), OccupiedType.BLOCK_WORKERS)
+	set_occupied_tiles_rect(Vector2i(LEVEL_WIDTH, 0), Vector2i(1, LEVEL_HEIGHT), OccupiedType.BLOCK_WORKERS)
 
 func set_occupied_tiles_rect(top_left: Vector2i, size: Vector2i, value) -> void:
 	for dx in size.x:

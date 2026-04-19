@@ -150,9 +150,11 @@ func _update_buttons() -> void:
         var btn: Button = pair[1]
         var tier: int = pair[2]
         if key == "BuilderHut":
-            btn.disabled = true
+            btn.disabled = not wc_saw_placed
+        elif key == "WoodcutterHut" or key == "Sawmill":
+            btn.disabled = (_placed_keys.has(key) and not wc_saw_placed) or tier > max_tier
         else:
-            btn.disabled = _placed_keys.has(key) or tier > max_tier
+            btn.disabled = tier > max_tier
 
 func _start_building(scene: PackedScene, size: Vector2i, tooltip_key: String) -> void:
     if _building_mode:

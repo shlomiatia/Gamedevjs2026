@@ -18,11 +18,11 @@ var thirst_drain_walking := 2.0
 var thirst_threshold := 100.0
 
 # Clothing (blocks worker at 0, no threshold replenishment)
-var initial_clothing := 300.0
+var initial_clothing := 200.0
 var clothing_drain := 1.0
 
 # Tool (blocks worker at 0, no threshold replenishment)
-var initial_tool := 300.0
+var initial_tool := 150.0
 var tool_drain := 2.0
 
 # Need satisfaction
