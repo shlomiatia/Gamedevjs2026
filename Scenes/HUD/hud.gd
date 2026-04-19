@@ -8,7 +8,6 @@ var _coordination_manager: CoordinationManager = null
 var _timer := 0.0
 
 var _lbl_workers: Label
-var _lbl_sites: Label
 var _lbl_planks: Label
 var _lbl_bricks: Label
 var _lbl_food: Label
@@ -46,11 +45,9 @@ func _ready() -> void:
 
 	_lbl_workers = _icon_label(row1, worker_tex, " 0")
 	_gap(row1)
-	_lbl_sites = _icon_label(row1, load("res://Textures/house.png"), " 0")
+	_lbl_planks = _icon_label(row1, load("res://Textures/planks.png"), ": 0/0")
 	_gap(row1)
-	_lbl_planks = _icon_label(row1, load("res://Textures/planks.png"), ": 0")
-	_gap(row1)
-	_lbl_bricks = _icon_label(row1, load("res://Textures/brick.png"), ": 0")
+	_lbl_bricks = _icon_label(row1, load("res://Textures/brick.png"), ": 0/0")
 
 	_lbl_food     = _icon_label(row2, load("res://Textures/apple.png"),   ": 0/0")
 	_gap(row2)
@@ -103,9 +100,8 @@ func _refresh() -> void:
 	var R := CoordinationManager.ResourceType
 
 	_lbl_workers.text = " %d" % s.live_workers
-	_lbl_sites.text   = " %d" % s.sites
-	_lbl_planks.text  = ": %d"         % res[R.PLANK]
-	_lbl_bricks.text  = ": %d"         % res[R.BRICK]
+	_lbl_planks.text  = ": %d/%d" % [res[R.PLANK], s.plank_sites]
+	_lbl_bricks.text  = ": %d/%d" % [res[R.BRICK], s.brick_sites]
 	_lbl_food.text     = ": %d/%d" % [res[R.APPLE],   s.hungry]
 	_lbl_drink.text    = ": %d/%d" % [res[R.CIDER],   s.thirsty]
 	_lbl_clothing.text = ": %d/%d" % [res[R.CLOTHES], s.no_clothing]

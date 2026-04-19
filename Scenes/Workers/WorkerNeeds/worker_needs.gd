@@ -6,6 +6,7 @@ signal died
 
 const FONT_SIZE := 9
 const NUM_Y := -72.0
+const NAME_Y := NUM_Y - (FONT_SIZE + 2) * 2 - 2
 
 var hunger := 0.0
 var thirst := 0.0
@@ -99,7 +100,7 @@ func _process(delta: float) -> void:
     thirst = maxf(0.0, thirst - thirst_drain * delta)
     clothing = maxf(0.0, clothing - Constants.clothing_drain * delta)
     if is_working:
-        _tool = maxf(0.0, _tool - Constants.tool_drain * 2.0 * delta)
+        _tool = maxf(0.0, _tool - Constants.tool_drain * delta)
 
     if hunger == 0.0 or thirst == 0.0:
         _is_dead = true
@@ -131,24 +132,30 @@ func _process(delta: float) -> void:
 func _need_color(ratio: float, high: Color, mid: Color, low: Color) -> Color:
     return high if ratio > 0.5 else (mid if ratio > 0.25 else low)
 
+func _ds(font: Font, pos: Vector2, text: String, width: int, color: Color) -> void:
+    draw_string_outline(font, pos, text, HORIZONTAL_ALIGNMENT_LEFT, width, FONT_SIZE, 2, Color.BLACK)
+    draw_string(font, pos, text, HORIZONTAL_ALIGNMENT_LEFT, width, FONT_SIZE, color)
+
 func _draw() -> void:
     var font := ThemeDB.fallback_font
     var col_w := 16
     var x0 := -col_w
 
+    if _mover != null:
+        _ds(font, Vector2(x0, NAME_Y), _mover.name, 64, Color.WHITE)
+
     var hr := hunger / Constants.initial_hunger
-    var hc := _need_color(hr, Color(0.25, 0.8, 0.25), Color(0.9, 0.7, 0.1), Color(0.9, 0.2, 0.2))
-    draw_string(font, Vector2(x0, NUM_Y), "%d" % int(hunger), HORIZONTAL_ALIGNMENT_LEFT, col_w, FONT_SIZE, hc)
+    _ds(font, Vector2(x0, NUM_Y), "%d" % int(hunger), col_w,
+        _need_color(hr, Color(0.25, 0.8, 0.25), Color(0.9, 0.7, 0.1), Color(0.9, 0.2, 0.2)))
 
     var tr_ratio := thirst / Constants.initial_thirst
-    var tc := _need_color(tr_ratio, Color(0.2, 0.6, 0.9), Color(0.9, 0.8, 0.2), Color(0.9, 0.3, 0.1))
-    draw_string(font, Vector2(x0 + col_w, NUM_Y), "%d" % int(thirst), HORIZONTAL_ALIGNMENT_LEFT, col_w, FONT_SIZE, tc)
+    _ds(font, Vector2(x0 + col_w, NUM_Y), "%d" % int(thirst), col_w,
+        _need_color(tr_ratio, Color(0.2, 0.6, 0.9), Color(0.9, 0.8, 0.2), Color(0.9, 0.3, 0.1)))
 
     var cr := clothing / Constants.initial_clothing
-    var cc := _need_color(cr, Color(0.7, 0.3, 0.9), Color(0.9, 0.7, 0.1), Color(0.9, 0.2, 0.2))
-    draw_string(font, Vector2(x0, NUM_Y - FONT_SIZE - 2), "%d" % int(clothing), HORIZONTAL_ALIGNMENT_LEFT, col_w, FONT_SIZE, cc)
+    _ds(font, Vector2(x0, NUM_Y - FONT_SIZE - 2), "%d" % int(clothing), col_w,
+        _need_color(cr, Color(0.7, 0.3, 0.9), Color(0.9, 0.7, 0.1), Color(0.9, 0.2, 0.2)))
 
     var tool_r := _tool / Constants.initial_tool
-    var tc2 := _need_color(tool_r, Color(0.8, 0.6, 0.2), Color(0.9, 0.7, 0.1), Color(0.9, 0.2, 0.2))
-    draw_string(font, Vector2(x0 + col_w, NUM_Y - FONT_SIZE - 2), "%d" % int(_tool), HORIZONTAL_ALIGNMENT_LEFT, col_w, FONT_SIZE, tc2)
-
+    _ds(font, Vector2(x0 + col_w, NUM_Y - FONT_SIZE - 2), "%d" % int(_tool), col_w,
+        _need_color(tool_r, Color(0.8, 0.6, 0.2), Color(0.9, 0.7, 0.1), Color(0.9, 0.2, 0.2)))

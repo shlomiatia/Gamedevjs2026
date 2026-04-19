@@ -11,6 +11,7 @@ var _map: Map = null
 var _coordination_manager: Node = null
 var _target_pile: ResourcePile = null
 var _build_elapsed := 0.0
+var _build_res_type: int = CoordinationManager.ResourceType.PLANK
 
 func setup(home_hut: BuilderHut, map: Map, coordination_manager: Node) -> void:
 	_home_hut = home_hut
@@ -27,8 +28,8 @@ func assign_build_task(target) -> void:
 	assert(is_free(), "assign_build_task called on a non-free builder")
 	_target_hut = target
 	_state = State.WAIT_FOR_RESOURCE_GO_HOME
-	var res_type: int = _target_hut.get("CONSTRUCTION_RESOURCE_TYPE") if _target_hut.get("CONSTRUCTION_RESOURCE_TYPE") != null else CoordinationManager.ResourceType.PLANK
-	_coordination_manager.queue_resource_collection(self, res_type)
+	_build_res_type = _target_hut.get("CONSTRUCTION_RESOURCE_TYPE") if _target_hut.get("CONSTRUCTION_RESOURCE_TYPE") != null else CoordinationManager.ResourceType.PLANK
+	_coordination_manager.queue_resource_collection(self, _build_res_type)
 	if _state == State.WAIT_FOR_RESOURCE_GO_HOME and not $Worker.is_satisfying_need():
 		$Worker.navigate_to($Worker.home_world_pos())
 
@@ -116,7 +117,7 @@ func _finish_build() -> void:
 	_target_hut.complete_construction()
 	_target_hut = null
 	_state = State.IDLE
-	_coordination_manager.notify_construction_complete()
+	_coordination_manager.notify_construction_complete(_build_res_type)
 	_coordination_manager.notify_idle_builder(self)
 	if _state == State.IDLE:
 		_state = State.GO_HOME
