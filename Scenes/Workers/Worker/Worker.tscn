@@ -208,4 +208,4 @@ position = Vector2(0, -32)
 sprite_frames = SubResource("frames")
 animation = &"up_work"
 autoplay = "down_stand"
-frame_progress = 0.248361
+frame_progress = 0.20513816
