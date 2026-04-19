@@ -64,6 +64,8 @@ func _try_find_tree() -> void:
 func _do_pick(delta: float) -> void:
     assert(is_instance_valid(_target_tree), "target tree freed while picking")
     _pick_elapsed += delta * 1000.0
+    var progress := clampf(_pick_elapsed / Constants.pick_duration_ms, 0.0, 1.0)
+    _target_tree.set_pick_progress(progress)
     if _pick_elapsed >= Constants.pick_duration_ms:
         _finish_pick()
 

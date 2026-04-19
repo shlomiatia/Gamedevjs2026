@@ -21,7 +21,11 @@ func _ready() -> void:
 func set_chop_progress(progress: float) -> void:
 	rotation_degrees = progress * 90.0
 
+func set_pick_progress(progress: float) -> void:
+	$ApplesSprite.modulate.a = 1.0 - progress
+
 func remove_apples() -> void:
 	has_apples = false
 	targeted = false
+	$ApplesSprite.modulate.a = 1.0
 	$ApplesSprite.visible = false

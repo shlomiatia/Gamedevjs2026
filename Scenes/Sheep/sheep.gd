@@ -2,6 +2,7 @@ class_name Sheep
 extends Node2D
 
 var is_sheared := false
+var _is_walking := false
 
 func _ready() -> void:
 	$AnimatedSprite2D.play("unsheared_stand")
@@ -16,6 +17,9 @@ func follow_toward(target_pos: Vector2, delta: float) -> void:
 	position += dir.normalized() * Constants.sheep_follow_speed * delta
 
 func set_walking(walking: bool) -> void:
+	if walking == _is_walking:
+		return
+	_is_walking = walking
 	if is_sheared:
 		$AnimatedSprite2D.play("sheared_walk" if walking else "sheared_stand")
 	else:
@@ -23,8 +27,10 @@ func set_walking(walking: bool) -> void:
 
 func shear() -> void:
 	is_sheared = true
+	_is_walking = false
 	$AnimatedSprite2D.play("sheared_stand")
 
 func regrow() -> void:
 	is_sheared = false
+	_is_walking = false
 	$AnimatedSprite2D.play("unsheared_stand")

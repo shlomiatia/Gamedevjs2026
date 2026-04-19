@@ -101,7 +101,6 @@ func _on_path_finished() -> void:
 			_build_elapsed = 0.0
 		State.GO_TO_BUILD:
 			_state = State.BUILD
-			_build_elapsed = 0.0
 		State.GO_HOME:
 			_state = State.IDLE
 			_coordination_manager.notify_idle_builder(self)
