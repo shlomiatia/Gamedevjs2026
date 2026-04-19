@@ -16,6 +16,7 @@ const CoalMineScene = preload("res://Scenes/Buildings/CoalMine/CoalMine.tscn")
 const IronMineScene = preload("res://Scenes/Buildings/IronMine/IronMine.tscn")
 const SteelMillScene = preload("res://Scenes/Buildings/SteelMill/SteelMill.tscn")
 const ToolsmithScene = preload("res://Scenes/Buildings/Toolsmith/Toolsmith.tscn")
+const FromageScene = preload("res://Scenes/Buildings/Fromage/Fromage.tscn")
 
 var _map: Map = null
 var _spawn_parent: Node2D = null
@@ -48,6 +49,7 @@ var _overlay: PlacementOverlay = null
 @onready var _build_iron_mine_button: Button = $UI/ButtonPanel/Row2/BuildIronMineButton
 @onready var _build_steel_mill_button: Button = $UI/ButtonPanel/Row2/BuildSteelMillButton
 @onready var _build_toolsmith_button: Button = $UI/ButtonPanel/Row2/BuildToolsmithButton
+@onready var _build_fromage_button: Button = $UI/ButtonPanel/Row2/BuildFromageButton
 
 func setup(map: Map, coordination_manager: Node, forest: Forest) -> void:
     _map = map
@@ -82,6 +84,7 @@ func _ready() -> void:
         ["IronMine",      _build_iron_mine_button,  CostTier.BRICK],
         ["SteelMill",     _build_steel_mill_button, CostTier.BRICK],
         ["Toolsmith",     _build_toolsmith_button,  CostTier.BRICK],
+        ["Fromage",       _build_fromage_button,    CostTier.BRICK],
     ]
     for pair in _button_key_pairs:
         pair.append((pair[1] as Button).text)
@@ -112,6 +115,8 @@ func _ready() -> void:
         func(): _start_building(SteelMillScene, Vector2i(SteelMill.SIZE_X, SteelMill.SIZE_Y), "SteelMill"))
     _build_toolsmith_button.pressed.connect(
         func(): _start_building(ToolsmithScene, Vector2i(Toolsmith.SIZE_X, Toolsmith.SIZE_Y), "Toolsmith"))
+    _build_fromage_button.pressed.connect(
+        func(): _start_building(FromageScene, Vector2i(Fromage.SIZE_X, Fromage.SIZE_Y), "Fromage"))
 
     _tooltip_manager.connect_builder_button(_build_builder_button)
     _tooltip_manager.connect_button(_build_woodcutter_button, "WoodcutterHut")
@@ -126,6 +131,7 @@ func _ready() -> void:
     _tooltip_manager.connect_button(_build_iron_mine_button, "IronMine")
     _tooltip_manager.connect_button(_build_steel_mill_button, "SteelMill")
     _tooltip_manager.connect_button(_build_toolsmith_button, "Toolsmith")
+    _tooltip_manager.connect_button(_build_fromage_button, "Fromage")
 
     _update_buttons()
 

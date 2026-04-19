@@ -3,7 +3,7 @@ extends CanvasLayer
 
 # Integer keys match CoordinationManager.ResourceType enum order:
 # LOG=0, PLANK=1, APPLE=2, CIDER=3, WOOL=4, CLOTHES=5, CLAY=6, BRICK=7,
-# COAL=8, IRON_ORE=9, IRON_BAR=10, TOOL=11
+# COAL=8, IRON_ORE=9, IRON_BAR=10, TOOL=11, MILK=12, CHEESE=13
 const _PALETTE_SHADER := preload("res://Shaders/pallete_swap.gdshader")
 
 const _ICON_TEXTURE := {
@@ -19,6 +19,8 @@ const _ICON_TEXTURE := {
 	9: preload("res://Textures/ore.png"),
 	10: preload("res://Textures/brick.png"),
 	11: preload("res://Textures/tool.png"),
+	12: preload("res://Textures/cider.png"),
+	13: preload("res://Textures/cheese.png"),
 }
 
 # Modulate to distinguish resources that share the same base texture
@@ -57,6 +59,11 @@ func _ready() -> void:
 		 Color(0.54902, 0.19216, 0.19608), Color(0.32941, 0.13725, 0.13725), Color(0.24706, 0.13725, 0.13725)],
 		[Color(0.91765, 0.91765, 0.90980), Color(0.80784, 0.79216, 0.78824), Color(0.67059, 0.68627, 0.72549),
 		 Color(0.63137, 0.53333, 0.59216), Color(0.45882, 0.38431, 0.46275), Color(0.36471, 0.27451, 0.37647)]
+	)
+	# Milk: cider.png with red tones → white/grey tones (#f8401b #bd2709 #7c122b → #ffffff #eaeae8 #cecac9)
+	_icon_materials[12] = _make_palette_mat(
+		[Color(0.97255, 0.25098, 0.10588), Color(0.74118, 0.15294, 0.03529), Color(0.48627, 0.07059, 0.16863)],
+		[Color(1.0, 1.0, 1.0), Color(0.91765, 0.91765, 0.90980), Color(0.80784, 0.79216, 0.78824)]
 	)
 	_panel = PanelContainer.new()
 	_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE

@@ -3,6 +3,7 @@ extends Node2D
 
 const WoolScene = preload("res://Scenes/Resources/Wool/Wool.tscn")
 const SheepScene = preload("res://Scenes/Sheep/Sheep.tscn")
+const MilkScene = preload("res://Scenes/Resources/Milk/Milk.tscn")
 
 enum State { IDLE, GO_TO_NEXT_TILE, GRAZE, GO_HOME, SHEAR }
 
@@ -11,22 +12,27 @@ var _sheep_farm: SheepFarm = null
 var _map: Map = null
 var _spawn_parent: Node2D = null
 var _herd: Array[Sheep] = []
+var _wool_pile: ResourcePile = null
+var _milk_pile: ResourcePile = null
 
-var _pending_deliveries: Array = []   # Array of {sheep: Sheep, tile: Vector2i}
+var _pending_deliveries: Array = []
 var _graze_tiles: Array[Vector2i] = []
-var _delivered_sheep: Dictionary = {} # Sheep -> true
+var _delivered_sheep: Dictionary = {}
 
 var _action_elapsed := 0.0
 var _shear_elapsed := 0.0
-var _shear_queue: Array = []          # Array of Sheep
+var _shear_queue: Array = []  # Array of {sheep: Sheep, is_milk: bool}
 var _spawn_new_sheep := false
 var _first_return_done := false
 
-func setup(sheep_farm: SheepFarm, map: Map, sheep: Sheep, spawn_parent: Node2D, coordination_manager: Node) -> void:
+func setup(sheep_farm: SheepFarm, map: Map, sheep: Sheep, spawn_parent: Node2D,
+		coordination_manager: Node, wool_pile: ResourcePile, milk_pile: ResourcePile) -> void:
 	_sheep_farm = sheep_farm
 	_map = map
 	_spawn_parent = spawn_parent
 	_herd.append(sheep)
+	_wool_pile = wool_pile
+	_milk_pile = milk_pile
 	$Worker.setup(sheep_farm, map, coordination_manager)
 
 func resume_work() -> void:
@@ -62,15 +68,14 @@ func _process(delta: float) -> void:
 		State.SHEAR:
 			_do_shear(delta)
 
-func _output_pile() -> ResourcePile:
-	return _sheep_farm.get_pile_for_type(CoordinationManager.ResourceType.WOOL)
-
 func _should_go_out() -> bool:
 	if not _first_return_done:
 		return true
 	if _herd.size() < Constants.max_herd_size:
 		return true
-	return not $Worker.is_output_full(_output_pile(), Constants.output_pile_capacity)
+	var wool_full: bool = $Worker.is_output_full(_wool_pile, Constants.output_pile_capacity)
+	var milk_full: bool = $Worker.is_output_full(_milk_pile, Constants.output_pile_capacity)
+	return not (wool_full and milk_full)
 
 func _try_find_tiles() -> void:
 	if not _should_go_out():
@@ -133,29 +138,47 @@ func _on_arrived_home() -> void:
 
 func _setup_shear_cycle() -> void:
 	_shear_queue.clear()
+	var to_process: Array[Sheep] = []
+
 	if not _first_return_done:
-		for sheep in _herd:
-			_shear_queue.append(sheep)
+		to_process = _herd.duplicate()
 		_spawn_new_sheep = false
 		_first_return_done = true
 	elif _herd.size() < Constants.max_herd_size:
 		for i in _herd.size() - 1:
-			_shear_queue.append(_herd[i])
+			to_process.append(_herd[i])
 		_spawn_new_sheep = true
 	else:
-		for sheep in _herd:
-			_shear_queue.append(sheep)
+		to_process = _herd.duplicate()
 		_spawn_new_sheep = false
+
+	_split_into_shear_queue(to_process)
+
+func _split_into_shear_queue(sheep_list: Array[Sheep]) -> void:
+	var n := sheep_list.size()
+	var half := n / 2
+	for i in half:
+		_shear_queue.append({sheep = sheep_list[i], is_milk = false})
+	for i in half:
+		_shear_queue.append({sheep = sheep_list[half + i], is_milk = true})
+	if n % 2 == 1:
+		_shear_queue.append({sheep = sheep_list[n - 1], is_milk = randi() % 2 == 1})
 
 func _do_shear(delta: float) -> void:
 	_shear_elapsed += delta * 1000.0
 	if _shear_elapsed < Constants.sheep_shear_time_ms:
 		return
 	_shear_elapsed = 0.0
-	var sheep := _shear_queue.pop_front() as Sheep
-	if not $Worker.is_output_full(_output_pile(), Constants.output_pile_capacity):
-		_output_pile().add_resource(WoolScene)
-		sheep.shear()
+	var entry := _shear_queue.pop_front() as Dictionary
+	var sheep := entry.sheep as Sheep
+	var is_milk: bool = entry.get("is_milk", false)
+	if is_milk:
+		if not $Worker.is_output_full(_milk_pile, Constants.output_pile_capacity):
+			_milk_pile.add_resource(MilkScene)
+	else:
+		if not $Worker.is_output_full(_wool_pile, Constants.output_pile_capacity):
+			_wool_pile.add_resource(WoolScene)
+			sheep.shear()
 	if _shear_queue.is_empty():
 		_do_spawn_if_needed()
 

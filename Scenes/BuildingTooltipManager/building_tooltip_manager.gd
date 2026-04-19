@@ -21,7 +21,8 @@ const TOOLTIP_DATA := {
 	"CoalMine":      {"display_name": "Coal Mine",  "cost": 1, "action": "produce", "output": 8},
 	"IronMine":      {"display_name": "Iron Mine",  "cost": 1, "action": "produce", "output": 9},
 	"SteelMill":     {"display_name": "Steel Mill", "cost": 7, "action": "convert", "inputs": [9, 8], "output": 10},
-	"Toolsmith":     {"display_name": "Toolsmith",  "cost": 7, "action": "convert", "inputs": [8, 10],"output": 11},
+	"Toolsmith":     {"display_name": "Toolsmith",  "cost": 7, "action": "convert", "inputs": [8, 10], "output": 11},
+	"Fromage":       {"display_name": "Fromage",    "cost": 7, "action": "convert", "inputs": [12, 0], "output": 13},
 }
 
 var _tooltip: BuildingTooltip

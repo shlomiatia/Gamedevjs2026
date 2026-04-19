@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scenes/Resources/Cheese/cheese.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://Textures/cheese.png" id="2_cheese"]
+
+[node name="Cheese" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+texture = ExtResource("2_cheese")
