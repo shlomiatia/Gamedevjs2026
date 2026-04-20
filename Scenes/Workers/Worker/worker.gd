@@ -41,8 +41,8 @@ func home_world_pos() -> Vector2:
 func is_satisfying_need() -> bool:
     return _needs.is_satisfying_need()
 
-func handle_need(need: int, pile: ResourcePile) -> void:
-    _needs.handle_need(need, pile)
+func handle_need(need: int, pile: ResourcePile, resource_type: int) -> void:
+    _needs.handle_need(need, pile, resource_type)
 
 func get_need_value(need: int) -> float:
     return _needs.get_need_value(need)

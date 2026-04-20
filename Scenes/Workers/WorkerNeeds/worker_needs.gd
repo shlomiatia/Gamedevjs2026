@@ -48,11 +48,11 @@ func get_need_value(need: int) -> float:
         Worker.NeedType.TOOL: return _tool
     return INF
 
-func handle_need(need: int, pile: ResourcePile) -> void:
+func handle_need(need: int, pile: ResourcePile, resource_type: int) -> void:
     assert(need != Worker.NO_NEED, "handle_need called with NO_NEED")
-    _receive_need(need, pile)
+    _receive_need(need, pile, resource_type)
 
-func _receive_need(need: int, pile: ResourcePile) -> void:
+func _receive_need(need: int, pile: ResourcePile, resource_type: int) -> void:
     for entry in _active_needs:
         if entry.need == need:
             return
@@ -63,7 +63,7 @@ func _receive_need(need: int, pile: ResourcePile) -> void:
         if get_need_value(_active_needs[i].need) > new_val:
             insert_at = i
             break
-    _active_needs.insert(insert_at, {need = need, pile = pile})
+    _active_needs.insert(insert_at, {need = need, pile = pile, resource_type = resource_type})
 
     if insert_at == 0:
         _navigator.navigate_to(pile.global_position)
@@ -73,7 +73,7 @@ func _finish_need_trip() -> void:
     assert(is_instance_valid(entry.pile), "need pile is no longer valid")
     var resource: Node2D = (entry.pile as ResourcePile).collect(_mover)
     resource.queue_free()
-    var satisfaction: float = Constants.need_satisfaction_value
+    var satisfaction: float = (_coordination_manager as CoordinationManager).get_satisfaction_for_resource(entry.resource_type)
     match entry.need:
         Worker.NeedType.FOOD: hunger = minf(Constants.initial_hunger, hunger + satisfaction)
         Worker.NeedType.DRINK: thirst = minf(Constants.initial_thirst, thirst + satisfaction)

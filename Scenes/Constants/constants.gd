@@ -19,9 +19,6 @@ var initial_clothing := 300.0
 # Tool (blocks worker at 0, no threshold replenishment)
 var initial_tool := 300.0
 
-# Need satisfaction
-var need_satisfaction_value := 200.0
-
 # Work durations (ms)
 var chop_duration_ms := 5000.0
 var pick_duration_ms := 5000.0
@@ -66,7 +63,6 @@ func _ready():
 				["hunger_drain_normal", 0.1],
 				["hunger_drain_working", 0.1],
 				["hunger_threshold", 10],
-				["need_satisfaction_value", 10],
 			]
 		},
 		{

@@ -7,17 +7,31 @@ enum ResourceType { LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, 
 
 const RESOURCE_TO_NEED := {
     ResourceType.APPLE: Worker.NeedType.FOOD,
+    ResourceType.CHEESE: Worker.NeedType.FOOD,
     ResourceType.CIDER: Worker.NeedType.DRINK,
+    ResourceType.MILK: Worker.NeedType.DRINK,
     ResourceType.CLOTHES: Worker.NeedType.CLOTHING,
     ResourceType.TOOL: Worker.NeedType.TOOL,
 }
 
 const NEED_TO_RESOURCE := {
-    Worker.NeedType.FOOD: ResourceType.APPLE,
-    Worker.NeedType.DRINK: ResourceType.CIDER,
-    Worker.NeedType.CLOTHING: ResourceType.CLOTHES,
-    Worker.NeedType.TOOL: ResourceType.TOOL,
+    Worker.NeedType.FOOD: [ResourceType.APPLE, ResourceType.CHEESE],
+    Worker.NeedType.DRINK: [ResourceType.CIDER, ResourceType.MILK],
+    Worker.NeedType.CLOTHING: [ResourceType.CLOTHES],
+    Worker.NeedType.TOOL: [ResourceType.TOOL],
 }
+
+const RESOURCE_SATISFACTION := {
+    ResourceType.APPLE: 150.0,
+    ResourceType.CHEESE: 300.0,
+    ResourceType.MILK: 150.0,
+    ResourceType.CIDER: 300.0,
+    ResourceType.CLOTHES: 300.0,
+    ResourceType.TOOL: 300.0,
+}
+
+func get_satisfaction_for_resource(resource_type: int) -> float:
+    return RESOURCE_SATISFACTION.get(resource_type, 200.0)
 
 var _builders: Array = []
 var _all_workers: Array = []
@@ -132,16 +146,18 @@ func queue_resource_collection(worker: Node2D, resource_type: int) -> void:
         _resource_queues[resource_type].append(worker)
 
 func queue_need_collection(worker: Node2D, need: int) -> void:
-    var pile := _find_nearest_pile_for_need(need, worker.position)
+    var result := _find_nearest_pile_for_need(need, worker.position)
+    var pile: ResourcePile = result[0]
+    var resource_type: int = result[1]
     if pile != null:
         pile.reserve(worker)
-        (worker.get_node("Worker") as Worker).handle_need(need, pile)
+        (worker.get_node("Worker") as Worker).handle_need(need, pile, resource_type)
     else:
         _need_queues[need].append(worker)
 
 func notify_free_resource(resource_type: int, pile: ResourcePile) -> void:
     if RESOURCE_TO_NEED.has(resource_type):
-        _dispatch_need_queue(RESOURCE_TO_NEED[resource_type], pile)
+        _dispatch_need_queue(RESOURCE_TO_NEED[resource_type], pile, resource_type)
     if pile.free_count() == 0:
         return
     var queue: Array = _resource_queues[resource_type]
@@ -151,7 +167,7 @@ func notify_free_resource(resource_type: int, pile: ResourcePile) -> void:
     pile.reserve(worker)
     worker.go_collect_resource(pile)
 
-func _dispatch_need_queue(need: int, pile: ResourcePile) -> void:
+func _dispatch_need_queue(need: int, pile: ResourcePile, resource_type: int) -> void:
     _cleanup_need_queue(need)
     var queue: Array = _need_queues[need]
     if queue.is_empty():
@@ -165,7 +181,7 @@ func _dispatch_need_queue(need: int, pile: ResourcePile) -> void:
             best = w
     queue.erase(best)
     pile.reserve(best)
-    (best.get_node("Worker") as Worker).handle_need(need, pile)
+    (best.get_node("Worker") as Worker).handle_need(need, pile, resource_type)
 
 func _cleanup_need_queue(need: int) -> void:
     _need_queues[need] = _need_queues[need].filter(func(w): return is_instance_valid(w))
@@ -177,18 +193,21 @@ func _find_free_resource_pile(resource_type: int) -> ResourcePile:
             return pile
     return null
 
-func _find_nearest_pile_for_need(need: int, from_pos: Vector2) -> ResourcePile:
-    var resource_type: int = NEED_TO_RESOURCE[need]
+func _find_nearest_pile_for_need(need: int, from_pos: Vector2) -> Array:
+    var resource_types: Array = NEED_TO_RESOURCE[need]
     var best: ResourcePile = null
+    var best_type: int = -1
     var best_dist := INF
-    for building in _buildings:
-        var pile: ResourcePile = building.get_pile_for_type(resource_type)
-        if pile != null and pile.free_count() > 0:
-            var d: float = (building as Node2D).position.distance_to(from_pos)
-            if d < best_dist:
-                best_dist = d
-                best = pile
-    return best
+    for rt: int in resource_types:
+        for building in _buildings:
+            var pile: ResourcePile = building.get_pile_for_type(rt)
+            if pile != null and pile.free_count() > 0:
+                var d: float = (building as Node2D).position.distance_to(from_pos)
+                if d < best_dist:
+                    best_dist = d
+                    best = pile
+                    best_type = rt
+    return [best, best_type]
 
 func _find_closest_free_builder(pos: Vector2) -> Builder:
     var closest: Builder = null
