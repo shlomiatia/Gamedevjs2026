@@ -5,7 +5,7 @@ const WoolScene = preload("res://Scenes/Resources/Wool/Wool.tscn")
 const SheepScene = preload("res://Scenes/Sheep/Sheep.tscn")
 const MilkScene = preload("res://Scenes/Resources/Milk/Milk.tscn")
 
-enum State { IDLE, GO_TO_NEXT_TILE, GRAZE, GO_HOME, SHEAR }
+enum State { IDLE, GO_TO_GRAZE, GRAZE, GO_HOME, SHEAR }
 
 var _state := State.IDLE
 var _sheep_farm: SheepFarm = null
@@ -15,13 +15,13 @@ var _herd: Array[Sheep] = []
 var _wool_pile: ResourcePile = null
 var _milk_pile: ResourcePile = null
 
-var _pending_deliveries: Array = []
 var _graze_tiles: Array[Vector2i] = []
-var _delivered_sheep: Dictionary = {}
+var _furthest_graze_tile := Vector2i(-1, -1)
+var _farmer_at_graze := false
 
 var _action_elapsed := 0.0
 var _shear_elapsed := 0.0
-var _shear_queue: Array = []  # Array of {sheep: Sheep, is_milk: bool}
+var _shear_queue: Array = []
 var _spawn_new_sheep := false
 var _first_return_done := false
 
@@ -37,9 +37,9 @@ func setup(sheep_farm: SheepFarm, map: Map, sheep: Sheep, spawn_parent: Node2D,
 
 func resume_work() -> void:
 	match _state:
-		State.GO_TO_NEXT_TILE:
-			if not _pending_deliveries.is_empty():
-				$Worker.navigate_to(_map.tile_to_world((_pending_deliveries[0] as Dictionary).tile))
+		State.GO_TO_GRAZE:
+			if _furthest_graze_tile != Vector2i(-1, -1):
+				$Worker.navigate_to(_map.tile_to_world(_furthest_graze_tile))
 		State.GRAZE:
 			pass
 		State.GO_HOME, State.SHEAR:
@@ -48,17 +48,18 @@ func resume_work() -> void:
 
 func _process(delta: float) -> void:
 	$Worker.set_working(_state == State.SHEAR)
-	match _state:
-		State.GO_TO_NEXT_TILE: _follow_undelivered(delta)
-		State.GO_HOME:         _follow_all_sheep(delta)
+	if _state == State.GO_HOME:
+		_follow_all_sheep()
 	if $Worker.is_satisfying_need():
 		return
 	match _state:
 		State.IDLE:
 			_try_find_tiles()
-		State.GO_TO_NEXT_TILE:
-			if $Worker.tick_movement(delta):
-				_on_arrived_at_tile()
+		State.GO_TO_GRAZE:
+			if not _farmer_at_graze and $Worker.tick_movement(delta):
+				_farmer_at_graze = true
+			if _farmer_at_graze and _all_sheep_at_target():
+				_on_arrived_at_graze()
 		State.GRAZE:
 			_action_elapsed += delta * 1000.0
 			if _action_elapsed >= Constants.sheep_eat_time_ms:
@@ -82,45 +83,42 @@ func _try_find_tiles() -> void:
 	if not _should_go_out():
 		return
 	var reserved: Dictionary = {}
-	var deliveries: Array = []
+	_graze_tiles.clear()
+	_furthest_graze_tile = Vector2i(-1, -1)
+	_farmer_at_graze = false
+	var furthest_dist := -1.0
 	for sheep: Sheep in _herd:
 		var tile := _map.find_sheep_grass_tile(_sheep_farm.position, reserved)
 		if tile == Vector2i(-1, -1):
 			return
 		reserved[tile] = true
-		deliveries.append({sheep = sheep, tile = tile})
-	_pending_deliveries = deliveries
-	_graze_tiles.clear()
-	_delivered_sheep.clear()
-	for sheep: Sheep in _herd:
-		sheep.reset_follow_delay()
-	$Worker.navigate_to(_map.tile_to_world((_pending_deliveries[0] as Dictionary).tile))
-	_state = State.GO_TO_NEXT_TILE
+		_graze_tiles.append(tile)
+		var tile_world := _map.tile_to_world(tile)
+		sheep.set_follow_target(tile_world)
+		sheep.clear_follow_delay()
+		var dist := _sheep_farm.position.distance_to(tile_world)
+		if dist > furthest_dist:
+			furthest_dist = dist
+			_furthest_graze_tile = tile
+	$Worker.navigate_to(_map.tile_to_world(_furthest_graze_tile))
+	_state = State.GO_TO_GRAZE
 
-func _follow_undelivered(_delta: float) -> void:
+func _all_sheep_at_target() -> bool:
 	for sheep: Sheep in _herd:
-		if not _delivered_sheep.has(sheep):
-			sheep.set_follow_target(global_position)
+		if not sheep.is_at_target():
+			return false
+	return true
 
-func _follow_all_sheep(_delta: float) -> void:
+func _follow_all_sheep() -> void:
 	for sheep: Sheep in _herd:
 		sheep.set_follow_target(global_position)
 
-func _on_arrived_at_tile() -> void:
-	var delivery := _pending_deliveries.pop_front() as Dictionary
-	var sheep := delivery.sheep as Sheep
-	var tile := delivery.tile as Vector2i
-	_graze_tiles.append(tile)
-	_delivered_sheep[sheep] = true
-	sheep.stop()
-	if not _pending_deliveries.is_empty():
-		$Worker.navigate_to(_map.tile_to_world((_pending_deliveries[0] as Dictionary).tile))
-	else:
-		_action_elapsed = 0.0
-		_map.start_grass_fade(_graze_tiles, Constants.sheep_eat_time_ms / 1000.0)
-		for s: Sheep in _herd:
-			s.set_eating(true)
-		_state = State.GRAZE
+func _on_arrived_at_graze() -> void:
+	_action_elapsed = 0.0
+	_map.start_grass_fade(_graze_tiles, Constants.sheep_eat_time_ms / 1000.0)
+	for sheep: Sheep in _herd:
+		sheep.set_eating(true)
+	_state = State.GRAZE
 
 func _finish_graze() -> void:
 	for tile in _graze_tiles:
@@ -128,8 +126,6 @@ func _finish_graze() -> void:
 	for sheep: Sheep in _herd:
 		sheep.set_eating(false)
 		sheep.regrow()
-		sheep.reset_follow_delay()
-	_delivered_sheep.clear()
 	$Worker.navigate_to($Worker.home_world_pos())
 	_state = State.GO_HOME
 
@@ -147,7 +143,6 @@ func _on_arrived_home() -> void:
 func _setup_shear_cycle() -> void:
 	_shear_queue.clear()
 	var to_process: Array[Sheep] = []
-
 	if not _first_return_done:
 		to_process = _herd.duplicate()
 		_spawn_new_sheep = false
@@ -159,7 +154,6 @@ func _setup_shear_cycle() -> void:
 	else:
 		to_process = _herd.duplicate()
 		_spawn_new_sheep = false
-
 	_split_into_shear_queue(to_process)
 
 func _split_into_shear_queue(sheep_list: Array[Sheep]) -> void:

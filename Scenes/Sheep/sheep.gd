@@ -16,6 +16,12 @@ func _ready() -> void:
 func reset_follow_delay() -> void:
 	_follow_delay = randf_range(0.1, 0.8)
 
+func clear_follow_delay() -> void:
+	_follow_delay = 0.0
+
+func is_at_target() -> bool:
+	return $NavigationAgent2D.is_navigation_finished()
+
 func set_follow_target(target_pos: Vector2) -> void:
 	$NavigationAgent2D.target_position = target_pos
 

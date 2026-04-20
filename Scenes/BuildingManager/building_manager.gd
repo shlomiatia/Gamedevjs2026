@@ -227,6 +227,11 @@ func _add_nav_obstacle(building: Node2D, size: Vector2i) -> void:
         Vector2(-hw, -h), Vector2(hw, -h), Vector2(hw, 0.0), Vector2(-hw, 0.0)
     ])
     building.add_child(obstacle)
+    var p := building.position
+    _map.add_nav_hole(PackedVector2Array([
+        p + Vector2(-hw, -h), p + Vector2(-hw, 0.0),
+        p + Vector2(hw, 0.0), p + Vector2(hw, -h)
+    ]))
 
 func _get_footprint_top_left() -> Vector2i:
     # Offset so the cursor tracks the bottom-center tile of the footprint

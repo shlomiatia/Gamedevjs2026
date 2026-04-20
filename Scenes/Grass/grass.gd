@@ -39,11 +39,22 @@ func start_grass_fade(tiles: Array[Vector2i], duration: float) -> void:
 	if _fade_tween:
 		_fade_tween.kill()
 	_clear_fade_layer()
+	# Collect graze tiles + already-eaten neighbors whose pattern will update
+	var snapshot: Dictionary = {}
 	for tile in tiles:
+		snapshot[tile] = true
+		for offset: Vector2i in [Vector2i(0,-1), Vector2i(1,0), Vector2i(0,1), Vector2i(-1,0)]:
+			var n := tile + offset
+			if _eaten_tiles.has(n):
+				snapshot[n] = true
+	# Copy current appearance to fade layer before eating
+	for tile: Vector2i in snapshot:
 		var coords := _grass_layer.get_cell_atlas_coords(tile)
 		if coords != Vector2i(-1, -1):
 			_fade_layer.set_cell(tile, 0, coords)
-		_fade_tiles.append(tile)
+			_fade_tiles.append(tile)
+	# Eat tiles immediately (dirt appears under the fade layer)
+	for tile in tiles:
 		eat_grass(tile)
 	_fade_layer.modulate.a = 1.0
 	_fade_tween = create_tween()

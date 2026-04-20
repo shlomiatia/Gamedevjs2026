@@ -3,7 +3,7 @@ extends CanvasLayer
 
 const _CLICK := "click"
 const _EVENT := "event"
-const WAIT_STEP_DELAY := 0.1
+const WAIT_STEP_DELAY := 0.
 
 var _steps: Array = []
 var _step: int = 0
@@ -70,7 +70,6 @@ func start() -> void:
 
 func _build_steps() -> void:
     _steps = [
-        _mc("Click to start."),
         _mc("Welcome to Logistictown!"),
         _me("Use WASD, arrows, or middle mouse button to pan the map.", "panned"),
         _mc("Your goal is to reach a population of 50."),
