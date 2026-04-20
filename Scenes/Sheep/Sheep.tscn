@@ -139,6 +139,13 @@ animations = [{
 [node name="Sheep" type="Node2D"]
 script = ExtResource("2_script")
 
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_enabled = true
+radius = 10.0
+neighbor_distance = 60.0
+max_neighbors = 10
+avoidance_priority = 0.5
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_sheep")

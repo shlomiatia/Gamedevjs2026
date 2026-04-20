@@ -13,6 +13,7 @@ var eaten_tiles: Dictionary = {}
 @onready var _grass: Grass = $Grass
 @onready var _river: River = $River
 @onready var _mountain: Mountain = $Mountain
+@onready var _nav_region: NavigationRegion2D = $NavRegion
 
 func _ready() -> void:
 	_grass.setup(LEVEL_WIDTH, LEVEL_HEIGHT, RIVER_ROW, 2)
@@ -22,6 +23,17 @@ func _ready() -> void:
 	set_occupied_tiles_rect(Vector2i(0, LEVEL_HEIGHT - 6), Vector2i(LEVEL_WIDTH, 6), OccupiedType.BLOCK_WORKERS)
 	set_occupied_tiles_rect(Vector2i(-1, 0), Vector2i(1, LEVEL_HEIGHT), OccupiedType.BLOCK_WORKERS)
 	set_occupied_tiles_rect(Vector2i(LEVEL_WIDTH, 0), Vector2i(1, LEVEL_HEIGHT), OccupiedType.BLOCK_WORKERS)
+	_setup_navigation()
+
+func _setup_navigation() -> void:
+	var ts := get_tile_size()
+	var tl := tile_to_world(Vector2i(0, RIVER_ROW + 2)) - Vector2(ts.x * 0.5, ts.y * 0.5)
+	var br := tile_to_world(Vector2i(LEVEL_WIDTH - 1, LEVEL_HEIGHT - 7)) + Vector2(ts.x * 0.5, ts.y * 0.5)
+	var nav_poly := NavigationPolygon.new()
+	var verts := PackedVector2Array([tl, Vector2(br.x, tl.y), br, Vector2(tl.x, br.y)])
+	nav_poly.vertices = verts
+	nav_poly.add_polygon(PackedInt32Array([0, 1, 2, 3]))
+	_nav_region.navigation_polygon = nav_poly
 
 func set_occupied_tiles_rect(top_left: Vector2i, size: Vector2i, value) -> void:
 	for dx in size.x:

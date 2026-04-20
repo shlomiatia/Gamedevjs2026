@@ -1,11 +1,9 @@
 class_name HUD
 extends PanelContainer
 
-const UPDATE_INTERVAL := 0.5
 const ICON_SIZE := Vector2(20, 20)
 
 var _coordination_manager: CoordinationManager = null
-var _timer := 0.0
 
 var _lbl_workers: Label
 var _lbl_planks: Label
@@ -115,13 +113,9 @@ func _gap(parent: HBoxContainer) -> void:
 	spacer.custom_minimum_size = Vector2(14, 0)
 	parent.add_child(spacer)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if _coordination_manager == null:
 		return
-	_timer += delta
-	if _timer < UPDATE_INTERVAL:
-		return
-	_timer = 0.0
 	_refresh()
 
 func _refresh() -> void:

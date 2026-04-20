@@ -3,7 +3,7 @@ extends CanvasLayer
 
 const _CLICK := "click"
 const _EVENT := "event"
-const WAIT_STEP_DELAY := 0.5
+const WAIT_STEP_DELAY := 0.1
 
 var _steps: Array = []
 var _step: int = 0
@@ -13,6 +13,8 @@ var _started: bool = false
 
 var _overlay: TutorialOverlay
 var _msg_label: Label
+
+var _branch_appended: bool = false
 
 var _coordination_manager: CoordinationManager
 var _building_manager: BuildingManager
@@ -167,7 +169,8 @@ func on_event(event_name: String) -> void:
 
 func _advance() -> void:
     _step += 1
-    if _step == _steps.size():
+    if not _branch_appended and _step == _steps.size():
+        _branch_appended = true
         var stats := _coordination_manager.get_hud_stats()
         var food: int = (stats.resources as Dictionary).get(CoordinationManager.ResourceType.APPLE, 0) \
                       + (stats.resources as Dictionary).get(CoordinationManager.ResourceType.CHEESE, 0)

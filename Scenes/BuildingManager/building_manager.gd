@@ -207,6 +207,7 @@ func _place_building() -> void:
     _spawn_parent.add_child(building)
     _map.set_occupied_tiles_rect(top_left, _active_size, Map.OccupiedType.BLOCK_WORKERS)
     _map.set_occupied_ring(top_left, _active_size, Map.OccupiedType.BLOCK_BUILDING)
+    _add_nav_obstacle(building, _active_size)
     _coordination_manager.register_building(building)
     building.on_placed(_spawn_parent, _map, _coordination_manager, _forest)
     _tooltip_manager.attach_to_building(building, _active_tooltip_key)
@@ -215,6 +216,17 @@ func _place_building() -> void:
     _cancel_building()
     _update_buttons()
     building_placed.emit(placed_key)
+
+func _add_nav_obstacle(building: Node2D, size: Vector2i) -> void:
+    var ts := _map.get_tile_size()
+    var hw := size.x * ts.x * 0.5
+    var h := size.y * ts.y
+    var obstacle := NavigationObstacle2D.new()
+    obstacle.avoidance_enabled = true
+    obstacle.vertices = PackedVector2Array([
+        Vector2(-hw, -h), Vector2(hw, -h), Vector2(hw, 0.0), Vector2(-hw, 0.0)
+    ])
+    building.add_child(obstacle)
 
 func _get_footprint_top_left() -> Vector2i:
     # Offset so the cursor tracks the bottom-center tile of the footprint
