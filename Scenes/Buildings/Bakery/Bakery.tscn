@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scenes/Buildings/Bakery/bakery.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bap1qcvbb4owg" path="res://Scenes/Buildings/Building/Building.tscn" id="2_building"]
+[ext_resource type="Texture2D" uid="uid://doy1ell80b8ho" path="res://Textures/bricks_house.png" id="3_texture"]
+
+[node name="Bakery" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Building" parent="." instance=ExtResource("2_building")]
+building_name = "Bakery"
+
+[node name="Sprite2D" parent="Building" index="1"]
+texture = ExtResource("3_texture")
+
+[node name="Smoke" type="CPUParticles2D" parent="."]
+position = Vector2(-36, -201)
+emitting = false
+amount = 16
+lifetime = 4.0
+direction = Vector2(0, -1)
+spread = 15.0
+gravity = Vector2(3, -10)
+initial_velocity_min = 8.0
+initial_velocity_max = 15.0
+scale_amount_min = 20.0
+scale_amount_max = 40.0
+color = Color(0.67058825, 0.6862745, 0.7254902, 0.7019608)

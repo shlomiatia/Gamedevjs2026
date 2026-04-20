@@ -9,20 +9,22 @@ signal construction_queued
 
 const WIN_WORKER_COUNT := 50
 
-enum ResourceType { LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR, TOOL, MILK, CHEESE }
+enum ResourceType { LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR, TOOL, MILK, CHEESE, WHEAT, FLOUR, BREAD, BEER }
 
 const RESOURCE_TO_NEED := {
     ResourceType.APPLE: Worker.NeedType.FOOD,
     ResourceType.CHEESE: Worker.NeedType.FOOD,
+    ResourceType.BREAD: Worker.NeedType.FOOD,
     ResourceType.CIDER: Worker.NeedType.DRINK,
     ResourceType.MILK: Worker.NeedType.DRINK,
+    ResourceType.BEER: Worker.NeedType.DRINK,
     ResourceType.CLOTHES: Worker.NeedType.CLOTHING,
     ResourceType.TOOL: Worker.NeedType.TOOL,
 }
 
 const NEED_TO_RESOURCE := {
-    Worker.NeedType.FOOD: [ResourceType.APPLE, ResourceType.CHEESE],
-    Worker.NeedType.DRINK: [ResourceType.CIDER, ResourceType.MILK],
+    Worker.NeedType.FOOD: [ResourceType.APPLE, ResourceType.CHEESE, ResourceType.BREAD],
+    Worker.NeedType.DRINK: [ResourceType.CIDER, ResourceType.MILK, ResourceType.BEER],
     Worker.NeedType.CLOTHING: [ResourceType.CLOTHES],
     Worker.NeedType.TOOL: [ResourceType.TOOL],
 }
@@ -30,8 +32,10 @@ const NEED_TO_RESOURCE := {
 const RESOURCE_SATISFACTION := {
     ResourceType.APPLE: 150.0,
     ResourceType.CHEESE: 300.0,
+    ResourceType.BREAD: 450.0,
     ResourceType.MILK: 150.0,
     ResourceType.CIDER: 300.0,
+    ResourceType.BEER: 300.0,
     ResourceType.CLOTHES: 300.0,
     ResourceType.TOOL: 300.0,
 }

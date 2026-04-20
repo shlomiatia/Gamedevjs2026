@@ -1,10 +1,11 @@
-[gd_scene load_steps=28 format=3 uid="uid://dgt4raq3utqpl"]
+[gd_scene load_steps=30 format=3 uid="uid://dgt4raq3utqpl"]
 
 [ext_resource type="Script" uid="uid://bsrrpa1hvme71" path="res://Scenes/Workers/Worker/worker.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://Scenes/Workers/WorkerNavigator/WorkerNavigator.tscn" id="3_navigator"]
 [ext_resource type="PackedScene" path="res://Scenes/Workers/WorkerNeeds/WorkerNeeds.tscn" id="4_needs"]
 [ext_resource type="PackedScene" path="res://Scenes/Workers/WorkerBackpack/WorkerBackpack.tscn" id="5_backpack"]
 [ext_resource type="Texture2D" uid="uid://cmysa80q0ep88" path="res://Textures/worker.png" id="5_jdvju"]
+[ext_resource type="Shader" path="res://Scenes/Workers/Worker/worker_palette_swap.gdshader" id="6_shader"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kii70"]
 atlas = ExtResource("5_jdvju")
@@ -89,6 +90,12 @@ region = Rect2(64, 64, 32, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_dqq4f"]
 atlas = ExtResource("5_jdvju")
 region = Rect2(32, 64, 32, 64)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_worker"]
+shader = ExtResource("6_shader")
+shader_parameter/to_color_0 = Color(0.784, 0.565, 0.376, 1)
+shader_parameter/to_color_1 = Color(0.627, 0.439, 0.251, 1)
+shader_parameter/to_color_2 = Color(0.471, 0.314, 0.188, 1)
 
 [sub_resource type="SpriteFrames" id="frames"]
 animations = [{
@@ -226,6 +233,7 @@ target_desired_distance = 8.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -30)
+material = SubResource("ShaderMaterial_worker")
 sprite_frames = SubResource("frames")
 animation = &"up_work"
 autoplay = "down_stand"

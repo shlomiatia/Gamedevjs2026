@@ -36,6 +36,18 @@ func _setup_navigation() -> void:
 	_bake_nav_mesh()
 
 func add_nav_hole(hole: PackedVector2Array) -> void:
+	var nav_min_y := _nav_outer[0].y
+	var nav_max_y := _nav_outer[0].y
+	var nav_min_x := _nav_outer[0].x
+	var nav_max_x := _nav_outer[0].x
+	for p in _nav_outer:
+		nav_min_x = min(nav_min_x, p.x)
+		nav_max_x = max(nav_max_x, p.x)
+		nav_min_y = min(nav_min_y, p.y)
+		nav_max_y = max(nav_max_y, p.y)
+	for p in hole:
+		if p.x < nav_min_x or p.x > nav_max_x or p.y < nav_min_y or p.y > nav_max_y:
+			return
 	_nav_holes.append(hole)
 	_bake_nav_mesh()
 
@@ -109,6 +121,22 @@ func find_building_spawn_tiles(building_pos: Vector2, size: Vector2i, count: int
 			run.clear()
 	assert(false, "find_building_spawn_tiles: could not find %d consecutive free tiles" % count)
 	return []
+
+func find_empty_wheat_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -> Vector2i:
+	return _grass.find_wheat_planting_tile(near_pos, occupied_tiles, extra_occupied)
+
+func plant_wheat(tile: Vector2i) -> void:
+	_grass.plant_wheat(tile, Constants.wheat_grow_time_ms / 1000.0)
+
+func is_wheat_ready(tile: Vector2i) -> bool:
+	return _grass.is_wheat_ready(tile)
+
+func start_wheat_harvest_tween(tile: Vector2i) -> void:
+	_grass.start_wheat_harvest_tween(tile, Constants.wheat_harvest_time_ms / 1000.0)
+
+func finish_wheat_harvest(tile: Vector2i) -> void:
+	_grass.remove_wheat_tile(tile)
+	occupied_tiles.erase(tile)
 
 func _ring_clockwise(top_left: Vector2i, size: Vector2i) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []

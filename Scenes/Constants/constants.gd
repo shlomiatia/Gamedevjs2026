@@ -27,6 +27,12 @@ var build_duration_ms := 5000.0
 var mine_duration_ms := 5000.0
 var kiln_work_duration_ms := 5000.0
 
+# Wheat farming
+var wheat_plant_time_ms := 3000.0
+var wheat_grow_time_ms := 10000.0
+var wheat_harvest_time_ms := 2000.0
+var wheat_farmer_max_tiles := 6
+
 # Sheep
 var sheep_eat_time_ms := 5000.0
 var sheep_shear_time_ms := 5000.0

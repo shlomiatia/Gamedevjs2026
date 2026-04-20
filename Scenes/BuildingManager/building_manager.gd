@@ -20,6 +20,10 @@ const IronMineScene = preload("res://Scenes/Buildings/IronMine/IronMine.tscn")
 const SteelMillScene = preload("res://Scenes/Buildings/SteelMill/SteelMill.tscn")
 const ToolsmithScene = preload("res://Scenes/Buildings/Toolsmith/Toolsmith.tscn")
 const FromageScene = preload("res://Scenes/Buildings/Fromage/Fromage.tscn")
+const WheatFarmScene = preload("res://Scenes/Buildings/WheatFarm/WheatFarm.tscn")
+const GritsmillScene = preload("res://Scenes/Buildings/Gritsmill/Gritsmill.tscn")
+const BakeryScene = preload("res://Scenes/Buildings/Bakery/Bakery.tscn")
+const BreweryScene = preload("res://Scenes/Buildings/Brewery/Brewery.tscn")
 
 var _map: Map = null
 var _spawn_parent: Node2D = null
@@ -53,6 +57,10 @@ var _overlay: PlacementOverlay = null
 @onready var _build_steel_mill_button: Button = $UI/ButtonPanel/Row2/BuildSteelMillButton
 @onready var _build_toolsmith_button: Button = $UI/ButtonPanel/Row2/BuildToolsmithButton
 @onready var _build_fromage_button: Button = $UI/ButtonPanel/Row2/BuildFromageButton
+@onready var _build_wheat_farm_button: Button = $UI/ButtonPanel/Row3/BuildWheatFarmButton
+@onready var _build_gritsmill_button: Button = $UI/ButtonPanel/Row3/BuildGritsmillButton
+@onready var _build_bakery_button: Button = $UI/ButtonPanel/Row3/BuildBakeryButton
+@onready var _build_brewery_button: Button = $UI/ButtonPanel/Row3/BuildBreweryButton
 
 func setup(map: Map, coordination_manager: Node, forest: Forest) -> void:
     _map = map
@@ -89,6 +97,10 @@ func _ready() -> void:
         ["SteelMill",     _build_steel_mill_button, CostTier.BRICK],
         ["Toolsmith",     _build_toolsmith_button,  CostTier.BRICK],
         ["Fromage",       _build_fromage_button,    CostTier.BRICK],
+        ["WheatFarm",     _build_wheat_farm_button, CostTier.PLANK],
+        ["Gritsmill",     _build_gritsmill_button,  CostTier.PLANK],
+        ["Bakery",        _build_bakery_button,     CostTier.BRICK],
+        ["Brewery",       _build_brewery_button,    CostTier.BRICK],
     ]
     for pair in _button_key_pairs:
         pair.append((pair[1] as Button).text)
@@ -121,6 +133,14 @@ func _ready() -> void:
         func(): _start_building(ToolsmithScene, Vector2i(Toolsmith.SIZE_X, Toolsmith.SIZE_Y), "Toolsmith"))
     _build_fromage_button.pressed.connect(
         func(): _start_building(FromageScene, Vector2i(Fromage.SIZE_X, Fromage.SIZE_Y), "Fromage"))
+    _build_wheat_farm_button.pressed.connect(
+        func(): _start_building(WheatFarmScene, Vector2i(WheatFarm.SIZE_X, WheatFarm.SIZE_Y), "WheatFarm"))
+    _build_gritsmill_button.pressed.connect(
+        func(): _start_building(GritsmillScene, Vector2i(Gritsmill.SIZE_X, Gritsmill.SIZE_Y), "Gritsmill"))
+    _build_bakery_button.pressed.connect(
+        func(): _start_building(BakeryScene, Vector2i(Bakery.SIZE_X, Bakery.SIZE_Y), "Bakery"))
+    _build_brewery_button.pressed.connect(
+        func(): _start_building(BreweryScene, Vector2i(Brewery.SIZE_X, Brewery.SIZE_Y), "Brewery"))
 
     _tooltip_manager.connect_builder_button(_build_builder_button)
     _tooltip_manager.connect_button(_build_woodcutter_button, "WoodcutterHut")
@@ -136,6 +156,10 @@ func _ready() -> void:
     _tooltip_manager.connect_button(_build_steel_mill_button, "SteelMill")
     _tooltip_manager.connect_button(_build_toolsmith_button, "Toolsmith")
     _tooltip_manager.connect_button(_build_fromage_button, "Fromage")
+    _tooltip_manager.connect_button(_build_wheat_farm_button, "WheatFarm")
+    _tooltip_manager.connect_button(_build_gritsmill_button, "Gritsmill")
+    _tooltip_manager.connect_button(_build_bakery_button, "Bakery")
+    _tooltip_manager.connect_button(_build_brewery_button, "Brewery")
 
     _update_buttons()
 

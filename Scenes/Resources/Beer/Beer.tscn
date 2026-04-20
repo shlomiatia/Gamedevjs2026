@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://Scenes/Resources/Beer/beer.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://Textures/cider.png" id="2_cider"]
+[ext_resource type="Shader" path="res://Scenes/Resources/Beer/beer_shader.gdshader" id="3_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_beer"]
+shader = ExtResource("3_shader")
+
+[node name="Beer" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_beer")
+texture = ExtResource("2_cider")
+position = Vector2(0, -16)

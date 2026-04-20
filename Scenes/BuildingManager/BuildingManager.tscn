@@ -93,3 +93,26 @@ text = "Build Toolsmith"
 size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 40)
 text = "Build Fromage"
+
+[node name="Row3" type="HBoxContainer" parent="UI/ButtonPanel"]
+size_flags_vertical = 3
+
+[node name="BuildWheatFarmButton" type="Button" parent="UI/ButtonPanel/Row3"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
+text = "Build Wheat Farm"
+
+[node name="BuildGritsmillButton" type="Button" parent="UI/ButtonPanel/Row3"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
+text = "Build Gritsmill"
+
+[node name="BuildBakeryButton" type="Button" parent="UI/ButtonPanel/Row3"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
+text = "Build Bakery"
+
+[node name="BuildBreweryButton" type="Button" parent="UI/ButtonPanel/Row3"]
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 40)
+text = "Build Brewery"
