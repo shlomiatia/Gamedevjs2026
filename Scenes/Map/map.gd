@@ -67,6 +67,13 @@ func get_mouse_tile() -> Vector2i:
 func find_grass_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -> Vector2i:
 	return _grass.find_grass_tile(near_pos, occupied_tiles, extra_occupied)
 
+func find_sheep_grass_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -> Vector2i:
+	var workers_only: Dictionary = {}
+	for tile: Vector2i in occupied_tiles:
+		if occupied_tiles[tile] == OccupiedType.BLOCK_WORKERS:
+			workers_only[tile] = true
+	return _grass.find_grass_tile(near_pos, workers_only, extra_occupied)
+
 func eat_grass(tile: Vector2i) -> void:
 	_grass.eat_grass(tile)
 

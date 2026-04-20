@@ -83,7 +83,7 @@ func _try_find_tiles() -> void:
 	var reserved: Dictionary = {}
 	var deliveries: Array = []
 	for sheep: Sheep in _herd:
-		var tile := _map.find_grass_tile(_sheep_farm.position, reserved)
+		var tile := _map.find_sheep_grass_tile(_sheep_farm.position, reserved)
 		if tile == Vector2i(-1, -1):
 			return
 		reserved[tile] = true

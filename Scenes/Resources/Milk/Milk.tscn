@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://cxvrt3mxudok2"]
 
-[ext_resource type="Script" path="res://Scenes/Resources/Milk/milk.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://Textures/cider.png" id="2_cider"]
+[ext_resource type="Script" uid="uid://ck5ckaxpxiepd" path="res://Scenes/Resources/Milk/milk.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://7l47drsij0cv" path="res://Textures/cider.png" id="2_cider"]
 [ext_resource type="Shader" uid="uid://b8yka2iqauytq" path="res://Shaders/pallete_swap.gdshader" id="3_shader"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_milk"]
@@ -10,7 +10,7 @@ shader_parameter/is_disabled = false
 shader_parameter/original_0 = Color(0.97255, 0.25098, 0.10588, 1)
 shader_parameter/original_1 = Color(0.74118, 0.15294, 0.03529, 1)
 shader_parameter/original_2 = Color(0.48627, 0.07059, 0.16863, 1)
-shader_parameter/original_3 = Color(0, 0, 0, 1)
+shader_parameter/original_3 = Color(0.6156863, 0.11372549, 0.101960786, 1)
 shader_parameter/original_4 = Color(0, 0, 0, 1)
 shader_parameter/original_5 = Color(0, 0, 0, 1)
 shader_parameter/original_6 = Color(0, 0, 0, 1)
@@ -20,10 +20,10 @@ shader_parameter/original_9 = Color(0, 0, 0, 1)
 shader_parameter/original_10 = Color(0, 0, 0, 1)
 shader_parameter/original_11 = Color(0, 0, 0, 1)
 shader_parameter/original_12 = Color(0, 0, 0, 1)
-shader_parameter/replace_0 = Color(1.0, 1.0, 1.0, 1)
-shader_parameter/replace_1 = Color(0.91765, 0.91765, 0.90980, 1)
+shader_parameter/replace_0 = Color(1, 1, 1, 1)
+shader_parameter/replace_1 = Color(0.91765, 0.91765, 0.9098, 1)
 shader_parameter/replace_2 = Color(0.80784, 0.79216, 0.78824, 1)
-shader_parameter/replace_3 = Color(0, 0, 0, 1)
+shader_parameter/replace_3 = Color(0.8627451, 0.85490197, 0.8509804, 1)
 shader_parameter/replace_4 = Color(0, 0, 0, 1)
 shader_parameter/replace_5 = Color(0, 0, 0, 1)
 shader_parameter/replace_6 = Color(0, 0, 0, 1)
