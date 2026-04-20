@@ -213,6 +213,11 @@ animations = [{
 [node name="Worker" type="Node2D"]
 script = ExtResource("1_script")
 
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_enabled = false
+path_desired_distance = 4.0
+target_desired_distance = 8.0
+
 [node name="WorkerNavigator" parent="." instance=ExtResource("3_navigator")]
 
 [node name="WorkerNeeds" parent="." instance=ExtResource("4_needs")]

@@ -17,7 +17,7 @@ func setup(home: Node2D, map: Map, coordination_manager: Node) -> void:
     _needs = $WorkerNeeds
     _backpack = $WorkerBackpack
     _anim = $AnimatedSprite2D
-    _navigator.setup(get_parent(), home, map)
+    _navigator.setup(get_parent(), home, map, $NavigationAgent2D)
     _needs.setup(get_parent(), map, coordination_manager, _navigator)
     _backpack.setup(get_parent())
     coordination_manager.register_worker(get_parent())
