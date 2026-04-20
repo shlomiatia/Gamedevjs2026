@@ -80,6 +80,18 @@ func _icon_label(parent: HBoxContainer, texture: Texture2D, initial_text: String
 	parent.add_child(lbl)
 	return lbl
 
+func get_workers_rect() -> Rect2:
+	var r := _lbl_workers.get_global_rect()
+	r.position.x -= ICON_SIZE.x + 2.0
+	r.size.x += ICON_SIZE.x + 2.0
+	return r
+
+func get_planks_rect() -> Rect2:
+	var r := _lbl_planks.get_global_rect()
+	r.position.x -= ICON_SIZE.x + 2.0
+	r.size.x += ICON_SIZE.x + 2.0
+	return r
+
 func _gap(parent: HBoxContainer) -> void:
 	var spacer := Control.new()
 	spacer.custom_minimum_size = Vector2(14, 0)

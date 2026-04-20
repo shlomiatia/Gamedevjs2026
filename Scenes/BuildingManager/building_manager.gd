@@ -1,6 +1,9 @@
 class_name BuildingManager
 extends Node2D
 
+signal building_button_pressed(key: String)
+signal building_placed(key: String)
+
 enum CostTier { FREE = 0, PLANK = 1, BRICK = 2 }
 
 const WoodcutterHutScene = preload("res://Scenes/Buildings/WoodcutterHut/WoodcutterHut.tscn")
@@ -59,6 +62,7 @@ func setup(map: Map, coordination_manager: Node, forest: Forest) -> void:
 func _ready() -> void:
     z_index = 10
     _spawn_parent = get_parent() as Node2D
+    $UI.process_mode = Node.PROCESS_MODE_ALWAYS
 
     _tooltip_manager = BuildingTooltipManager.new()
     add_child(_tooltip_manager)
@@ -182,6 +186,7 @@ func _start_building(scene: PackedScene, size: Vector2i, tooltip_key: String) ->
     var data := _compute_placement_data(size)
     _valid_tiles = data[0]
     _overlay.show_rects(data[1])
+    building_button_pressed.emit(tooltip_key)
 
 func _cancel_building() -> void:
     _building_mode = false
@@ -206,8 +211,10 @@ func _place_building() -> void:
     building.on_placed(_spawn_parent, _map, _coordination_manager, _forest)
     _tooltip_manager.attach_to_building(building, _active_tooltip_key)
     _placed_keys[_active_tooltip_key] = _placed_keys.get(_active_tooltip_key, 0) + 1
+    var placed_key := _active_tooltip_key
     _cancel_building()
     _update_buttons()
+    building_placed.emit(placed_key)
 
 func _get_footprint_top_left() -> Vector2i:
     # Offset so the cursor tracks the bottom-center tile of the footprint
@@ -286,6 +293,12 @@ func _update_arrow() -> void:
                 nearest_dist = d
                 nearest_dir = (wp - vp_center_world).normalized()
         _overlay.set_arrow(nearest_dir, true)
+
+func get_builder_button_rect() -> Rect2:
+    return _build_builder_button.get_global_rect()
+
+func get_woodcutter_sawmill_rect() -> Rect2:
+    return _build_woodcutter_button.get_global_rect().merge(_build_sawmill_button.get_global_rect())
 
 func _compute_placement_data(size: Vector2i) -> Array:
     var tile_size := _map.get_tile_size()

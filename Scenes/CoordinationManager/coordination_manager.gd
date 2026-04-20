@@ -3,6 +3,9 @@ extends Node
 
 signal game_over
 signal game_won
+signal worker_registered(count: int)
+signal worker_became_hungry
+signal construction_queued
 
 const WIN_WORKER_COUNT := 50
 
@@ -67,6 +70,7 @@ func deregister_builder(builder: Builder) -> void:
 
 func register_worker(worker_node: Node2D) -> void:
     _all_workers.append(worker_node)
+    worker_registered.emit(_all_workers.size())
     if _all_workers.size() >= WIN_WORKER_COUNT:
         game_won.emit()
 
@@ -116,7 +120,10 @@ func get_hud_stats() -> Dictionary:
 
 # --- Construction queue ---
 
+var _hungry_signal_emitted := false
+
 func queue_construction(target: Node2D) -> void:
+    construction_queued.emit()
     var res_type: int = target.get("CONSTRUCTION_RESOURCE_TYPE") if target.get("CONSTRUCTION_RESOURCE_TYPE") != null else ResourceType.PLANK
     if res_type == ResourceType.BRICK:
         _brick_sites += 1
@@ -151,6 +158,9 @@ func queue_resource_collection(worker: Node2D, resource_type: int) -> void:
         _resource_queues[resource_type].append(worker)
 
 func queue_need_collection(worker: Node2D, need: int) -> void:
+    if need == Worker.NeedType.FOOD and not _hungry_signal_emitted:
+        _hungry_signal_emitted = true
+        worker_became_hungry.emit()
     var result := _find_nearest_pile_for_need(need, worker.position)
     var pile: ResourcePile = result[0]
     var resource_type: int = result[1]
