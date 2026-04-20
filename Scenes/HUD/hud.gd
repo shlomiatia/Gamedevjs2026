@@ -99,7 +99,7 @@ func _refresh() -> void:
 	var res: Dictionary = s.resources
 	var R := CoordinationManager.ResourceType
 
-	_lbl_workers.text = " %d" % s.live_workers
+	_lbl_workers.text = " %d / %d" % [s.live_workers, CoordinationManager.WIN_WORKER_COUNT]
 	_lbl_planks.text  = ": %d/%d" % [res[R.PLANK], s.plank_sites]
 	_lbl_bricks.text  = ": %d/%d" % [res[R.BRICK], s.brick_sites]
 	_lbl_food.text     = ": %d/%d" % [res[R.APPLE],   s.hungry]

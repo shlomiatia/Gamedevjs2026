@@ -2,6 +2,9 @@ class_name CoordinationManager
 extends Node
 
 signal game_over
+signal game_won
+
+const WIN_WORKER_COUNT := 50
 
 enum ResourceType { LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR, TOOL, MILK, CHEESE }
 
@@ -64,6 +67,8 @@ func deregister_builder(builder: Builder) -> void:
 
 func register_worker(worker_node: Node2D) -> void:
     _all_workers.append(worker_node)
+    if _all_workers.size() >= WIN_WORKER_COUNT:
+        game_won.emit()
 
 func deregister_worker(worker_node: Node2D) -> void:
     _all_workers.erase(worker_node)
