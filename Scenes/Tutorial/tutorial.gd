@@ -3,7 +3,7 @@ extends CanvasLayer
 
 const _CLICK := "click"
 const _EVENT := "event"
-const _EVENT_AUTO := "event_auto"
+const WAIT_STEP_DELAY := 0.5
 
 var _steps: Array = []
 var _step: int = 0
@@ -12,9 +12,7 @@ var _auto_timer: float = -1.0
 var _started: bool = false
 
 var _overlay: TutorialOverlay
-var _panel: PanelContainer
 var _msg_label: Label
-var _click_hint: Label
 
 var _coordination_manager: CoordinationManager
 var _building_manager: BuildingManager
@@ -37,55 +35,30 @@ func _build_ui() -> void:
     _overlay = TutorialOverlay.new()
     _overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
     _overlay.process_mode = Node.PROCESS_MODE_ALWAYS
-    _overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+    _overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
     add_child(_overlay)
-    _overlay.gui_input.connect(_on_overlay_input)
-
-    _panel = PanelContainer.new()
-    _panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-    _panel.offset_top = -150.0
-    _panel.offset_bottom = -10.0
-    _panel.offset_left = 80.0
-    _panel.offset_right = -80.0
-    _panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    _panel.process_mode = Node.PROCESS_MODE_ALWAYS
-    add_child(_panel)
-
-    var style := StyleBoxFlat.new()
-    style.bg_color = Color(0.04, 0.04, 0.1, 0.92)
-    style.corner_radius_top_left = 8
-    style.corner_radius_top_right = 8
-    style.corner_radius_bottom_left = 8
-    style.corner_radius_bottom_right = 8
-    style.content_margin_left = 20.0
-    style.content_margin_right = 20.0
-    style.content_margin_top = 12.0
-    style.content_margin_bottom = 12.0
-    _panel.add_theme_stylebox_override("panel", style)
-
-    var vbox := VBoxContainer.new()
-    vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    vbox.add_theme_constant_override("separation", 6)
-    _panel.add_child(vbox)
 
     _msg_label = Label.new()
-    _msg_label.add_theme_font_size_override("font_size", 20)
-    _msg_label.add_theme_color_override("font_color", Color.WHITE)
-    _msg_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.8))
-    _msg_label.add_theme_constant_override("shadow_offset_x", 1)
-    _msg_label.add_theme_constant_override("shadow_offset_y", 1)
+    _msg_label.anchor_left = 0.5
+    _msg_label.anchor_top = 0.5
+    _msg_label.anchor_right = 0.5
+    _msg_label.anchor_bottom = 0.5
+    _msg_label.offset_left = -420.0
+    _msg_label.offset_right = 420.0
+    _msg_label.offset_top = -80.0
+    _msg_label.offset_bottom = 80.0
+    _msg_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
+    _msg_label.grow_vertical = Control.GROW_DIRECTION_BOTH
     _msg_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    _msg_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
     _msg_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    _msg_label.add_theme_font_size_override("font_size", 24)
+    _msg_label.add_theme_color_override("font_color", Color.WHITE)
+    _msg_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.95))
+    _msg_label.add_theme_constant_override("shadow_offset_x", 2)
+    _msg_label.add_theme_constant_override("shadow_offset_y", 2)
     _msg_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    vbox.add_child(_msg_label)
-
-    _click_hint = Label.new()
-    _click_hint.text = "[ click to continue ]"
-    _click_hint.add_theme_font_size_override("font_size", 11)
-    _click_hint.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
-    _click_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-    _click_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    vbox.add_child(_click_hint)
+    add_child(_msg_label)
 
 func start() -> void:
     _build_steps()
@@ -97,15 +70,15 @@ func _build_steps() -> void:
     _steps = [
         _mc("Click to start."),
         _mc("Welcome to Logistictown!"),
-        _mea("Use WASD, arrows, or middle mouse button to pan the map.", "panned", 2.0),
+        _me("Use WASD, arrows, or middle mouse button to pan the map.", "panned"),
         _mc("Your goal is to reach a population of 50."),
         _mc("You currently have none.", func(): return _hud.get_workers_rect()),
-        _me("Let's fix this by building a Builder Hut.", "builder_button_clicked",
+        _meu("Let's fix this by building a Builder Hut.", "builder_button_clicked",
             func(): return _building_manager.get_builder_button_rect()),
         _w("building_placed:BuilderHut"),
         _mc("Your first building is free, but others are not."),
         _mc("You have 2 planks.", func(): return _hud.get_planks_rect()),
-        _me("Use them to secure plank production.", "woodcutter_or_sawmill_clicked",
+        _meu("Use them to secure plank production.", "woodcutter_or_sawmill_clicked",
             func(): return _building_manager.get_woodcutter_sawmill_rect()),
         _w("construction_queued"),
         _mc("You have 1 building site.", func(): return _hud.get_planks_rect()),
@@ -122,17 +95,41 @@ func _build_steps() -> void:
         # Branch appended dynamically in _advance()
     ]
 
+# Click to continue
 func _mc(text: String, highlight: Callable = Callable()) -> Dictionary:
     return {type = "message", text = text, advance = _CLICK, highlight = highlight}
 
+# Event advance — blocks UI input (e.g. pan the camera)
 func _me(text: String, event: String, highlight: Callable = Callable()) -> Dictionary:
-    return {type = "message", text = text, advance = _EVENT, event = event, highlight = highlight}
+    return {type = "message", text = text, advance = _EVENT, event = event, highlight = highlight, pass_input = false}
 
-func _mea(text: String, event: String, delay: float) -> Dictionary:
-    return {type = "message", text = text, advance = _EVENT_AUTO, event = event, auto_delay = delay}
+# Event advance — allows UI input so player can click a button
+func _meu(text: String, event: String, highlight: Callable = Callable()) -> Dictionary:
+    return {type = "message", text = text, advance = _EVENT, event = event, highlight = highlight, pass_input = true}
 
 func _w(event: String) -> Dictionary:
     return {type = "wait", event = event}
+
+func _input(event: InputEvent) -> void:
+    if not _started or not visible:
+        return
+    # Always let middle mouse and motion through so camera panning works
+    if event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_MIDDLE:
+        return
+    if event is InputEventMouseMotion:
+        return
+    # During button-click steps, let all mouse input through to reach the buttons
+    if _step < _steps.size():
+        var step: Dictionary = _steps[_step]
+        if step.get("advance", "") == _EVENT and step.get("pass_input", false):
+            return
+    # Left click advances click-type steps
+    if event is InputEventMouseButton and (event as InputEventMouseButton).pressed \
+            and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
+        if _step < _steps.size() and _steps[_step].get("advance", "") == _CLICK:
+            call_deferred("_advance")
+    # Block everything else from reaching the game
+    get_viewport().set_input_as_handled()
 
 func _show_step() -> void:
     if _step >= _steps.size():
@@ -155,35 +152,21 @@ func _show_step() -> void:
         _overlay.highlight_rect = hl.call()
     _overlay.queue_redraw()
 
-    var advance: String = step.get("advance", _CLICK)
-    if advance == _CLICK:
-        _overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-        _click_hint.visible = true
-    else:
-        _overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-        _click_hint.visible = false
+    if step.get("advance", "") == _EVENT:
         _waiting_for_event = step.get("event", "")
-
-func _on_overlay_input(event: InputEvent) -> void:
-    if not _started or _step >= _steps.size():
-        return
-    if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-        if _steps[_step].get("advance", "") == _CLICK:
-            _advance()
 
 func on_event(event_name: String) -> void:
     if not _started or _waiting_for_event != event_name:
         return
     _waiting_for_event = ""
-    var step: Dictionary = _steps[_step]
-    if step.get("advance", "") == _EVENT_AUTO:
-        _auto_timer = step.get("auto_delay", 1.0)
+    if _step < _steps.size() and _steps[_step].type == "wait":
+        _auto_timer = WAIT_STEP_DELAY
     else:
+        # Message step — immediately dismiss overlay
         _advance()
 
 func _advance() -> void:
     _step += 1
-    # After "You have a hungry worker!" — append branch steps based on food supply
     if _step == _steps.size():
         var stats := _coordination_manager.get_hud_stats()
         var food: int = (stats.resources as Dictionary).get(CoordinationManager.ResourceType.APPLE, 0) \
