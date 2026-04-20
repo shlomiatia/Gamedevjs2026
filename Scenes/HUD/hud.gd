@@ -92,6 +92,24 @@ func get_planks_rect() -> Rect2:
 	r.size.x += ICON_SIZE.x + 2.0
 	return r
 
+func get_food_drink_rect() -> Rect2:
+	var rf := _lbl_food.get_global_rect()
+	rf.position.x -= ICON_SIZE.x + 2.0
+	rf.size.x += ICON_SIZE.x + 2.0
+	var rd := _lbl_drink.get_global_rect()
+	rd.position.x -= ICON_SIZE.x + 2.0
+	rd.size.x += ICON_SIZE.x + 2.0
+	return rf.merge(rd)
+
+func get_clothing_tool_rect() -> Rect2:
+	var rc := _lbl_clothing.get_global_rect()
+	rc.position.x -= ICON_SIZE.x + 2.0
+	rc.size.x += ICON_SIZE.x + 2.0
+	var rt := _lbl_tool.get_global_rect()
+	rt.position.x -= ICON_SIZE.x + 2.0
+	rt.size.x += ICON_SIZE.x + 2.0
+	return rc.merge(rt)
+
 func _gap(parent: HBoxContainer) -> void:
 	var spacer := Control.new()
 	spacer.custom_minimum_size = Vector2(14, 0)
