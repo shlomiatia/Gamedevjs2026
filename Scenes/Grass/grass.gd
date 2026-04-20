@@ -3,8 +3,11 @@ extends Node2D
 
 @onready var _grass_layer: TileMapLayer = $GrassLayer
 @onready var _dirt_layer: TileMapLayer = $DirtLayer
+@onready var _fade_layer: TileMapLayer = $FadeLayer
 
 var _eaten_tiles: Dictionary = {}
+var _fade_tiles: Array[Vector2i] = []
+var _fade_tween: Tween = null
 
 func setup(level_width: int, level_height: int, river_row: int, river_rows: int = 1) -> void:
 	for x in level_width:
@@ -31,6 +34,27 @@ func get_used_rect() -> Rect2i:
 
 func get_mouse_tile() -> Vector2i:
 	return _grass_layer.local_to_map(_grass_layer.get_local_mouse_position())
+
+func start_grass_fade(tiles: Array[Vector2i], duration: float) -> void:
+	if _fade_tween:
+		_fade_tween.kill()
+	_clear_fade_layer()
+	for tile in tiles:
+		var coords := _grass_layer.get_cell_atlas_coords(tile)
+		if coords != Vector2i(-1, -1):
+			_fade_layer.set_cell(tile, 0, coords)
+		_fade_tiles.append(tile)
+		eat_grass(tile)
+	_fade_layer.modulate.a = 1.0
+	_fade_tween = create_tween()
+	_fade_tween.tween_property(_fade_layer, "modulate:a", 0.0, duration)
+	_fade_tween.tween_callback(_clear_fade_layer)
+
+func _clear_fade_layer() -> void:
+	for tile in _fade_tiles:
+		_fade_layer.erase_cell(tile)
+	_fade_tiles.clear()
+	_fade_layer.modulate.a = 1.0
 
 func eat_grass(tile: Vector2i) -> void:
 	_eaten_tiles[tile] = true

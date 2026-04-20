@@ -11,3 +11,6 @@ tile_set = ExtResource("2_tileset")
 
 [node name="GrassLayer" type="TileMapLayer" parent="."]
 tile_set = ExtResource("2_tileset")
+
+[node name="FadeLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("2_tileset")

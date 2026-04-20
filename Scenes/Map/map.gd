@@ -77,6 +77,9 @@ func find_sheep_grass_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -
 func eat_grass(tile: Vector2i) -> void:
 	_grass.eat_grass(tile)
 
+func start_grass_fade(tiles: Array[Vector2i], duration: float) -> void:
+	_grass.start_grass_fade(tiles, duration)
+
 func find_path(from_world: Vector2, to_world: Vector2) -> Array[Vector2]:
 	var from_tile := world_to_tile(from_world)
 	var to_tile := world_to_tile(to_world)

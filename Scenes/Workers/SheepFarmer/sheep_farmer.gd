@@ -48,13 +48,15 @@ func resume_work() -> void:
 
 func _process(delta: float) -> void:
 	$Worker.set_working(_state == State.SHEAR)
+	match _state:
+		State.GO_TO_NEXT_TILE: _follow_undelivered(delta)
+		State.GO_HOME:         _follow_all_sheep(delta)
 	if $Worker.is_satisfying_need():
 		return
 	match _state:
 		State.IDLE:
 			_try_find_tiles()
 		State.GO_TO_NEXT_TILE:
-			_follow_undelivered(delta)
 			if $Worker.tick_movement(delta):
 				_on_arrived_at_tile()
 		State.GRAZE:
@@ -62,7 +64,6 @@ func _process(delta: float) -> void:
 			if _action_elapsed >= Constants.sheep_eat_time_ms:
 				_finish_graze()
 		State.GO_HOME:
-			_follow_all_sheep(delta)
 			if $Worker.tick_movement(delta):
 				_on_arrived_home()
 		State.SHEAR:
@@ -116,6 +117,7 @@ func _on_arrived_at_tile() -> void:
 		$Worker.navigate_to(_map.tile_to_world((_pending_deliveries[0] as Dictionary).tile))
 	else:
 		_action_elapsed = 0.0
+		_map.start_grass_fade(_graze_tiles, Constants.sheep_eat_time_ms / 1000.0)
 		for s: Sheep in _herd:
 			s.set_eating(true)
 		_state = State.GRAZE
