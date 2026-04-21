@@ -44,8 +44,6 @@ var _overlay_layer: CanvasLayer = null
 var _overlay: PlacementOverlay = null
 
 var _build_builder_button: Button = null
-var _build_woodcutter_button: Button = null
-var _build_sawmill_button: Button = null
 var _planks_trigger: Button = null
 var _popup_container: Control = null
 
@@ -218,23 +216,24 @@ func _build_construction_section(parent: HBoxContainer) -> void:
     _button_key_pairs.append(["BuilderHut", builder_btn, -1, "Builder"])
 
     var planks_btns := _make_dropdown(row, "res://Textures/planks.png", CostTier.FREE, [
-        {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": "Woodcutter"},
         {"key": "Sawmill", "scene": SawmillScene, "size_x": Sawmill.SIZE_X, "size_y": Sawmill.SIZE_Y, "text": "Sawmill"},
+        {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": "Woodcutter"},
+        
     ])
-    _build_woodcutter_button = planks_btns[0]
-    _build_sawmill_button = planks_btns[1]
     _planks_trigger = _dropdown_pairs.back()[0]
-    _button_key_pairs.append(["WoodcutterHut", planks_btns[0], CostTier.FREE, "Woodcutter"])
-    _button_key_pairs.append(["Sawmill", planks_btns[1], CostTier.FREE, "Sawmill"])
+    _button_key_pairs.append(["Sawmill", planks_btns[0], CostTier.FREE, "Sawmill"])
+    _button_key_pairs.append(["WoodcutterHut", planks_btns[1], CostTier.FREE, "Woodcutter"])
+    
 
     var bricks_btns := _make_dropdown(row, "res://Textures/brick.png", CostTier.PLANK, [
-        {"key": "ClayPit", "scene": ClayPitScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Clay Pit"},
-        {"key": "ClayKiln", "scene": ClayKilnScene, "size_x": ClayKiln.SIZE_X, "size_y": ClayKiln.SIZE_Y, "text": "Clay Kiln"},
         {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": "Woodcutter"},
+        {"key": "ClayKiln", "scene": ClayKilnScene, "size_x": ClayKiln.SIZE_X, "size_y": ClayKiln.SIZE_Y, "text": "Clay Kiln"},
+        {"key": "ClayPit", "scene": ClayPitScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Clay Pit"},
     ])
-    _button_key_pairs.append(["ClayPit", bricks_btns[0], CostTier.PLANK, "Clay Pit"])
+    
+    _button_key_pairs.append(["WoodcutterHut", bricks_btns[0], CostTier.FREE, "Woodcutter"])
     _button_key_pairs.append(["ClayKiln", bricks_btns[1], CostTier.PLANK, "Clay Kiln"])
-    _button_key_pairs.append(["WoodcutterHut", bricks_btns[2], CostTier.FREE, "Woodcutter"])
+    _button_key_pairs.append(["ClayPit", bricks_btns[2], CostTier.PLANK, "Clay Pit"])
 
 func _build_food_section(parent: HBoxContainer) -> void:
     var row := _make_section(parent, "res://Textures/food.png", "Food")
@@ -247,24 +246,24 @@ func _build_food_section(parent: HBoxContainer) -> void:
     _button_key_pairs.append(["AppleFarm", apple_btn, CostTier.PLANK, "Apple Farm"])
 
     var cheese_btns := _make_dropdown(row, "res://Textures/cheese.png", CostTier.BRICK, [
-        {"key": "SheepFarm", "scene": SheepFarmScene, "size_x": SheepFarm.SIZE_X, "size_y": SheepFarm.SIZE_Y, "text": "Sheep Farm"},
-        {"key": "Fromage", "scene": FromageScene, "size_x": Fromage.SIZE_X, "size_y": Fromage.SIZE_Y, "text": "Fromage"},
         {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": "Woodcutter"},
+        {"key": "Fromage", "scene": FromageScene, "size_x": Fromage.SIZE_X, "size_y": Fromage.SIZE_Y, "text": "Fromage"},
+        {"key": "SheepFarm", "scene": SheepFarmScene, "size_x": SheepFarm.SIZE_X, "size_y": SheepFarm.SIZE_Y, "text": "Sheep Farm"},
     ])
-    _button_key_pairs.append(["SheepFarm", cheese_btns[0], CostTier.PLANK, "Sheep Farm"])
+    _button_key_pairs.append(["WoodcutterHut", cheese_btns[0], CostTier.FREE, "Woodcutter"])
     _button_key_pairs.append(["Fromage", cheese_btns[1], CostTier.BRICK, "Fromage"])
-    _button_key_pairs.append(["WoodcutterHut", cheese_btns[2], CostTier.FREE, "Woodcutter"])
+    _button_key_pairs.append(["SheepFarm", cheese_btns[2], CostTier.PLANK, "Sheep Farm"])
 
     var bread_btns := _make_dropdown(row, "res://Textures/bread.png.png", CostTier.BRICK, [
-        {"key": "WheatFarm", "scene": WheatFarmScene, "size_x": WheatFarm.SIZE_X, "size_y": WheatFarm.SIZE_Y, "text": "Wheat Farm"},
-        {"key": "Gritsmill", "scene": GritsmillScene, "size_x": Gritsmill.SIZE_X, "size_y": Gritsmill.SIZE_Y, "text": "Gritsmill"},
-        {"key": "Bakery", "scene": BakeryScene, "size_x": Bakery.SIZE_X, "size_y": Bakery.SIZE_Y, "text": "Bakery"},
         {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": "Woodcutter"},
+        {"key": "Bakery", "scene": BakeryScene, "size_x": Bakery.SIZE_X, "size_y": Bakery.SIZE_Y, "text": "Bakery"},
+        {"key": "Gritsmill", "scene": GritsmillScene, "size_x": Gritsmill.SIZE_X, "size_y": Gritsmill.SIZE_Y, "text": "Gritsmill"},
+        {"key": "WheatFarm", "scene": WheatFarmScene, "size_x": WheatFarm.SIZE_X, "size_y": WheatFarm.SIZE_Y, "text": "Wheat Farm"},
     ])
-    _button_key_pairs.append(["WheatFarm", bread_btns[0], CostTier.PLANK, "Wheat Farm"])
-    _button_key_pairs.append(["Gritsmill", bread_btns[1], CostTier.PLANK, "Gritsmill"])
-    _button_key_pairs.append(["Bakery", bread_btns[2], CostTier.BRICK, "Bakery"])
-    _button_key_pairs.append(["WoodcutterHut", bread_btns[3], CostTier.FREE, "Woodcutter"])
+    _button_key_pairs.append(["WoodcutterHut", bread_btns[0], CostTier.FREE, "Woodcutter"])
+    _button_key_pairs.append(["Bakery", bread_btns[1], CostTier.BRICK, "Bakery"])
+    _button_key_pairs.append(["Gritsmill", bread_btns[2], CostTier.PLANK, "Gritsmill"])
+    _button_key_pairs.append(["WheatFarm", bread_btns[3], CostTier.PLANK, "Wheat Farm"])
 
 func _build_drink_section(parent: HBoxContainer) -> void:
     var drink_mat := ShaderMaterial.new()
@@ -293,46 +292,49 @@ func _build_drink_section(parent: HBoxContainer) -> void:
     _button_key_pairs.append(["SheepFarm", sheep_btn, CostTier.PLANK, null])
 
     var cider_btns := _make_dropdown(row, "res://Textures/cider.png", CostTier.PLANK, [
-        {"key": "AppleFarm", "scene": AppleFarmScene, "size_x": AppleFarm.SIZE_X, "size_y": AppleFarm.SIZE_Y, "text": "Apple Farm"},
         {"key": "CiderMill", "scene": CiderMillScene, "size_x": CiderMill.SIZE_X, "size_y": CiderMill.SIZE_Y, "text": "Cider Mill"},
+        {"key": "AppleFarm", "scene": AppleFarmScene, "size_x": AppleFarm.SIZE_X, "size_y": AppleFarm.SIZE_Y, "text": "Apple Farm"},
     ])
-    _button_key_pairs.append(["AppleFarm", cider_btns[0], CostTier.PLANK, "Apple Farm"])
-    _button_key_pairs.append(["CiderMill", cider_btns[1], CostTier.PLANK, "Cider Mill"])
+    _button_key_pairs.append(["CiderMill", cider_btns[0], CostTier.PLANK, "Cider Mill"])
+    _button_key_pairs.append(["AppleFarm", cider_btns[1], CostTier.PLANK, "Apple Farm"])
 
     # Beer dropdown with beer-coloured cider icon
     var beer_btns := _make_dropdown(row, "res://Textures/beer.png", CostTier.BRICK, [
-        {"key": "WheatFarm", "scene": WheatFarmScene, "size_x": WheatFarm.SIZE_X, "size_y": WheatFarm.SIZE_Y, "text": "Wheat Farm"},
-        {"key": "Brewery", "scene": BreweryScene, "size_x": Brewery.SIZE_X, "size_y": Brewery.SIZE_Y, "text": "Brewery"},
         {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": "Woodcutter"},
+        {"key": "Brewery", "scene": BreweryScene, "size_x": Brewery.SIZE_X, "size_y": Brewery.SIZE_Y, "text": "Brewery"},
+        {"key": "WheatFarm", "scene": WheatFarmScene, "size_x": WheatFarm.SIZE_X, "size_y": WheatFarm.SIZE_Y, "text": "Wheat Farm"},
+        
     ])
-    _button_key_pairs.append(["WheatFarm", beer_btns[0], CostTier.PLANK, "Wheat Farm"])
+    _button_key_pairs.append(["WoodcutterHut", beer_btns[0], CostTier.FREE, "Woodcutter"])
     _button_key_pairs.append(["Brewery", beer_btns[1], CostTier.BRICK, "Brewery"])
-    _button_key_pairs.append(["WoodcutterHut", beer_btns[2], CostTier.FREE, "Woodcutter"])
+    _button_key_pairs.append(["WheatFarm", beer_btns[2], CostTier.PLANK, "Wheat Farm"])
 
 func _build_clothes_section(parent: HBoxContainer) -> void:
     var row := _make_section(parent, "res://Textures/Clothes.png", "Clothes")
 
     var clothes_btns := _make_dropdown(row, "res://Textures/Clothes.png", CostTier.PLANK, [
-        {"key": "SheepFarm", "scene": SheepFarmScene, "size_x": SheepFarm.SIZE_X, "size_y": SheepFarm.SIZE_Y, "text": "Sheep Farm"},
         {"key": "WoolMill", "scene": WoolMillScene, "size_x": WoolMill.SIZE_X, "size_y": WoolMill.SIZE_Y, "text": "Wool Mill"},
+        {"key": "SheepFarm", "scene": SheepFarmScene, "size_x": SheepFarm.SIZE_X, "size_y": SheepFarm.SIZE_Y, "text": "Sheep Farm"},
     ])
-    _button_key_pairs.append(["SheepFarm", clothes_btns[0], CostTier.PLANK, "Sheep Farm"])
-    _button_key_pairs.append(["WoolMill", clothes_btns[1], CostTier.PLANK, "Wool Mill"])
+    _button_key_pairs.append(["WoolMill", clothes_btns[0], CostTier.PLANK, "Wool Mill"])
+    _button_key_pairs.append(["SheepFarm", clothes_btns[1], CostTier.PLANK, "Sheep Farm"])
+    
 
 func _build_tools_section(parent: HBoxContainer) -> void:
     var row := _make_section(parent, "res://Textures/tool.png", "Tools")
 
     var tools_btns := _make_dropdown(row, "res://Textures/tool.png", CostTier.BRICK, [
-        {"key": "CoalMine", "scene": CoalMineScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Coal Mine"},
-        {"key": "IronMine", "scene": IronMineScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Iron Mine"},
-        {"key": "SteelMill", "scene": SteelMillScene, "size_x": SteelMill.SIZE_X, "size_y": SteelMill.SIZE_Y, "text": "Steel Mill"},
         {"key": "Toolsmith", "scene": ToolsmithScene, "size_x": Toolsmith.SIZE_X, "size_y": Toolsmith.SIZE_Y, "text": "Toolsmith"},
+        {"key": "SteelMill", "scene": SteelMillScene, "size_x": SteelMill.SIZE_X, "size_y": SteelMill.SIZE_Y, "text": "Steel Mill"},
+        {"key": "IronMine", "scene": IronMineScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Iron Mine"},
+        {"key": "CoalMine", "scene": CoalMineScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Coal Mine"},
     ])
-    _button_key_pairs.append(["CoalMine", tools_btns[0], CostTier.PLANK, "Coal Mine"])
-    _button_key_pairs.append(["IronMine", tools_btns[1], CostTier.PLANK, "Iron Mine"])
-    _button_key_pairs.append(["SteelMill", tools_btns[2], CostTier.BRICK, "Steel Mill"])
-    _button_key_pairs.append(["Toolsmith", tools_btns[3], CostTier.BRICK, "Toolsmith"])
+    _button_key_pairs.append(["Toolsmith", tools_btns[0], CostTier.BRICK, "Toolsmith"])
+    _button_key_pairs.append(["SteelMill", tools_btns[1], CostTier.BRICK, "Steel Mill"])
+    _button_key_pairs.append(["IronMine", tools_btns[2], CostTier.PLANK, "Iron Mine"])
+    _button_key_pairs.append(["CoalMine", tools_btns[3], CostTier.PLANK, "Coal Mine"])
 
+    
 func _update_buttons() -> void:
     var builder_placed := _placed_keys.has("BuilderHut")
     var wc_saw_placed := _placed_keys.has("WoodcutterHut") and _placed_keys.has("Sawmill")
