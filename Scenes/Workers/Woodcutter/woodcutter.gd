@@ -49,8 +49,6 @@ func _output_pile() -> ResourcePile:
     return _woodcutter_hut.get_pile_for_type(CoordinationManager.ResourceType.LOG)
 
 func _try_find_tree() -> void:
-    if $Worker.is_output_full(_output_pile(), ):
-        return
     var result := _forest.find_tree(_woodcutter_hut.position, false)
     if result.is_empty():
         return
@@ -79,7 +77,8 @@ func _finish_chop() -> void:
     _state = State.GO_HOME
 
 func _try_deposit() -> void:
-    assert(not $Worker.is_output_full(_output_pile(), ), "_try_deposit: output pile is full")
+    if $Worker.is_output_full(_output_pile()):
+        return
     _output_pile().add_existing_resource($Worker.drop())
     _state = State.IDLE
 

@@ -39,7 +39,7 @@ var kiln_work_duration_ms := 5000.0
 
 # Wheat farming
 var wheat_plant_time_ms := 5000.0
-var wheat_grow_time_ms := 45.0
+var wheat_grow_time_ms := 45000.0
 var wheat_harvest_time_ms := 5000.0
 
 
