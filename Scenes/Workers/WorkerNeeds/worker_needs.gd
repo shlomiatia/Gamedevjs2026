@@ -75,10 +75,10 @@ func _finish_need_trip() -> void:
     resource.queue_free()
     var satisfaction: float = (_coordination_manager as CoordinationManager).get_satisfaction_for_resource(entry.resource_type)
     match entry.need:
-        Worker.NeedType.FOOD: hunger = minf(Constants.initial_hunger, hunger + satisfaction)
-        Worker.NeedType.DRINK: thirst = minf(Constants.initial_thirst, thirst + satisfaction)
-        Worker.NeedType.CLOTHING: clothing = minf(Constants.initial_clothing, clothing + satisfaction)
-        Worker.NeedType.TOOL: _tool = minf(Constants.initial_tool, _tool + satisfaction)
+        Worker.NeedType.FOOD: hunger = hunger + satisfaction
+        Worker.NeedType.DRINK: thirst = thirst + satisfaction
+        Worker.NeedType.CLOTHING: clothing = clothing + satisfaction
+        Worker.NeedType.TOOL: _tool = _tool + satisfaction
     _blocked_by_needs.erase(entry.need)
     _need_requested[entry.need] = false
     _active_needs.remove_at(0)

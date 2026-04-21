@@ -243,7 +243,6 @@ animations = [{
 }]
 
 [node name="Worker" type="Node2D"]
-position = Vector2(1, 0)
 script = ExtResource("1_script")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
@@ -258,7 +257,8 @@ target_desired_distance = 8.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_worker")
-position = Vector2(0, -30)
+position = Vector2(0, -26)
 sprite_frames = SubResource("frames")
-animation = &"up_work"
+animation = &"down_walk"
 autoplay = "down_stand"
+frame_progress = 0.70053905

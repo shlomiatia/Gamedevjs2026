@@ -87,6 +87,7 @@ func _process(_delta: float) -> void:
     if _anim.animation != anim_name:
         _anim.play(anim_name)
     _anim.flip_h = flip
+    _backpack.update(prefix)
 
 func carry(resource: Node2D) -> void:
     _backpack.carry(resource)

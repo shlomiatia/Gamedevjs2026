@@ -289,7 +289,7 @@ func _build_drink_section(parent: HBoxContainer) -> void:
     row.add_child(sheep_btn)
     sheep_btn.pressed.connect(func(): _start_building(SheepFarmScene, Vector2i(SheepFarm.SIZE_X, SheepFarm.SIZE_Y), "SheepFarm"))
     _tooltip_manager.connect_button(sheep_btn, "SheepFarm")
-    _button_key_pairs.append(["SheepFarm", sheep_btn, CostTier.PLANK, null])
+    _button_key_pairs.append(["SheepFarm", sheep_btn, CostTier.PLANK, "Sheep Farm"])
 
     var cider_btns := _make_dropdown(row, "res://Textures/cider.png", CostTier.PLANK, [
         {"key": "CiderMill", "scene": CiderMillScene, "size_x": CiderMill.SIZE_X, "size_y": CiderMill.SIZE_Y, "text": "Cider Mill"},
