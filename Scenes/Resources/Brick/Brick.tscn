@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://dp10u38tawkf4"]
 
-[ext_resource type="Script" path="res://Scenes/Resources/Brick/brick.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://Textures/brick.png" id="2_brick"]
+[ext_resource type="Script" uid="uid://dwlhye3f2ko5k" path="res://Scenes/Resources/Brick/brick.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cg6sx23mpb63c" path="res://Textures/brick.png" id="2_brick"]
 
 [node name="Brick" type="Node2D"]
 script = ExtResource("1_script")

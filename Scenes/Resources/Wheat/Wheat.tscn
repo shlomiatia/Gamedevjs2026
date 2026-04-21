@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://djmvp3v44icrf"]
 
-[ext_resource type="Script" path="res://Scenes/Resources/Wheat/wheat.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://Textures/wheat.png" id="2_wheat"]
+[ext_resource type="Script" uid="uid://cesgq8eu3f2nw" path="res://Scenes/Resources/Wheat/wheat.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://d235ptu47b7qp" path="res://Textures/wheat.png" id="2_wheat"]
 
 [node name="Wheat" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_wheat")
 position = Vector2(0, -16)
+texture = ExtResource("2_wheat")

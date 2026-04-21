@@ -1,4 +1,4 @@
 class_name Milk
 extends Node2D
 
-const SPACE := 8
+const SPACE := 7

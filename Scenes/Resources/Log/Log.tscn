@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://ca1r2p6s9t5u3"]
+[gd_scene load_steps=3 format=3 uid="uid://ca1r2p6tat5u3"]
 
 [ext_resource type="Script" uid="uid://cryshxbekws01" path="res://Scenes/Resources/Log/log.gd" id="1_log_script"]
 [ext_resource type="Texture2D" uid="uid://bfp6xv6gitefi" path="res://Textures/Log.png" id="2_log"]
@@ -7,5 +7,5 @@
 script = ExtResource("1_log_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_log")
 position = Vector2(0, -16)
+texture = ExtResource("2_log")

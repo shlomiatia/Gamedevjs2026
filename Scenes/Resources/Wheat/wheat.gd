@@ -1,4 +1,4 @@
 class_name Wheat
 extends Node2D
 
-const SPACE := 8
+const SPACE := 3

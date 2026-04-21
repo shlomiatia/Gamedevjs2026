@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://dm4yakp2nqt7b"]
 
-[ext_resource type="Script" path="res://Scenes/Resources/Apple/apple.gd" id="1_apple_script"]
-[ext_resource type="Texture2D" path="res://Textures/apple.png" id="2_apple"]
+[ext_resource type="Script" uid="uid://divaoaa3onh5b" path="res://Scenes/Resources/Apple/apple.gd" id="1_apple_script"]
+[ext_resource type="Texture2D" uid="uid://b8jog40ufu6gr" path="res://Textures/apple.png" id="2_apple"]
 
 [node name="Apple" type="Node2D"]
 script = ExtResource("1_apple_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_apple")
 position = Vector2(0, -16)
+texture = ExtResource("2_apple")

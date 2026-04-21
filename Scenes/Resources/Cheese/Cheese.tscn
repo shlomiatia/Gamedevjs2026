@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://cirxc4mnut3pj"]
 
-[ext_resource type="Script" path="res://Scenes/Resources/Cheese/cheese.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://Textures/cheese.png" id="2_cheese"]
+[ext_resource type="Script" uid="uid://n6wftwlbhl7a" path="res://Scenes/Resources/Cheese/cheese.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://doconeg5v6giy" path="res://Textures/cheese.png" id="2_cheese"]
 
 [node name="Cheese" type="Node2D"]
 script = ExtResource("1_script")

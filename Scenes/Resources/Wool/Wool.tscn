@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://dm4p573dlg173"]
 
-[ext_resource type="Script" path="res://Scenes/Resources/Wool/wool.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://Textures/Wool.png" id="2_wool"]
+[ext_resource type="Script" uid="uid://bnb6bjkneaqhs" path="res://Scenes/Resources/Wool/wool.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cpr8lcr6e6yp5" path="res://Textures/Wool.png" id="2_wool"]
 
 [node name="Wool" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_wool")
 position = Vector2(0, -16)
+texture = ExtResource("2_wool")

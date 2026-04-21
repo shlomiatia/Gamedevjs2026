@@ -1,4 +1,4 @@
 class_name Tool
 extends Node2D
 
-const SPACE := 8
+const SPACE := 4

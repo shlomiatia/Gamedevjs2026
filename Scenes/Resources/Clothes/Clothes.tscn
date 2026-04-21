@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://dfftutyxk8owj"]
 
-[ext_resource type="Script" path="res://Scenes/Resources/Clothes/clothes.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://Textures/Clothes.png" id="2_clothes"]
+[ext_resource type="Script" uid="uid://be34gwja3ma0q" path="res://Scenes/Resources/Clothes/clothes.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://bkch8q7ckdsel" path="res://Textures/Clothes.png" id="2_clothes"]
 
 [node name="Clothes" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_clothes")
 position = Vector2(0, -16)
+texture = ExtResource("2_clothes")

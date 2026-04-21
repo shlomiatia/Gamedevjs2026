@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://huwn5jg43eud"]
 
-[ext_resource type="Script" path="res://Scenes/Resources/Bread/bread.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://Textures/bread.png.png" id="2_bread"]
+[ext_resource type="Script" uid="uid://cff4kruofx0rr" path="res://Scenes/Resources/Bread/bread.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://c1aske6k4siqa" path="res://Textures/bread.png.png" id="2_bread"]
 
 [node name="Bread" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_bread")
 position = Vector2(0, -16)
+texture = ExtResource("2_bread")
