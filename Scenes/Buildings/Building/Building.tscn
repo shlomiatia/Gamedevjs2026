@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://40jn3smmkgn3" path="res://Scenes/Buildings/Building/building.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cdkpe3hq6o048" path="res://Textures/house.png" id="2_house"]
-[ext_resource type="PackedScene" path="res://Scenes/Buildings/Mill/Mill.tscn" id="3_mill"]
+[ext_resource type="PackedScene" uid="uid://c4m1ll0c0mp01" path="res://Scenes/Buildings/Mill/Mill.tscn" id="3_mill"]
 [ext_resource type="PackedScene" uid="uid://c7e72ujaqkmo7" path="res://Scenes/Resources/ResourcePile/ResourcePile.tscn" id="4_pile"]
 
 [node name="Building" type="Node2D"]

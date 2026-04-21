@@ -7,7 +7,7 @@ signal worker_registered(count: int)
 signal worker_became_hungry
 signal construction_queued
 
-const WIN_WORKER_COUNT := 50
+const WIN_WORKER_COUNT := 40
 
 enum ResourceType {LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR, TOOL, MILK, CHEESE, WHEAT, FLOUR, BREAD, BEER}
 
@@ -115,7 +115,7 @@ func notify_idle_builder(builder: Builder) -> void:
 # --- Resource collection ---
 
 func queue_resource_collection(worker: Node2D, resource_type: int) -> void:
-    var pile := _find_free_resource_pile(resource_type)
+    var pile := _find_free_resource_pile(resource_type, worker.position)
     if pile != null:
         pile.reserve(worker)
         worker.go_collect_resource(pile)
@@ -170,12 +170,17 @@ func _dispatch_need_queue(need: int, pile: ResourcePile, resource_type: int) -> 
 func _cleanup_need_queue(need: int) -> void:
     _need_queues[need] = _need_queues[need].filter(func(w): return is_instance_valid(w))
 
-func _find_free_resource_pile(resource_type: int) -> ResourcePile:
+func _find_free_resource_pile(resource_type: int, from_pos: Vector2) -> ResourcePile:
+    var best: ResourcePile = null
+    var best_dist := INF
     for building in buildings:
         var pile: ResourcePile = building.get_pile_for_type(resource_type)
         if pile != null and pile.free_count() > 0:
-            return pile
-    return null
+            var d: float = (building as Node2D).position.distance_to(from_pos)
+            if d < best_dist:
+                best_dist = d
+                best = pile
+    return best
 
 func _find_nearest_pile_for_need(need: int, from_pos: Vector2) -> Array:
     var resource_types: Array = NEED_TO_RESOURCE[need]

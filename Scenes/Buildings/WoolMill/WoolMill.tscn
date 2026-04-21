@@ -19,9 +19,4 @@ script = ExtResource("1_script")
 [node name="Building" parent="." instance=ExtResource("2_building")]
 has_mill = true
 building_name = "WoolMill"
-
-[node name="Sprite2D" parent="Building" index="1"]
-material = SubResource("ShaderMaterial_sheep")
-
-[node name="WatermillSprite" parent="Building/Mill"]
-material = SubResource("ShaderMaterial_sheep")
+building_material = SubResource("ShaderMaterial_sheep")

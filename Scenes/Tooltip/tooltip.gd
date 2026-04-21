@@ -40,12 +40,13 @@ const _RESOURCE_NEED := {
 # Modulate to distinguish resources that share the same base texture
 const _ICON_MODULATE := {
 	6: Color(0.85, 0.58, 0.32),  # CLAY — warm brown over ore.png
-	8: Color(0.15, 0.09, 0.18),  # COAL — near-black over ore.png
 }
 
 const _IronOreScene = preload("res://Scenes/Resources/IronOre/IronOre.tscn")
 const _IronBarScene = preload("res://Scenes/Resources/IronBar/IronBar.tscn")
 const _MilkScene = preload("res://Scenes/Resources/Milk/Milk.tscn")
+const _CoalScene = preload("res://Scenes/Resources/Coal/Coal.tscn")
+const _BeerScene = preload("res://Scenes/Resources/Beer/Beer.tscn")
 
 var _icon_materials: Dictionary = {}
 
@@ -71,6 +72,14 @@ func _ready() -> void:
 	var milk := _MilkScene.instantiate()
 	_icon_materials[12] = milk.get_node("Sprite2D").material as ShaderMaterial
 	milk.free()
+
+	var coal := _CoalScene.instantiate()
+	_icon_materials[8] = coal.get_node("Sprite2D").material as ShaderMaterial
+	coal.free()
+
+	var beer := _BeerScene.instantiate()
+	_icon_materials[17] = beer.get_node("Sprite2D").material as ShaderMaterial
+	beer.free()
 
 	_panel = PanelContainer.new()
 	_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE

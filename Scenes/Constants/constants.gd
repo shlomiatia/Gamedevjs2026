@@ -26,8 +26,8 @@ var bread_satisfaction := initial_hunger * 2.0
 var milk_satisfaction := initial_thirst * 0.5
 var cider_satisfaction := initial_thirst * 0.75
 var beer_satisfaction := initial_thirst * 1.0
-var clothes_satisfaction := initial_clothing * 1.0
-var tool_satisfaction := initial_tool * 1.0
+var clothes_satisfaction := initial_clothing * 0.75
+var tool_satisfaction := initial_tool * 2.0
 
 # Work durations (ms)
 var chop_duration_ms := 5000.0

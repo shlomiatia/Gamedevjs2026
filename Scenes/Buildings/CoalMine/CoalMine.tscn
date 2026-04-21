@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3 uid="uid://cc3ikxeyhov5"]
 
-[ext_resource type="Script" path="res://Scenes/Buildings/Mine/mine.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cyahh78qmxcsx" path="res://Scenes/Buildings/Mine/mine.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://bap1qcvbb4owg" path="res://Scenes/Buildings/Building/Building.tscn" id="2_building"]
 [ext_resource type="Texture2D" uid="uid://ck6kmiwq857ep" path="res://Textures/mine.png" id="3_mine"]
 [ext_resource type="PackedScene" uid="uid://c5y83qnbq8poy" path="res://Scenes/Resources/Coal/Coal.tscn" id="4_coal"]
@@ -8,12 +8,34 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_coal"]
 shader = ExtResource("5_shader")
+shader_parameter/is_disabled = false
 shader_parameter/original_0 = Color(0.537255, 0.623529, 0.4, 1)
 shader_parameter/original_1 = Color(0.380392, 0.521569, 0.352941, 1)
 shader_parameter/original_2 = Color(0.298039, 0.376471, 0.317647, 1)
+shader_parameter/original_3 = Color(0, 0, 0, 1)
+shader_parameter/original_4 = Color(0, 0, 0, 1)
+shader_parameter/original_5 = Color(0, 0, 0, 1)
+shader_parameter/original_6 = Color(0, 0, 0, 1)
+shader_parameter/original_7 = Color(0, 0, 0, 1)
+shader_parameter/original_8 = Color(0, 0, 0, 1)
+shader_parameter/original_9 = Color(0, 0, 0, 1)
+shader_parameter/original_10 = Color(0, 0, 0, 1)
+shader_parameter/original_11 = Color(0, 0, 0, 1)
+shader_parameter/original_12 = Color(0, 0, 0, 1)
 shader_parameter/replace_0 = Color(0.235, 0.235, 0.235, 1)
 shader_parameter/replace_1 = Color(0.157, 0.157, 0.157, 1)
 shader_parameter/replace_2 = Color(0.094, 0.094, 0.094, 1)
+shader_parameter/replace_3 = Color(0, 0, 0, 1)
+shader_parameter/replace_4 = Color(0, 0, 0, 1)
+shader_parameter/replace_5 = Color(0, 0, 0, 1)
+shader_parameter/replace_6 = Color(0, 0, 0, 1)
+shader_parameter/replace_7 = Color(0, 0, 0, 1)
+shader_parameter/replace_8 = Color(0, 0, 0, 1)
+shader_parameter/replace_9 = Color(0, 0, 0, 1)
+shader_parameter/replace_10 = Color(0, 0, 0, 1)
+shader_parameter/replace_11 = Color(0, 0, 0, 1)
+shader_parameter/replace_12 = Color(0, 0, 0, 1)
+shader_parameter/modulate = Color(1, 1, 1, 1)
 
 [node name="CoalMine" type="Node2D"]
 script = ExtResource("1_script")
@@ -22,10 +44,5 @@ output_scene = ExtResource("4_coal")
 
 [node name="Building" parent="." instance=ExtResource("2_building")]
 building_name = "CoalMine"
-
-[node name="Sprite2D" parent="Building"]
-texture = ExtResource("3_mine")
-material = SubResource("ShaderMaterial_coal")
-
-[node name="OutputPile" parent="Building"]
-position = Vector2(96, -48)
+building_texture = ExtResource("3_mine")
+building_material = SubResource("ShaderMaterial_coal")

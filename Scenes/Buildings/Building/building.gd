@@ -5,9 +5,17 @@ const SPRITE_OFFSET_Y := -104.0
 
 @export var has_mill: bool = false
 @export var building_name: String = ""
+@export var building_texture: Texture2D = null
+@export var building_material: Material = null
 
 func _ready() -> void:
     $Mill.visible = false
+    if building_texture != null:
+        $Sprite2D.texture = building_texture
+    if building_material != null:
+        $Sprite2D.material = building_material
+        if has_mill:
+            $Mill.get_node("WatermillSprite").material = building_material
 
 func start_construction() -> void:
     set_construction_progress(0.01)

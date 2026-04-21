@@ -19,10 +19,8 @@ script = ExtResource("1_script")
 
 [node name="Building" parent="." instance=ExtResource("2_building")]
 building_name = "Toolsmith"
-
-[node name="Sprite2D" parent="Building" index="1"]
-texture = ExtResource("3_texture")
-material = SubResource("ShaderMaterial_iron")
+building_texture = ExtResource("3_texture")
+building_material = SubResource("ShaderMaterial_iron")
 
 [node name="Smoke" type="CPUParticles2D" parent="."]
 position = Vector2(-36, -201)

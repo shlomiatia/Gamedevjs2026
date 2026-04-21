@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://Scenes/Buildings/Mine/mine.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://bap1qcvbb4owg" path="res://Scenes/Buildings/Building/Building.tscn" id="2_building"]
@@ -22,10 +22,8 @@ output_scene = ExtResource("4_clay")
 
 [node name="Building" parent="." instance=ExtResource("2_building")]
 building_name = "ClayPit"
-
-[node name="Sprite2D" parent="Building"]
-texture = ExtResource("3_mine")
-material = SubResource("ShaderMaterial_clay")
+building_texture = ExtResource("3_mine")
+building_material = SubResource("ShaderMaterial_clay")
 
 [node name="OutputPile" parent="Building"]
 position = Vector2(96, -48)
