@@ -5,7 +5,7 @@ extends Node2D
 enum State {
 	WAIT_FOR_RES1, GO_TO_RES1, GO_HOME_WITH_RES1,
 	WAIT_FOR_RES2, GO_TO_RES2, GO_HOME_WITH_RES2,
-	WORK, GO_HOME_TO_WORK
+	DELIVER, WORK, GO_HOME_TO_WORK
 }
 
 var _state := State.WAIT_FOR_RES1
@@ -49,7 +49,7 @@ func resume_work() -> void:
 			$Worker.navigate_to(_target_pile.global_position)
 		State.GO_HOME_WITH_RES1, State.GO_HOME_WITH_RES2, State.GO_HOME_TO_WORK:
 			$Worker.navigate_to($Worker.home_world_pos())
-		State.WORK:
+		State.WORK, State.DELIVER:
 			_state = State.GO_HOME_TO_WORK
 			$Worker.navigate_to($Worker.home_world_pos())
 		State.WAIT_FOR_RES1, State.WAIT_FOR_RES2:
@@ -64,7 +64,7 @@ func _process(delta: float) -> void:
 	if $Worker.is_satisfying_need():
 		return
 	match _state:
-		State.GO_TO_RES1, State.GO_TO_RES2, State.GO_HOME_WITH_RES1, State.GO_HOME_WITH_RES2, State.GO_HOME_TO_WORK:
+		State.GO_TO_RES1, State.GO_TO_RES2, State.GO_HOME_WITH_RES1, State.GO_HOME_WITH_RES2, State.DELIVER, State.GO_HOME_TO_WORK:
 			if $Worker.tick_movement(delta):
 				_on_path_finished()
 		State.WORK:
@@ -87,6 +87,10 @@ func _on_path_finished() -> void:
 			_state = State.GO_HOME_WITH_RES2
 			$Worker.navigate_to($Worker.home_world_pos())
 		State.GO_HOME_WITH_RES2:
+			_state = State.DELIVER
+		State.DELIVER:
+			if $Worker.is_output_full(_output_pile):
+				return
 			$Worker.drop().queue_free()
 			_state = State.WORK
 			_work_elapsed = 0.0
@@ -96,8 +100,6 @@ func _on_path_finished() -> void:
 func _do_work(delta: float) -> void:
 	_work_elapsed += delta * 1000.0
 	if _work_elapsed >= Constants.kiln_work_duration_ms:
-		if $Worker.is_output_full(_output_pile):
-			return
 		_output_pile.add_resource(_output_scene)
 		_state = State.WAIT_FOR_RES1
 		_coordination_manager.queue_resource_collection(self, _resource_type_1)

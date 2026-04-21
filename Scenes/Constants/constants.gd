@@ -6,25 +6,25 @@ var sheep_follow_speed := 80.0
 var sheep_follow_stop_distance := 16.0
 
 # Hunger
-var initial_hunger := 400.0
+var initial_hunger := 500.0
 var hunger_threshold := initial_hunger / 2.0
 
 # Thirst
-var initial_thirst := 400.0
+var initial_thirst := 500.0
 var thirst_threshold := initial_thirst / 2.0
 
 # Clothing (blocks worker at 0, no threshold replenishment)
-var initial_clothing := 400.0
+var initial_clothing := 500.0
 
 # Tool (blocks worker at 0, no threshold replenishment)
-var initial_tool := 400.0
+var initial_tool := 500.0
 
 # Resource satisfaction (how much each item fills a need)
 var apple_satisfaction := initial_hunger * 0.5
 var cheese_satisfaction := initial_hunger * 1.0
 var bread_satisfaction := initial_hunger * 2.0
 var milk_satisfaction := initial_thirst * 0.5
-var cider_satisfaction := initial_thirst * 1.0
+var cider_satisfaction := initial_thirst * 0.75
 var beer_satisfaction := initial_thirst * 1.0
 var clothes_satisfaction := initial_clothing * 1.0
 var tool_satisfaction := initial_tool * 1.0

@@ -3,7 +3,7 @@ extends Node2D
 
 const WheatScene = preload("res://Scenes/Resources/Wheat/Wheat.tscn")
 
-enum State { IDLE, GO_TO_PLANT, PLANT, GO_TO_HARVEST, HARVEST, GO_HOME }
+enum State { IDLE, GO_TO_PLANT, PLANT, GO_TO_HARVEST, HARVEST, GO_HOME, DEPOSIT }
 
 var _state := State.IDLE
 var _wheat_farm: Node2D = null
@@ -24,7 +24,7 @@ func resume_work() -> void:
 	match _state:
 		State.GO_TO_PLANT, State.GO_TO_HARVEST:
 			$Worker.navigate_to(_map.tile_to_world(_target_tile))
-		State.GO_HOME:
+		State.GO_HOME, State.DEPOSIT:
 			$Worker.navigate_to($Worker.home_world_pos())
 
 func _process(delta: float) -> void:
@@ -34,7 +34,7 @@ func _process(delta: float) -> void:
 	match _state:
 		State.IDLE:
 			_try_find_work()
-		State.GO_TO_PLANT, State.GO_TO_HARVEST, State.GO_HOME:
+		State.GO_TO_PLANT, State.GO_TO_HARVEST, State.GO_HOME, State.DEPOSIT:
 			if $Worker.tick_movement(delta):
 				_on_arrived()
 		State.PLANT:
@@ -86,6 +86,10 @@ func _on_arrived() -> void:
 		State.GO_TO_HARVEST:
 			_state = State.HARVEST
 		State.GO_HOME:
+			_state = State.DEPOSIT
+		State.DEPOSIT:
+			if $Worker.is_output_full(_output_pile):
+				return
 			_output_pile.add_existing_resource($Worker.drop())
 			_target_tile = Vector2i(-1, -1)
 			_state = State.IDLE
