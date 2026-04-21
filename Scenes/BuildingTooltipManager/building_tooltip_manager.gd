@@ -33,6 +33,7 @@ var _tooltip: BuildingTooltip
 var _hovered: Array = [] # Array of {building: Node2D, key: String}
 var _hover_timer: float = 0.0
 var _tooltip_shown: bool = false
+var _btn_hide_pending: bool = false
 
 func _ready() -> void:
     _tooltip = BuildingTooltip.new()
@@ -40,20 +41,36 @@ func _ready() -> void:
 
 func connect_button(button: Button, key: String) -> void:
     button.mouse_entered.connect(func():
+        _btn_hide_pending = false
         _cancel_hover()
         _tooltip.show_tooltip(TOOLTIP_DATA[key])
     )
-    button.mouse_exited.connect(func(): _tooltip.hide_tooltip())
+    button.mouse_exited.connect(func():
+        _btn_hide_pending = true
+        get_tree().create_timer(0.12).timeout.connect(func():
+            if _btn_hide_pending:
+                _btn_hide_pending = false
+                _tooltip.hide_tooltip()
+        )
+    )
 
 func connect_builder_button(button: Button) -> void:
     button.mouse_entered.connect(func():
+        _btn_hide_pending = false
         _cancel_hover()
         var data: Dictionary = TOOLTIP_DATA["BuilderHut"].duplicate()
         if BuilderHut._placed_count == 0:
             data["cost"] = -1
         _tooltip.show_tooltip(data)
     )
-    button.mouse_exited.connect(func(): _tooltip.hide_tooltip())
+    button.mouse_exited.connect(func():
+        _btn_hide_pending = true
+        get_tree().create_timer(0.12).timeout.connect(func():
+            if _btn_hide_pending:
+                _btn_hide_pending = false
+                _tooltip.hide_tooltip()
+        )
+    )
 
 func attach_to_building(building: Node2D, key: String) -> void:
     var area := Area2D.new()
