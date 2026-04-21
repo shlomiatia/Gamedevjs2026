@@ -3,7 +3,7 @@ extends Node2D
 
 const WheatScene = preload("res://Scenes/Resources/Wheat/Wheat.tscn")
 
-enum State { IDLE, GO_TO_PLANT, PLANT, GO_TO_HARVEST, HARVEST }
+enum State { IDLE, GO_TO_PLANT, PLANT, GO_TO_HARVEST, HARVEST, GO_HOME }
 
 var _state := State.IDLE
 var _wheat_farm: Node2D = null
@@ -24,6 +24,8 @@ func resume_work() -> void:
 	match _state:
 		State.GO_TO_PLANT, State.GO_TO_HARVEST:
 			$Worker.navigate_to(_map.tile_to_world(_target_tile))
+		State.GO_HOME:
+			$Worker.navigate_to($Worker.home_world_pos())
 
 func _process(delta: float) -> void:
 	$Worker.set_working(_state == State.PLANT or _state == State.HARVEST)
@@ -32,7 +34,7 @@ func _process(delta: float) -> void:
 	match _state:
 		State.IDLE:
 			_try_find_work()
-		State.GO_TO_PLANT, State.GO_TO_HARVEST:
+		State.GO_TO_PLANT, State.GO_TO_HARVEST, State.GO_HOME:
 			if $Worker.tick_movement(delta):
 				_on_arrived()
 		State.PLANT:
@@ -45,16 +47,15 @@ func _process(delta: float) -> void:
 				_finish_harvest()
 
 func _try_find_work() -> void:
-	var ready_tile := _find_my_ready_tile()
-	if ready_tile != Vector2i(-1, -1):
-		_target_tile = ready_tile
-		_map.wheat.start_wheat_harvest_tween(_target_tile, Constants.wheat_harvest_time_ms / 1000.0)
-		$Worker.navigate_to(_map.tile_to_world(_target_tile))
-		_state = State.GO_TO_HARVEST
-		return
-	if _my_tiles.size() >= Constants.wheat_farmer_max_tiles:
-		return
-	if $Worker.is_output_full(_output_pile, Constants.output_pile_capacity):
+	if not $Worker.is_output_full(_output_pile):
+		var ready_tile := _find_my_ready_tile()
+		if ready_tile != Vector2i(-1, -1):
+			_target_tile = ready_tile
+			_map.wheat.start_wheat_harvest_tween(_target_tile, Constants.wheat_harvest_time_ms / 1000.0)
+			$Worker.navigate_to(_map.tile_to_world(_target_tile))
+			_state = State.GO_TO_HARVEST
+			return
+	if $Worker.is_output_full(_output_pile):
 		return
 	var tile := _map.wheat.find_wheat_planting_tile(_wheat_farm.position)
 	if tile == Vector2i(-1, -1):
@@ -84,11 +85,14 @@ func _on_arrived() -> void:
 			_state = State.PLANT
 		State.GO_TO_HARVEST:
 			_state = State.HARVEST
+		State.GO_HOME:
+			_output_pile.add_existing_resource($Worker.drop())
+			_target_tile = Vector2i(-1, -1)
+			_state = State.IDLE
 
 func _finish_harvest() -> void:
 	_map.wheat.finish_wheat_harvest(_target_tile)
-	if not $Worker.is_output_full(_output_pile, Constants.output_pile_capacity):
-		_output_pile.add_resource(WheatScene)
+	$Worker.carry(WheatScene.instantiate() as Node2D)
 	_my_tiles.erase(_target_tile)
-	_target_tile = Vector2i(-1, -1)
-	_state = State.IDLE
+	$Worker.navigate_to($Worker.home_world_pos())
+	_state = State.GO_HOME

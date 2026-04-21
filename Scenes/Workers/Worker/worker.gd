@@ -100,5 +100,5 @@ func drop() -> Node2D:
 func is_carrying() -> bool:
     return _backpack.is_carrying()
 
-func is_output_full(pile: ResourcePile, capacity: int) -> bool:
-    return pile.get_child_count() >= capacity
+func is_output_full(pile: ResourcePile) -> bool:
+    return pile.get_child_count() >= Constants.output_pile_capacity

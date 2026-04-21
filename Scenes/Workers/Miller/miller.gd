@@ -74,6 +74,8 @@ func _on_path_finished() -> void:
 func _do_work(delta: float) -> void:
 	_work_elapsed += delta * 1000.0
 	if _work_elapsed >= Constants.mill_work_duration_ms:
+		if $Worker.is_output_full(_output_pile):
+			return
 		_output_pile.add_resource(_output_scene)
 		_state = State.WAIT_FOR_RESOURCE
 		_coordination_manager.queue_resource_collection(self, _input_resource_type)

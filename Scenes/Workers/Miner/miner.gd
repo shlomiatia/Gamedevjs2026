@@ -25,7 +25,7 @@ func resume_work() -> void:
 	$Worker.navigate_to(_pile.global_position)
 
 func _process(delta: float) -> void:
-	var pile_full: bool = $Worker.is_output_full(_pile, Constants.output_pile_capacity)
+	var pile_full: bool = $Worker.is_output_full(_pile)
 	$Worker.set_working(_state == State.MINE and not pile_full)
 	if $Worker.is_satisfying_need():
 		return

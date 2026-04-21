@@ -23,7 +23,7 @@ var _action_elapsed := 0.0
 var _wait_for_sheep_elapsed := 0.0
 var _shear_elapsed := 0.0
 var _shear_queue: Array = []
-var _spawn_new_sheep := false
+
 var _first_return_done := false
 
 func setup(sheep_farm: SheepFarm, map: Map, sheep: Sheep, spawn_parent: Node2D,
@@ -88,8 +88,8 @@ func _should_go_out() -> bool:
         return true
     if _herd.size() < Constants.max_herd_size:
         return true
-    var wool_full: bool = $Worker.is_output_full(_wool_pile, Constants.output_pile_capacity)
-    var milk_full: bool = $Worker.is_output_full(_milk_pile, Constants.output_pile_capacity)
+    var wool_full: bool = $Worker.is_output_full(_wool_pile)
+    var milk_full: bool = $Worker.is_output_full(_milk_pile)
     return not (wool_full and milk_full)
 
 func _try_find_tiles() -> void:
@@ -143,31 +143,30 @@ func _finish_graze() -> void:
     _state = State.GO_HOME
 
 func _on_arrived_home() -> void:
-    for sheep: Sheep in _herd:
-        sheep.stop()
     if _shear_queue.is_empty():
         _setup_shear_cycle()
     if not _shear_queue.is_empty():
         _shear_elapsed = 0.0
         _state = State.SHEAR
     else:
-        _do_spawn_if_needed()
+        _state = State.IDLE
 
 func _setup_shear_cycle() -> void:
     _shear_queue.clear()
     var to_process: Array[Sheep] = []
+    var do_spawn := false
     if not _first_return_done:
         to_process = _herd.duplicate()
-        _spawn_new_sheep = false
         _first_return_done = true
     elif _herd.size() < Constants.max_herd_size:
         for i in _herd.size() - 1:
             to_process.append(_herd[i])
-        _spawn_new_sheep = true
+        do_spawn = true
     else:
         to_process = _herd.duplicate()
-        _spawn_new_sheep = false
     _split_into_shear_queue(to_process)
+    if do_spawn:
+        _shear_queue.append({is_spawn = true})
 
 func _split_into_shear_queue(sheep_list: Array[Sheep]) -> void:
     var n := sheep_list.size()
@@ -185,27 +184,24 @@ func _do_shear(delta: float) -> void:
         return
     _shear_elapsed = 0.0
     var entry := _shear_queue.pop_front() as Dictionary
-    var sheep := entry.sheep as Sheep
-    var is_milk: bool = entry.get("is_milk", false)
-    if is_milk:
-        if not $Worker.is_output_full(_milk_pile, Constants.output_pile_capacity):
-            _milk_pile.add_resource(MilkScene)
-    else:
-        if not $Worker.is_output_full(_wool_pile, Constants.output_pile_capacity):
-            _wool_pile.add_resource(WoolScene)
-            sheep.shear()
-    if _shear_queue.is_empty():
-        _do_spawn_if_needed()
-
-func debug_dump() -> void:
-    print("  [SheepFarmer] state=%s  herd=%d  farmer_at_graze=%s  wait_for_sheep=%.0f  shear_queue=%d  action_elapsed=%.0f" % [
-        State.keys()[_state], _herd.size(), _farmer_at_graze, _wait_for_sheep_elapsed, _shear_queue.size(), _action_elapsed])
-
-func _do_spawn_if_needed() -> void:
-    if _spawn_new_sheep:
-        _spawn_new_sheep = false
+    if entry.get("is_spawn", false):
         var baby := SheepScene.instantiate() as Sheep
         baby.position = position
         _spawn_parent.add_child(baby)
         _herd.append(baby)
-    _state = State.IDLE
+    else:
+        var sheep := entry.sheep as Sheep
+        var is_milk: bool = entry.get("is_milk", false)
+        if is_milk:
+            if not $Worker.is_output_full(_milk_pile):
+                _milk_pile.add_resource(MilkScene)
+        else:
+            if not $Worker.is_output_full(_wool_pile):
+                _wool_pile.add_resource(WoolScene)
+                sheep.shear()
+    if _shear_queue.is_empty():
+        _state = State.IDLE
+
+func debug_dump() -> void:
+    print("  [SheepFarmer] state=%s  herd=%d  farmer_at_graze=%s  wait_for_sheep=%.0f  shear_queue=%d  action_elapsed=%.0f" % [
+        State.keys()[_state], _herd.size(), _farmer_at_graze, _wait_for_sheep_elapsed, _shear_queue.size(), _action_elapsed])
