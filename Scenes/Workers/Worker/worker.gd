@@ -28,6 +28,23 @@ func setup(home: Node2D, map: Map, coordination_manager: Node) -> void:
         get_parent().queue_free()
     )
     _needs.needs_satisfied.connect(func(): get_parent().resume_work())
+    _apply_building_colors(home)
+
+func _apply_building_colors(home: Node2D) -> void:
+    var sprite := home.get_node_or_null("Building/Sprite2D") as Sprite2D
+    if sprite == null:
+        return
+    var building_mat := sprite.material as ShaderMaterial
+    if building_mat == null:
+        return
+    var r0 = building_mat.get_shader_parameter("replace_0")
+    if r0 == null:
+        return
+    var worker_mat := _anim.material.duplicate() as ShaderMaterial
+    worker_mat.set_shader_parameter("replace_0", r0)
+    worker_mat.set_shader_parameter("replace_1", building_mat.get_shader_parameter("replace_1"))
+    worker_mat.set_shader_parameter("replace_2", building_mat.get_shader_parameter("replace_2"))
+    _anim.material = worker_mat
 
 func navigate_to(world_pos: Vector2) -> void:
     _navigator.navigate_to(world_pos)

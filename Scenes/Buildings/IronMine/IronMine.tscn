@@ -4,13 +4,16 @@
 [ext_resource type="PackedScene" uid="uid://bap1qcvbb4owg" path="res://Scenes/Buildings/Building/Building.tscn" id="2_building"]
 [ext_resource type="Texture2D" uid="uid://ck6kmiwq857ep" path="res://Textures/mine.png" id="3_mine"]
 [ext_resource type="PackedScene" path="res://Scenes/Resources/IronOre/IronOre.tscn" id="4_ironore"]
-[ext_resource type="Shader" path="res://Scenes/Buildings/Building/palette_swap.gdshader" id="5_shader"]
+[ext_resource type="Shader" uid="uid://b8yka2iqauytq" path="res://Shaders/pallete_swap.gdshader" id="5_shader"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iron"]
 shader = ExtResource("5_shader")
-shader_parameter/to_color_0 = Color(0.917647, 0.917647, 0.909804, 1)
-shader_parameter/to_color_1 = Color(0.807843, 0.792157, 0.788235, 1)
-shader_parameter/to_color_2 = Color(0.670588, 0.686275, 0.725490, 1)
+shader_parameter/original_0 = Color(0.537255, 0.623529, 0.4, 1)
+shader_parameter/original_1 = Color(0.380392, 0.521569, 0.352941, 1)
+shader_parameter/original_2 = Color(0.298039, 0.376471, 0.317647, 1)
+shader_parameter/replace_0 = Color(0.917647, 0.917647, 0.909804, 1)
+shader_parameter/replace_1 = Color(0.807843, 0.792157, 0.788235, 1)
+shader_parameter/replace_2 = Color(0.670588, 0.686275, 0.725490, 1)
 
 [node name="IronMine" type="Node2D"]
 script = ExtResource("1_script")

@@ -8,6 +8,7 @@ const WAIT_STEP_DELAY := 0.
 var _steps: Array = []
 var _step: int = 0
 var _waiting_for_event: String = ""
+var _buffered_events: Dictionary = {}
 var _auto_timer: float = -1.0
 var _started: bool = false
 
@@ -71,7 +72,7 @@ func start() -> void:
 func _build_steps() -> void:
     _steps = [
         _mc("Welcome to Logistictown!"),
-        _me("Use WASD, arrows, or middle mouse button to pan the map.", "panned"),
+        _me("Use WASD, arrows, or middle mouse button to pan the map.", "panned", Callable(), 2.0),
         _mc("Your goal is to reach a population of 50."),
         _mc("You currently have none.", func(): return _hud.get_workers_rect()),
         _meu("Let's fix this by building a Builder Hut.", "builder_button_clicked",
@@ -101,12 +102,12 @@ func _mc(text: String, highlight: Callable = Callable()) -> Dictionary:
     return {type = "message", text = text, advance = _CLICK, highlight = highlight}
 
 # Event advance — blocks UI input (e.g. pan the camera)
-func _me(text: String, event: String, highlight: Callable = Callable()) -> Dictionary:
-    return {type = "message", text = text, advance = _EVENT, event = event, highlight = highlight, pass_input = false}
+func _me(text: String, event: String, highlight: Callable = Callable(), delay: float = 0.0) -> Dictionary:
+    return {type = "message", text = text, advance = _EVENT, event = event, highlight = highlight, pass_input = false, delay = delay}
 
 # Event advance — allows UI input so player can click a button
-func _meu(text: String, event: String, highlight: Callable = Callable()) -> Dictionary:
-    return {type = "message", text = text, advance = _EVENT, event = event, highlight = highlight, pass_input = true}
+func _meu(text: String, event: String, highlight: Callable = Callable(), delay: float = 0.0) -> Dictionary:
+    return {type = "message", text = text, advance = _EVENT, event = event, highlight = highlight, pass_input = true, delay = delay}
 
 func _w(event: String) -> Dictionary:
     return {type = "wait", event = event}
@@ -141,6 +142,8 @@ func _show_step() -> void:
         visible = false
         get_tree().paused = false
         _waiting_for_event = step.event
+        if _buffered_events.erase(_waiting_for_event):
+            _trigger_event_advance()
         return
 
     visible = true
@@ -155,15 +158,25 @@ func _show_step() -> void:
 
     if step.get("advance", "") == _EVENT:
         _waiting_for_event = step.get("event", "")
+        if _buffered_events.erase(_waiting_for_event):
+            _trigger_event_advance()
 
 func on_event(event_name: String) -> void:
-    if not _started or _waiting_for_event != event_name:
+    if not _started:
+        return
+    if _waiting_for_event != event_name:
+        _buffered_events[event_name] = true
         return
     _waiting_for_event = ""
-    if _step < _steps.size() and _steps[_step].type == "wait":
+    _trigger_event_advance()
+
+func _trigger_event_advance() -> void:
+    var delay: float = _steps[_step].get("delay", 0.0) if _step < _steps.size() else 0.0
+    if delay > 0.0:
+        _auto_timer = delay
+    elif _step < _steps.size() and _steps[_step].type == "wait":
         _auto_timer = WAIT_STEP_DELAY
     else:
-        # Message step — immediately dismiss overlay
         _advance()
 
 func _advance() -> void:
