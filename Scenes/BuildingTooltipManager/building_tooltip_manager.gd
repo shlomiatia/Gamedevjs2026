@@ -10,27 +10,27 @@ const _HOVER_DELAY := 1.0
 #                        CLAY=6 BRICK=7 COAL=8 IRON_ORE=9 IRON_BAR=10 TOOL=11
 const TOOLTIP_DATA := {
     "WoodcutterHut": {"display_name": "Woodcutter", "cost": 1, "action": "produce", "output": 0},
-    "BuilderHut":    {"display_name": "Builder",    "cost": 1, "action": "train"},
-    "Sawmill":       {"display_name": "Sawmill",    "cost": 1, "action": "convert", "inputs": [0],    "output": 1},
-    "AppleFarm":     {"display_name": "Apple Farm", "cost": 1, "action": "produce", "output": 2},
-    "CiderMill":     {"display_name": "Cider Mill", "cost": 1, "action": "convert", "inputs": [2],    "output": 3},
-    "SheepFarm":     {"display_name": "Sheep Farm", "cost": 1, "action": "produce", "output": 4},
-    "WoolMill":      {"display_name": "Wool Mill",  "cost": 1, "action": "convert", "inputs": [4],    "output": 5},
-    "ClayPit":       {"display_name": "Clay Pit",   "cost": 1, "action": "produce", "output": 6},
-    "ClayKiln":      {"display_name": "Clay Kiln",  "cost": 7, "action": "convert", "inputs": [6, 0], "output": 7},
-    "CoalMine":      {"display_name": "Coal Mine",  "cost": 1, "action": "produce", "output": 8},
-    "IronMine":      {"display_name": "Iron Mine",  "cost": 1, "action": "produce", "output": 9},
-    "SteelMill":     {"display_name": "Steel Mill", "cost": 7, "action": "convert", "inputs": [9, 8], "output": 10},
-    "Toolsmith":     {"display_name": "Toolsmith",  "cost": 7, "action": "convert", "inputs": [8, 10], "output": 11},
-    "Fromage":       {"display_name": "Fromage",    "cost": 7, "action": "convert", "inputs": [12, 0], "output": 13},
-    "WheatFarm":     {"display_name": "Wheat Farm",  "cost": 1, "action": "produce", "output": 14},
-    "Gritsmill":     {"display_name": "Gritsmill",  "cost": 1, "action": "convert", "inputs": [14],    "output": 15},
-    "Bakery":        {"display_name": "Bakery",      "cost": 7, "action": "convert", "inputs": [15, 0], "output": 16},
-    "Brewery":       {"display_name": "Brewery",     "cost": 7, "action": "convert", "inputs": [14, 0], "output": 17},
+    "BuilderHut": {"display_name": "Builder", "cost": 1, "action": "train"},
+    "Sawmill": {"display_name": "Sawmill", "cost": 1, "action": "convert", "inputs": [0], "output": 1},
+    "AppleFarm": {"display_name": "Apple Farm", "cost": 1, "action": "produce", "output": 2},
+    "CiderMill": {"display_name": "Cider Mill", "cost": 1, "action": "convert", "inputs": [2], "output": 3},
+    "SheepFarm": {"display_name": "Sheep Farm", "cost": 1, "action": "produce", "output": 4},
+    "WoolMill": {"display_name": "Wool Mill", "cost": 1, "action": "convert", "inputs": [4], "output": 5},
+    "ClayPit": {"display_name": "Clay Pit", "cost": 1, "action": "produce", "output": 6},
+    "ClayKiln": {"display_name": "Clay Kiln", "cost": 7, "action": "convert", "inputs": [6, 0], "output": 7},
+    "CoalMine": {"display_name": "Coal Mine", "cost": 1, "action": "produce", "output": 8},
+    "IronMine": {"display_name": "Iron Mine", "cost": 1, "action": "produce", "output": 9},
+    "SteelMill": {"display_name": "Steel Mill", "cost": 7, "action": "convert", "inputs": [9, 8], "output": 10},
+    "Toolsmith": {"display_name": "Toolsmith", "cost": 7, "action": "convert", "inputs": [8, 10], "output": 11},
+    "Fromage": {"display_name": "Fromage", "cost": 7, "action": "convert", "inputs": [12, 0], "output": 13},
+    "WheatFarm": {"display_name": "Wheat Farm", "cost": 1, "action": "produce", "output": 14},
+    "Gritsmill": {"display_name": "Flour Mill", "cost": 1, "action": "convert", "inputs": [14], "output": 15},
+    "Bakery": {"display_name": "Bakery", "cost": 7, "action": "convert", "inputs": [15, 0], "output": 16},
+    "Brewery": {"display_name": "Brewery", "cost": 7, "action": "convert", "inputs": [14, 0], "output": 17},
 }
 
 var _tooltip: BuildingTooltip
-var _hovered: Array = []  # Array of {building: Node2D, key: String}
+var _hovered: Array = [] # Array of {building: Node2D, key: String}
 var _hover_timer: float = 0.0
 var _tooltip_shown: bool = false
 

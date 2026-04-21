@@ -36,31 +36,18 @@ var _coordination_manager: Node = null
 var _forest: Forest = null
 var _tooltip_manager: BuildingTooltipManager = null
 var _placed_keys: Dictionary = {}
-var _button_key_pairs: Array = []
+var _button_key_pairs: Array = [] # [key, btn, tier, base_text_or_null]
+var _dropdown_pairs: Array = [] # [trigger_btn, tier]
+var _dropdowns: Array = []      # [trigger_btn, popup_control] — for process-based hide
 var _valid_tiles: Array[Vector2i] = []
 var _overlay_layer: CanvasLayer = null
 var _overlay: PlacementOverlay = null
 
-# Swapped paths: Builder button is at position 1 (BuildWoodcutterHutButton node),
-# Woodcutter button is at position 2 (BuildBuilderHutButton node).
-@onready var _build_builder_button: Button = $UI/ButtonPanel/Row1/BuildWoodcutterHutButton
-@onready var _build_woodcutter_button: Button = $UI/ButtonPanel/Row1/BuildBuilderHutButton
-@onready var _build_sawmill_button: Button = $UI/ButtonPanel/Row1/BuildSawmillButton
-@onready var _build_apple_farm_button: Button = $UI/ButtonPanel/Row1/BuildAppleFarmButton
-@onready var _build_cider_mill_button: Button = $UI/ButtonPanel/Row1/BuildCiderMillButton
-@onready var _build_sheep_farm_button: Button = $UI/ButtonPanel/Row1/BuildSheepFarmButton
-@onready var _build_wool_mill_button: Button = $UI/ButtonPanel/Row1/BuildWoolMillButton
-@onready var _build_clay_pit_button: Button = $UI/ButtonPanel/Row2/BuildClayPitButton
-@onready var _build_clay_kiln_button: Button = $UI/ButtonPanel/Row2/BuildClayKilnButton
-@onready var _build_coal_mine_button: Button = $UI/ButtonPanel/Row2/BuildCoalMineButton
-@onready var _build_iron_mine_button: Button = $UI/ButtonPanel/Row2/BuildIronMineButton
-@onready var _build_steel_mill_button: Button = $UI/ButtonPanel/Row2/BuildSteelMillButton
-@onready var _build_toolsmith_button: Button = $UI/ButtonPanel/Row2/BuildToolsmithButton
-@onready var _build_fromage_button: Button = $UI/ButtonPanel/Row2/BuildFromageButton
-@onready var _build_wheat_farm_button: Button = $UI/ButtonPanel/Row3/BuildWheatFarmButton
-@onready var _build_gritsmill_button: Button = $UI/ButtonPanel/Row3/BuildGritsmillButton
-@onready var _build_bakery_button: Button = $UI/ButtonPanel/Row3/BuildBakeryButton
-@onready var _build_brewery_button: Button = $UI/ButtonPanel/Row3/BuildBreweryButton
+var _build_builder_button: Button = null
+var _build_woodcutter_button: Button = null
+var _build_sawmill_button: Button = null
+var _planks_trigger: Button = null
+var _popup_container: Control = null
 
 func setup(map: Map, coordination_manager: Node, forest: Forest) -> void:
     _map = map
@@ -81,98 +68,244 @@ func _ready() -> void:
     _overlay = PlacementOverlay.new()
     _overlay_layer.add_child(_overlay)
 
-    # Tier -1 = builder (always first, disabled once placed)
-    _button_key_pairs = [
-        ["BuilderHut", _build_builder_button, -1],
-        ["WoodcutterHut", _build_woodcutter_button, CostTier.FREE],
-        ["Sawmill", _build_sawmill_button, CostTier.FREE],
-        ["AppleFarm", _build_apple_farm_button, CostTier.PLANK],
-        ["CiderMill", _build_cider_mill_button, CostTier.PLANK],
-        ["SheepFarm", _build_sheep_farm_button, CostTier.PLANK],
-        ["WoolMill", _build_wool_mill_button, CostTier.PLANK],
-        ["ClayPit", _build_clay_pit_button, CostTier.PLANK],
-        ["ClayKiln", _build_clay_kiln_button, CostTier.PLANK],
-        ["CoalMine", _build_coal_mine_button, CostTier.PLANK],
-        ["IronMine", _build_iron_mine_button, CostTier.PLANK],
-        ["SteelMill", _build_steel_mill_button, CostTier.BRICK],
-        ["Toolsmith", _build_toolsmith_button, CostTier.BRICK],
-        ["Fromage", _build_fromage_button, CostTier.BRICK],
-        ["WheatFarm", _build_wheat_farm_button, CostTier.PLANK],
-        ["Gritsmill", _build_gritsmill_button, CostTier.PLANK],
-        ["Bakery", _build_bakery_button, CostTier.BRICK],
-        ["Brewery", _build_brewery_button, CostTier.BRICK],
-    ]
-    for pair in _button_key_pairs:
-        pair.append((pair[1] as Button).text)
-
-    _build_builder_button.pressed.connect(
-        func(): _start_building(BuilderHutScene, Vector2i(BuilderHut.SIZE_X, BuilderHut.SIZE_Y), "BuilderHut"))
-    _build_woodcutter_button.pressed.connect(
-        func(): _start_building(WoodcutterHutScene, Vector2i(WoodcutterHut.SIZE_X, WoodcutterHut.SIZE_Y), "WoodcutterHut"))
-    _build_sawmill_button.pressed.connect(
-        func(): _start_building(SawmillScene, Vector2i(Sawmill.SIZE_X, Sawmill.SIZE_Y), "Sawmill"))
-    _build_apple_farm_button.pressed.connect(
-        func(): _start_building(AppleFarmScene, Vector2i(AppleFarm.SIZE_X, AppleFarm.SIZE_Y), "AppleFarm"))
-    _build_cider_mill_button.pressed.connect(
-        func(): _start_building(CiderMillScene, Vector2i(CiderMill.SIZE_X, CiderMill.SIZE_Y), "CiderMill"))
-    _build_sheep_farm_button.pressed.connect(
-        func(): _start_building(SheepFarmScene, Vector2i(SheepFarm.SIZE_X, SheepFarm.SIZE_Y), "SheepFarm"))
-    _build_wool_mill_button.pressed.connect(
-        func(): _start_building(WoolMillScene, Vector2i(WoolMill.SIZE_X, WoolMill.SIZE_Y), "WoolMill"))
-    _build_clay_pit_button.pressed.connect(
-        func(): _start_building(ClayPitScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y), "ClayPit"))
-    _build_clay_kiln_button.pressed.connect(
-        func(): _start_building(ClayKilnScene, Vector2i(ClayKiln.SIZE_X, ClayKiln.SIZE_Y), "ClayKiln"))
-    _build_coal_mine_button.pressed.connect(
-        func(): _start_building(CoalMineScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y), "CoalMine"))
-    _build_iron_mine_button.pressed.connect(
-        func(): _start_building(IronMineScene, Vector2i(Mine.SIZE_X, Mine.SIZE_Y), "IronMine"))
-    _build_steel_mill_button.pressed.connect(
-        func(): _start_building(SteelMillScene, Vector2i(SteelMill.SIZE_X, SteelMill.SIZE_Y), "SteelMill"))
-    _build_toolsmith_button.pressed.connect(
-        func(): _start_building(ToolsmithScene, Vector2i(Toolsmith.SIZE_X, Toolsmith.SIZE_Y), "Toolsmith"))
-    _build_fromage_button.pressed.connect(
-        func(): _start_building(FromageScene, Vector2i(Fromage.SIZE_X, Fromage.SIZE_Y), "Fromage"))
-    _build_wheat_farm_button.pressed.connect(
-        func(): _start_building(WheatFarmScene, Vector2i(WheatFarm.SIZE_X, WheatFarm.SIZE_Y), "WheatFarm"))
-    _build_gritsmill_button.pressed.connect(
-        func(): _start_building(GritsmillScene, Vector2i(Gritsmill.SIZE_X, Gritsmill.SIZE_Y), "Gritsmill"))
-    _build_bakery_button.pressed.connect(
-        func(): _start_building(BakeryScene, Vector2i(Bakery.SIZE_X, Bakery.SIZE_Y), "Bakery"))
-    _build_brewery_button.pressed.connect(
-        func(): _start_building(BreweryScene, Vector2i(Brewery.SIZE_X, Brewery.SIZE_Y), "Brewery"))
-
-    _tooltip_manager.connect_builder_button(_build_builder_button)
-    _tooltip_manager.connect_button(_build_woodcutter_button, "WoodcutterHut")
-    _tooltip_manager.connect_button(_build_sawmill_button, "Sawmill")
-    _tooltip_manager.connect_button(_build_apple_farm_button, "AppleFarm")
-    _tooltip_manager.connect_button(_build_cider_mill_button, "CiderMill")
-    _tooltip_manager.connect_button(_build_sheep_farm_button, "SheepFarm")
-    _tooltip_manager.connect_button(_build_wool_mill_button, "WoolMill")
-    _tooltip_manager.connect_button(_build_clay_pit_button, "ClayPit")
-    _tooltip_manager.connect_button(_build_clay_kiln_button, "ClayKiln")
-    _tooltip_manager.connect_button(_build_coal_mine_button, "CoalMine")
-    _tooltip_manager.connect_button(_build_iron_mine_button, "IronMine")
-    _tooltip_manager.connect_button(_build_steel_mill_button, "SteelMill")
-    _tooltip_manager.connect_button(_build_toolsmith_button, "Toolsmith")
-    _tooltip_manager.connect_button(_build_fromage_button, "Fromage")
-    _tooltip_manager.connect_button(_build_wheat_farm_button, "WheatFarm")
-    _tooltip_manager.connect_button(_build_gritsmill_button, "Gritsmill")
-    _tooltip_manager.connect_button(_build_bakery_button, "Bakery")
-    _tooltip_manager.connect_button(_build_brewery_button, "Brewery")
-
+    _build_panel_ui()
     _update_buttons()
+
+func _build_panel_ui() -> void:
+    # Full-screen overlay for floating dropdown popups — never intercepts mouse when empty
+    _popup_container = Control.new()
+    _popup_container.set_anchors_preset(Control.PRESET_FULL_RECT)
+    _popup_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    $UI.add_child(_popup_container)
+
+    var panel := PanelContainer.new()
+    var style := StyleBoxFlat.new()
+    style.bg_color = Color(0.0, 0.0, 0.0, 0.72)
+    style.content_margin_left = 8.0
+    style.content_margin_right = 8.0
+    style.content_margin_top = 4.0
+    style.content_margin_bottom = 4.0
+    panel.add_theme_stylebox_override("panel", style)
+    panel.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+    panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+    $UI.add_child(panel)
+
+    var sections_row := HBoxContainer.new()
+    sections_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    sections_row.add_theme_constant_override("separation", 0)
+    panel.add_child(sections_row)
+
+    _build_construction_section(sections_row)
+    sections_row.add_child(VSeparator.new())
+    _build_food_section(sections_row)
+    sections_row.add_child(VSeparator.new())
+    _build_drink_section(sections_row)
+    sections_row.add_child(VSeparator.new())
+    _build_clothes_section(sections_row)
+    sections_row.add_child(VSeparator.new())
+    _build_tools_section(sections_row)
+
+func _make_section(parent: HBoxContainer, icon_path: String, label_text: String) -> HBoxContainer:
+    var section := VBoxContainer.new()
+    section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    section.add_theme_constant_override("separation", 2)
+    parent.add_child(section)
+
+    var btn_row := HBoxContainer.new()
+    btn_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    btn_row.alignment = BoxContainer.ALIGNMENT_CENTER
+    btn_row.add_theme_constant_override("separation", 4)
+    section.add_child(btn_row)
+
+    var header := HBoxContainer.new()
+    header.alignment = BoxContainer.ALIGNMENT_CENTER
+    header.add_theme_constant_override("separation", 3)
+    var icon := TextureRect.new()
+    icon.texture = load(icon_path) as Texture2D
+    icon.custom_minimum_size = Vector2(18, 18)
+    icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+    icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+    header.add_child(icon)
+    var lbl := Label.new()
+    lbl.text = label_text
+    lbl.add_theme_font_size_override("font_size", 11)
+    lbl.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85, 1.0))
+    header.add_child(lbl)
+    section.add_child(header)
+
+    return btn_row
+
+func _make_direct_btn(text: String, min_w: float = 70.0) -> Button:
+    var btn := Button.new()
+    btn.text = text
+    btn.custom_minimum_size = Vector2(min_w, 40)
+    btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    return btn
+
+func _make_dropdown(
+    parent_row: HBoxContainer,
+    icon_path: String,
+    tier: int,
+    items: Array
+) -> Array:
+    # Popup lives in _popup_container (full-screen overlay) so it never pushes the bar up
+    var popup := PanelContainer.new()
+    var ps := StyleBoxFlat.new()
+    ps.bg_color = Color(0.08, 0.08, 0.08, 0.92)
+    ps.border_color = Color(0.5, 0.5, 0.5, 0.6)
+    ps.set_border_width_all(1)
+    ps.set_corner_radius_all(3)
+    popup.add_theme_stylebox_override("panel", ps)
+    popup.visible = false
+    _popup_container.add_child(popup)
+
+    var popup_vbox := VBoxContainer.new()
+    popup_vbox.add_theme_constant_override("separation", 2)
+    popup.add_child(popup_vbox)
+
+    var item_buttons: Array = []
+    for item in items:
+        var btn := Button.new()
+        btn.text = item["text"]
+        btn.custom_minimum_size = Vector2(100, 34)
+        popup_vbox.add_child(btn)
+        item_buttons.append(btn)
+
+        var sc: PackedScene = item["scene"]
+        var sz := Vector2i(item["size_x"], item["size_y"])
+        var key: String = item["key"]
+        btn.pressed.connect(func(): _start_building(sc, sz, key))
+        _tooltip_manager.connect_button(btn, key)
+
+    var trigger := Button.new()
+    if icon_path != "":
+        trigger.icon = load(icon_path) as Texture2D
+    trigger.custom_minimum_size = Vector2(44, 40)
+    parent_row.add_child(trigger)
+
+    # Show on trigger hover — _process handles hiding so child-button hover doesn't close it
+    trigger.mouse_entered.connect(func():
+        if trigger.disabled:
+            return
+        popup.visible = true
+        await get_tree().process_frame
+        var rect := trigger.get_global_rect()
+        popup.position = Vector2(rect.position.x, rect.position.y - popup.size.y)
+    )
+
+    _dropdowns.append([trigger, popup])
+    _dropdown_pairs.append([trigger, tier])
+    return item_buttons
+
+func _build_construction_section(parent: HBoxContainer) -> void:
+    var row := _make_section(parent, "res://Textures/house.png", "Construction")
+
+    var builder_btn := _make_direct_btn("Builder")
+    row.add_child(builder_btn)
+    _build_builder_button = builder_btn
+    builder_btn.pressed.connect(func(): _start_building(BuilderHutScene, Vector2i(BuilderHut.SIZE_X, BuilderHut.SIZE_Y), "BuilderHut"))
+    _tooltip_manager.connect_builder_button(builder_btn)
+    _button_key_pairs.append(["BuilderHut", builder_btn, -1, "Builder"])
+
+    var planks_btns := _make_dropdown(row, "res://Textures/planks.png", CostTier.FREE, [
+        {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": "Woodcutter"},
+        {"key": "Sawmill", "scene": SawmillScene, "size_x": Sawmill.SIZE_X, "size_y": Sawmill.SIZE_Y, "text": "Sawmill"},
+    ])
+    _build_woodcutter_button = planks_btns[0]
+    _build_sawmill_button = planks_btns[1]
+    _planks_trigger = _dropdown_pairs.back()[0]
+    _button_key_pairs.append(["WoodcutterHut", planks_btns[0], CostTier.FREE, "Woodcutter"])
+    _button_key_pairs.append(["Sawmill", planks_btns[1], CostTier.FREE, "Sawmill"])
+
+    var bricks_btns := _make_dropdown(row, "res://Textures/brick.png", CostTier.PLANK, [
+        {"key": "ClayPit", "scene": ClayPitScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Clay Pit"},
+        {"key": "ClayKiln", "scene": ClayKilnScene, "size_x": ClayKiln.SIZE_X, "size_y": ClayKiln.SIZE_Y, "text": "Clay Kiln"},
+    ])
+    _button_key_pairs.append(["ClayPit", bricks_btns[0], CostTier.PLANK, "Clay Pit"])
+    _button_key_pairs.append(["ClayKiln", bricks_btns[1], CostTier.PLANK, "Clay Kiln"])
+
+func _build_food_section(parent: HBoxContainer) -> void:
+    var row := _make_section(parent, "res://Textures/food.png", "Food")
+
+    var apple_btn := _make_direct_btn("Apple Farm")
+    row.add_child(apple_btn)
+    apple_btn.pressed.connect(func(): _start_building(AppleFarmScene, Vector2i(AppleFarm.SIZE_X, AppleFarm.SIZE_Y), "AppleFarm"))
+    _tooltip_manager.connect_button(apple_btn, "AppleFarm")
+    _button_key_pairs.append(["AppleFarm", apple_btn, CostTier.PLANK, "Apple Farm"])
+
+    var cheese_btns := _make_dropdown(row, "res://Textures/cheese.png", CostTier.BRICK, [
+        {"key": "SheepFarm", "scene": SheepFarmScene, "size_x": SheepFarm.SIZE_X, "size_y": SheepFarm.SIZE_Y, "text": "Sheep Farm"},
+        {"key": "Fromage", "scene": FromageScene, "size_x": Fromage.SIZE_X, "size_y": Fromage.SIZE_Y, "text": "Fromage"},
+    ])
+    _button_key_pairs.append(["SheepFarm", cheese_btns[0], CostTier.PLANK, "Sheep Farm"])
+    _button_key_pairs.append(["Fromage", cheese_btns[1], CostTier.BRICK, "Fromage"])
+
+    var bread_btns := _make_dropdown(row, "res://Textures/bread.png.png", CostTier.BRICK, [
+        {"key": "WheatFarm", "scene": WheatFarmScene, "size_x": WheatFarm.SIZE_X, "size_y": WheatFarm.SIZE_Y, "text": "Wheat Farm"},
+        {"key": "Gritsmill", "scene": GritsmillScene, "size_x": Gritsmill.SIZE_X, "size_y": Gritsmill.SIZE_Y, "text": "Gritsmill"},
+        {"key": "Bakery", "scene": BakeryScene, "size_x": Bakery.SIZE_X, "size_y": Bakery.SIZE_Y, "text": "Bakery"},
+        {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": "Woodcutter"},
+    ])
+    _button_key_pairs.append(["WheatFarm", bread_btns[0], CostTier.PLANK, "Wheat Farm"])
+    _button_key_pairs.append(["Gritsmill", bread_btns[1], CostTier.PLANK, "Gritsmill"])
+    _button_key_pairs.append(["Bakery", bread_btns[2], CostTier.BRICK, "Bakery"])
+    _button_key_pairs.append(["WoodcutterHut", bread_btns[3], CostTier.FREE, "Woodcutter"])
+
+func _build_drink_section(parent: HBoxContainer) -> void:
+    var row := _make_section(parent, "res://Textures/cider.png", "Drink")
+
+    # Sheep Farm as icon-only button (milk stand-in; no milk texture available)
+    var sheep_btn := Button.new()
+    sheep_btn.icon = load("res://Textures/wool.png") as Texture2D
+    sheep_btn.custom_minimum_size = Vector2(44, 40)
+    row.add_child(sheep_btn)
+    sheep_btn.pressed.connect(func(): _start_building(SheepFarmScene, Vector2i(SheepFarm.SIZE_X, SheepFarm.SIZE_Y), "SheepFarm"))
+    _tooltip_manager.connect_button(sheep_btn, "SheepFarm")
+    _button_key_pairs.append(["SheepFarm", sheep_btn, CostTier.PLANK, null])
+
+    var cider_btns := _make_dropdown(row, "res://Textures/cider.png", CostTier.PLANK, [
+        {"key": "AppleFarm", "scene": AppleFarmScene, "size_x": AppleFarm.SIZE_X, "size_y": AppleFarm.SIZE_Y, "text": "Apple Farm"},
+        {"key": "CiderMill", "scene": CiderMillScene, "size_x": CiderMill.SIZE_X, "size_y": CiderMill.SIZE_Y, "text": "Cider Mill"},
+    ])
+    _button_key_pairs.append(["AppleFarm", cider_btns[0], CostTier.PLANK, "Apple Farm"])
+    _button_key_pairs.append(["CiderMill", cider_btns[1], CostTier.PLANK, "Cider Mill"])
+
+    # Beer dropdown — wheat.png used as icon (no beer texture)
+    var beer_btns := _make_dropdown(row, "res://Textures/wheat.png", CostTier.BRICK, [
+        {"key": "WheatFarm", "scene": WheatFarmScene, "size_x": WheatFarm.SIZE_X, "size_y": WheatFarm.SIZE_Y, "text": "Wheat Farm"},
+        {"key": "Brewery", "scene": BreweryScene, "size_x": Brewery.SIZE_X, "size_y": Brewery.SIZE_Y, "text": "Brewery"},
+        {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": "Woodcutter"},
+    ])
+    _button_key_pairs.append(["WheatFarm", beer_btns[0], CostTier.PLANK, "Wheat Farm"])
+    _button_key_pairs.append(["Brewery", beer_btns[1], CostTier.BRICK, "Brewery"])
+    _button_key_pairs.append(["WoodcutterHut", beer_btns[2], CostTier.FREE, "Woodcutter"])
+
+func _build_clothes_section(parent: HBoxContainer) -> void:
+    var row := _make_section(parent, "res://Textures/Clothes.png", "Clothes")
+
+    var clothes_btns := _make_dropdown(row, "res://Textures/Clothes.png", CostTier.PLANK, [
+        {"key": "SheepFarm", "scene": SheepFarmScene, "size_x": SheepFarm.SIZE_X, "size_y": SheepFarm.SIZE_Y, "text": "Sheep Farm"},
+        {"key": "WoolMill", "scene": WoolMillScene, "size_x": WoolMill.SIZE_X, "size_y": WoolMill.SIZE_Y, "text": "Wool Mill"},
+    ])
+    _button_key_pairs.append(["SheepFarm", clothes_btns[0], CostTier.PLANK, "Sheep Farm"])
+    _button_key_pairs.append(["WoolMill", clothes_btns[1], CostTier.PLANK, "Wool Mill"])
+
+func _build_tools_section(parent: HBoxContainer) -> void:
+    var row := _make_section(parent, "res://Textures/tool.png", "Tools")
+
+    var tools_btns := _make_dropdown(row, "res://Textures/tool.png", CostTier.BRICK, [
+        {"key": "CoalMine", "scene": CoalMineScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Coal Mine"},
+        {"key": "IronMine", "scene": IronMineScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Iron Mine"},
+        {"key": "SteelMill", "scene": SteelMillScene, "size_x": SteelMill.SIZE_X, "size_y": SteelMill.SIZE_Y, "text": "Steel Mill"},
+        {"key": "Toolsmith", "scene": ToolsmithScene, "size_x": Toolsmith.SIZE_X, "size_y": Toolsmith.SIZE_Y, "text": "Toolsmith"},
+    ])
+    _button_key_pairs.append(["CoalMine", tools_btns[0], CostTier.PLANK, "Coal Mine"])
+    _button_key_pairs.append(["IronMine", tools_btns[1], CostTier.PLANK, "Iron Mine"])
+    _button_key_pairs.append(["SteelMill", tools_btns[2], CostTier.BRICK, "Steel Mill"])
+    _button_key_pairs.append(["Toolsmith", tools_btns[3], CostTier.BRICK, "Toolsmith"])
 
 func _update_buttons() -> void:
     var builder_placed := _placed_keys.has("BuilderHut")
-    if not builder_placed:
-        for pair in _button_key_pairs:
-            var btn: Button = pair[1]
-            btn.disabled = pair[0] != "BuilderHut"
-            var count: int = _placed_keys.get(pair[0] as String, 0)
-            btn.text = "%s (%d)" % [pair[3] as String, count] if count > 0 else pair[3] as String
-        return
-
     var wc_saw_placed := _placed_keys.has("WoodcutterHut") and _placed_keys.has("Sawmill")
     var clay_kiln_placed := _placed_keys.has("ClayKiln")
 
@@ -188,15 +321,32 @@ func _update_buttons() -> void:
         var key: String = pair[0]
         var btn: Button = pair[1]
         var tier: int = pair[2]
-        var base_text: String = pair[3]
+        var base_text = pair[3]
         var count: int = _placed_keys.get(key, 0)
-        btn.text = "%s (%d)" % [base_text, count] if count > 0 else base_text
-        if key == "BuilderHut":
+
+        if base_text != null:
+            btn.text = "%s (%d)" % [base_text, count] if count > 0 else base_text
+
+        if not builder_placed:
+            btn.disabled = key != "BuilderHut"
+        elif key == "BuilderHut":
             btn.disabled = not wc_saw_placed
         elif key == "WoodcutterHut" or key == "Sawmill":
             btn.disabled = (_placed_keys.has(key) and not wc_saw_placed) or tier > max_tier
         else:
             btn.disabled = tier > max_tier
+
+    for pair in _dropdown_pairs:
+        var trigger: Button = pair[0]
+        var tier: int = pair[1]
+        if not builder_placed:
+            trigger.disabled = true
+        elif not wc_saw_placed:
+            trigger.disabled = tier != CostTier.FREE
+        elif not clay_kiln_placed:
+            trigger.disabled = tier > CostTier.PLANK
+        else:
+            trigger.disabled = false
 
 func _start_building(scene: PackedScene, size: Vector2i, tooltip_key: String) -> void:
     if _building_mode:
@@ -259,7 +409,6 @@ func _add_nav_obstacle(building: Node2D, size: Vector2i) -> void:
     ]))
 
 func _get_footprint_top_left() -> Vector2i:
-    # Offset so the cursor tracks the bottom-center tile of the footprint
     var mouse_tile := _map.get_mouse_tile()
     return mouse_tile - Vector2i(_active_size.x >> 1, _active_size.y - 1)
 
@@ -292,6 +441,19 @@ func _process(_delta: float) -> void:
         _update_preview()
         _update_arrow()
         _overlay.queue_redraw()
+    _update_dropdowns()
+
+func _update_dropdowns() -> void:
+    var mouse_pos := get_viewport().get_mouse_position()
+    for dd in _dropdowns:
+        var trigger: Button = dd[0]
+        var popup: Control = dd[1]
+        if not popup.visible:
+            continue
+        var trigger_rect := trigger.get_global_rect()
+        var popup_rect := Rect2(popup.global_position, popup.size)
+        if not trigger_rect.grow(2.0).has_point(mouse_pos) and not popup_rect.grow(2.0).has_point(mouse_pos):
+            popup.visible = false
 
 func _update_preview() -> void:
     var top_left := _get_footprint_top_left()
@@ -340,7 +502,7 @@ func get_builder_button_rect() -> Rect2:
     return _build_builder_button.get_global_rect()
 
 func get_woodcutter_sawmill_rect() -> Rect2:
-    return _build_woodcutter_button.get_global_rect().merge(_build_sawmill_button.get_global_rect())
+    return _planks_trigger.get_global_rect()
 
 func _compute_placement_data(size: Vector2i) -> Array:
     var tile_size := _map.get_tile_size()
