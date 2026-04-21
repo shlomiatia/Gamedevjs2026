@@ -119,14 +119,40 @@ func _process(_delta: float) -> void:
 	_refresh()
 
 func _refresh() -> void:
-	var s := _coordination_manager.get_hud_stats()
-	var res: Dictionary = s.resources
-	var R := CoordinationManager.ResourceType
+	var cm := _coordination_manager
+	cm.all_workers = cm.all_workers.filter(func(w): return is_instance_valid(w))
 
-	_lbl_workers.text = " %d / %d" % [s.live_workers, CoordinationManager.WIN_WORKER_COUNT]
-	_lbl_planks.text  = ": %d/%d" % [res[R.PLANK], s.plank_sites]
-	_lbl_bricks.text  = ": %d/%d" % [res[R.BRICK], s.brick_sites]
-	_lbl_food.text     = ": %d/%d" % [res[R.APPLE] + res[R.CHEESE] + res[R.BREAD], s.hungry]
-	_lbl_drink.text    = ": %d/%d" % [res[R.CIDER] + res[R.MILK] + res[R.BEER],   s.thirsty]
-	_lbl_clothing.text = ": %d/%d" % [res[R.CLOTHES], s.no_clothing]
-	_lbl_tool.text     = ": %d/%d" % [res[R.TOOL],    s.no_tool]
+	var hungry := 0
+	var thirsty := 0
+	var no_clothing := 0
+	var no_tool := 0
+	for entity in cm.all_workers:
+		var wn := entity.get_node_or_null("Worker/WorkerNeeds") as WorkerNeeds
+		if wn == null:
+			continue
+		if wn.hunger < Constants.hunger_threshold:
+			hungry += 1
+		if wn.thirst < Constants.thirst_threshold:
+			thirsty += 1
+		if wn.clothing == 0.0:
+			no_clothing += 1
+		if wn.get_need_value(Worker.NeedType.TOOL) == 0.0:
+			no_tool += 1
+
+	var R := CoordinationManager.ResourceType
+	var res: Dictionary = {}
+	for type in R.values():
+		var total := 0
+		for building in cm.buildings:
+			var pile: ResourcePile = building.get_pile_for_type(type)
+			if pile != null:
+				total += pile.get_child_count()
+		res[type] = total
+
+	_lbl_workers.text = " %d / %d" % [cm.all_workers.size(), CoordinationManager.WIN_WORKER_COUNT]
+	_lbl_planks.text  = ": %d/%d" % [res[R.PLANK], cm.plank_sites]
+	_lbl_bricks.text  = ": %d/%d" % [res[R.BRICK], cm.brick_sites]
+	_lbl_food.text     = ": %d/%d" % [res[R.APPLE] + res[R.CHEESE] + res[R.BREAD], hungry]
+	_lbl_drink.text    = ": %d/%d" % [res[R.CIDER] + res[R.MILK] + res[R.BEER],   thirsty]
+	_lbl_clothing.text = ": %d/%d" % [res[R.CLOTHES], no_clothing]
+	_lbl_tool.text     = ": %d/%d" % [res[R.TOOL],    no_tool]

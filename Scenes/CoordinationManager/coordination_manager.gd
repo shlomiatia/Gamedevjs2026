@@ -44,12 +44,12 @@ func get_satisfaction_for_resource(resource_type: int) -> float:
     return RESOURCE_SATISFACTION.get(resource_type, 200.0)
 
 var _builders: Array = []
-var _all_workers: Array = []
+var all_workers: Array = []
 var _dead_count: int = 0
-var _buildings: Array = []
+var buildings: Array = []
 var _construction_queue: Array = []
-var _plank_sites: int = 0
-var _brick_sites: int = 0
+var plank_sites: int = 0
+var brick_sites: int = 0
 var _resource_queues: Dictionary = {}
 var _need_queues: Dictionary = {}
 
@@ -73,54 +73,17 @@ func deregister_builder(builder: Builder) -> void:
         game_over.emit()
 
 func register_worker(worker_node: Node2D) -> void:
-    _all_workers.append(worker_node)
-    worker_registered.emit(_all_workers.size())
-    if _all_workers.size() >= WIN_WORKER_COUNT:
+    all_workers.append(worker_node)
+    worker_registered.emit(all_workers.size())
+    if all_workers.size() >= WIN_WORKER_COUNT:
         game_won.emit()
 
 func deregister_worker(worker_node: Node2D) -> void:
-    _all_workers.erase(worker_node)
+    all_workers.erase(worker_node)
     _dead_count += 1
 
 func register_building(building: Node2D) -> void:
-    _buildings.append(building)
-
-func get_hud_stats() -> Dictionary:
-    var hungry := 0
-    var thirsty := 0
-    var no_clothing := 0
-    var no_tool := 0
-    _all_workers = _all_workers.filter(func(w): return is_instance_valid(w))
-    for entity in _all_workers:
-        var wn := entity.get_node_or_null("Worker/WorkerNeeds") as WorkerNeeds
-        if wn == null:
-            continue
-        if wn.hunger < Constants.hunger_threshold:
-            hungry += 1
-        if wn.thirst < Constants.thirst_threshold:
-            thirsty += 1
-        if wn.clothing == 0.0:
-            no_clothing += 1
-        if wn.get_need_value(Worker.NeedType.TOOL) == 0.0:
-            no_tool += 1
-    var res: Dictionary = {}
-    for type in ResourceType.values():
-        var total := 0
-        for building in _buildings:
-            var pile: ResourcePile = building.get_pile_for_type(type)
-            if pile != null:
-                total += pile.get_child_count()
-        res[type] = total
-    return {
-        live_workers = _all_workers.size(),
-        plank_sites = _plank_sites,
-        brick_sites = _brick_sites,
-        hungry = hungry,
-        thirsty = thirsty,
-        no_clothing = no_clothing,
-        no_tool = no_tool,
-        resources = res,
-    }
+    buildings.append(building)
 
 # --- Construction queue ---
 
@@ -130,9 +93,9 @@ func queue_construction(target: Node2D) -> void:
     construction_queued.emit()
     var res_type: int = target.get("CONSTRUCTION_RESOURCE_TYPE") if target.get("CONSTRUCTION_RESOURCE_TYPE") != null else ResourceType.PLANK
     if res_type == ResourceType.BRICK:
-        _brick_sites += 1
+        brick_sites += 1
     else:
-        _plank_sites += 1
+        plank_sites += 1
     var builder := _find_closest_free_builder(target.position)
     if builder != null:
         builder.assign_build_task(target)
@@ -141,9 +104,9 @@ func queue_construction(target: Node2D) -> void:
 
 func notify_construction_complete(res_type: int) -> void:
     if res_type == ResourceType.BRICK:
-        _brick_sites = maxi(0, _brick_sites - 1)
+        brick_sites = maxi(0, brick_sites - 1)
     else:
-        _plank_sites = maxi(0, _plank_sites - 1)
+        plank_sites = maxi(0, plank_sites - 1)
 
 func notify_idle_builder(builder: Builder) -> void:
     if _construction_queue.is_empty():
@@ -206,7 +169,7 @@ func _cleanup_need_queue(need: int) -> void:
     _need_queues[need] = _need_queues[need].filter(func(w): return is_instance_valid(w))
 
 func _find_free_resource_pile(resource_type: int) -> ResourcePile:
-    for building in _buildings:
+    for building in buildings:
         var pile: ResourcePile = building.get_pile_for_type(resource_type)
         if pile != null and pile.free_count() > 0:
             return pile
@@ -218,7 +181,7 @@ func _find_nearest_pile_for_need(need: int, from_pos: Vector2) -> Array:
     var best_type: int = -1
     var best_dist := INF
     for rt: int in resource_types:
-        for building in _buildings:
+        for building in buildings:
             var pile: ResourcePile = building.get_pile_for_type(rt)
             if pile != null and pile.free_count() > 0:
                 var d: float = (building as Node2D).position.distance_to(from_pos)

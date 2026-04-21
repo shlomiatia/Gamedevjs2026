@@ -170,9 +170,13 @@ func _advance() -> void:
     _step += 1
     if not _branch_appended and _step == _steps.size():
         _branch_appended = true
-        var stats := _coordination_manager.get_hud_stats()
-        var food: int = (stats.resources as Dictionary).get(CoordinationManager.ResourceType.APPLE, 0) \
-                      + (stats.resources as Dictionary).get(CoordinationManager.ResourceType.CHEESE, 0)
+        var cm := _coordination_manager
+        var food := 0
+        for rt in [CoordinationManager.ResourceType.APPLE, CoordinationManager.ResourceType.CHEESE]:
+            for building in cm.buildings:
+                var pile: ResourcePile = building.get_pile_for_type(rt)
+                if pile != null:
+                    food += pile.get_child_count()
         if food > 0:
             _steps.append(_mc("But you also have %d food!" % food))
             _steps.append(_mc("The worker will go eat."))

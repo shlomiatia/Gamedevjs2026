@@ -4,8 +4,6 @@ extends CanvasLayer
 # Integer keys match CoordinationManager.ResourceType enum order:
 # LOG=0, PLANK=1, APPLE=2, CIDER=3, WOOL=4, CLOTHES=5, CLAY=6, BRICK=7,
 # COAL=8, IRON_ORE=9, IRON_BAR=10, TOOL=11, MILK=12, CHEESE=13
-const _PALETTE_SHADER := preload("res://Shaders/pallete_swap.gdshader")
-
 const _ICON_TEXTURE := {
 	0: preload("res://Textures/Log.png"),
 	1: preload("res://Textures/planks.png"),
@@ -29,6 +27,10 @@ const _ICON_MODULATE := {
 	8: Color(0.15, 0.09, 0.18),  # COAL — near-black over ore.png
 }
 
+const _IronOreScene = preload("res://Scenes/Resources/IronOre/IronOre.tscn")
+const _IronBarScene = preload("res://Scenes/Resources/IronBar/IronBar.tscn")
+const _MilkScene = preload("res://Scenes/Resources/Milk/Milk.tscn")
+
 var _icon_materials: Dictionary = {}
 
 var _panel: PanelContainer
@@ -38,33 +40,21 @@ var _name_label: Label
 var _cost_row: HBoxContainer
 var _action_row: HBoxContainer
 
-func _make_palette_mat(originals: Array, replacements: Array) -> ShaderMaterial:
-	var mat := ShaderMaterial.new()
-	mat.shader = _PALETTE_SHADER
-	mat.set_shader_parameter("is_disabled", false)
-	mat.set_shader_parameter("modulate", Color(1, 1, 1, 1))
-	for i in 13:
-		mat.set_shader_parameter("original_%d" % i, originals[i] if i < originals.size() else Color(0, 0, 0, 1))
-		mat.set_shader_parameter("replace_%d" % i, replacements[i] if i < replacements.size() else Color(0, 0, 0, 1))
-	return mat
-
 func _ready() -> void:
 	layer = 100
-	_icon_materials[9] = _make_palette_mat(
-		[Color(0.68235, 0.27059, 0.2902), Color(0.54902, 0.19216, 0.19608), Color(0.32941, 0.13725, 0.13725)],
-		[Color(0.80784, 0.79216, 0.78824), Color(0.63137, 0.53333, 0.59216), Color(0.36471, 0.27451, 0.37647)]
-	)
-	_icon_materials[10] = _make_palette_mat(
-		[Color(0.94118, 0.53333, 0.41961), Color(0.82745, 0.40784, 0.32549), Color(0.68235, 0.27059, 0.2902),
-		 Color(0.54902, 0.19216, 0.19608), Color(0.32941, 0.13725, 0.13725), Color(0.24706, 0.13725, 0.13725)],
-		[Color(0.91765, 0.91765, 0.90980), Color(0.80784, 0.79216, 0.78824), Color(0.67059, 0.68627, 0.72549),
-		 Color(0.63137, 0.53333, 0.59216), Color(0.45882, 0.38431, 0.46275), Color(0.36471, 0.27451, 0.37647)]
-	)
-	# Milk: cider.png with red tones → white/grey tones (#f8401b #bd2709 #7c122b → #ffffff #eaeae8 #cecac9)
-	_icon_materials[12] = _make_palette_mat(
-		[Color(0.97255, 0.25098, 0.10588), Color(0.74118, 0.15294, 0.03529), Color(0.48627, 0.07059, 0.16863)],
-		[Color(1.0, 1.0, 1.0), Color(0.91765, 0.91765, 0.90980), Color(0.80784, 0.79216, 0.78824)]
-	)
+
+	var iron_ore := _IronOreScene.instantiate()
+	_icon_materials[9] = iron_ore.get_node("Sprite2D").material as ShaderMaterial
+	iron_ore.free()
+
+	var iron_bar := _IronBarScene.instantiate()
+	_icon_materials[10] = iron_bar.get_node("Sprite2D").material as ShaderMaterial
+	iron_bar.free()
+
+	var milk := _MilkScene.instantiate()
+	_icon_materials[12] = milk.get_node("Sprite2D").material as ShaderMaterial
+	milk.free()
+
 	_panel = PanelContainer.new()
 	_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_panel)

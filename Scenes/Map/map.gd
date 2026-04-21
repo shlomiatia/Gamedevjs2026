@@ -8,15 +8,17 @@ const RIVER_ROW := 4
 enum OccupiedType {BLOCK_BUILDING = 1, BLOCK_WORKERS = 2}
 
 var occupied_tiles: Dictionary = {}
-var eaten_tiles: Dictionary = {}
 
 @onready var _grass: Grass = $Grass
 @onready var _river: River = $River
 @onready var _mountain: Mountain = $Mountain
 @onready var _nav_region: NavigationRegion2D = $NavRegion
 
+var wheat: WheatLayer:
+	get: return _grass.wheat
+
 func _ready() -> void:
-	_grass.setup(LEVEL_WIDTH, LEVEL_HEIGHT, RIVER_ROW, 2)
+	_grass.setup(LEVEL_WIDTH, LEVEL_HEIGHT, RIVER_ROW, 2, occupied_tiles)
 	_river.setup(LEVEL_WIDTH, RIVER_ROW, 2)
 	_mountain.setup(LEVEL_WIDTH, LEVEL_HEIGHT, get_tile_size())
 	set_occupied_tiles_rect(Vector2i(0, 0), Vector2i(LEVEL_WIDTH, RIVER_ROW + 2), OccupiedType.BLOCK_WORKERS)
@@ -89,14 +91,10 @@ func get_mouse_tile() -> Vector2i:
 	return _grass.get_mouse_tile()
 
 func find_grass_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -> Vector2i:
-	return _grass.find_grass_tile(near_pos, occupied_tiles, extra_occupied)
+	return _grass.find_grass_tile(near_pos, extra_occupied)
 
 func find_sheep_grass_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -> Vector2i:
-	var workers_only: Dictionary = {}
-	for tile: Vector2i in occupied_tiles:
-		if occupied_tiles[tile] == OccupiedType.BLOCK_WORKERS:
-			workers_only[tile] = true
-	return _grass.find_grass_tile(near_pos, workers_only, extra_occupied)
+	return _grass.find_sheep_grass_tile(near_pos, extra_occupied)
 
 func eat_grass(tile: Vector2i) -> void:
 	_grass.eat_grass(tile)
@@ -121,22 +119,6 @@ func find_building_spawn_tiles(building_pos: Vector2, size: Vector2i, count: int
 			run.clear()
 	assert(false, "find_building_spawn_tiles: could not find %d consecutive free tiles" % count)
 	return []
-
-func find_empty_wheat_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -> Vector2i:
-	return _grass.find_wheat_planting_tile(near_pos, occupied_tiles, extra_occupied)
-
-func plant_wheat(tile: Vector2i) -> void:
-	_grass.plant_wheat(tile, Constants.wheat_grow_time_ms / 1000.0)
-
-func is_wheat_ready(tile: Vector2i) -> bool:
-	return _grass.is_wheat_ready(tile)
-
-func start_wheat_harvest_tween(tile: Vector2i) -> void:
-	_grass.start_wheat_harvest_tween(tile, Constants.wheat_harvest_time_ms / 1000.0)
-
-func finish_wheat_harvest(tile: Vector2i) -> void:
-	_grass.remove_wheat_tile(tile)
-	occupied_tiles.erase(tile)
 
 func _ring_clockwise(top_left: Vector2i, size: Vector2i) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []

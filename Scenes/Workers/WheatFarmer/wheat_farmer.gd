@@ -47,7 +47,7 @@ func _try_find_work() -> void:
 	var ready_tile := _find_my_ready_tile()
 	if ready_tile != Vector2i(-1, -1):
 		_target_tile = ready_tile
-		_map.start_wheat_harvest_tween(_target_tile)
+		_map.wheat.start_wheat_harvest_tween(_target_tile, Constants.wheat_harvest_time_ms / 1000.0)
 		$Worker.navigate_to(_map.tile_to_world(_target_tile))
 		_state = State.GO_TO_HARVEST
 		return
@@ -55,13 +55,13 @@ func _try_find_work() -> void:
 		return
 	if $Worker.is_output_full(_output_pile, Constants.output_pile_capacity):
 		return
-	var tile := _map.find_empty_wheat_tile(_wheat_farm.position)
+	var tile := _map.wheat.find_wheat_planting_tile(_wheat_farm.position)
 	if tile == Vector2i(-1, -1):
 		return
 	_target_tile = tile
 	_my_tiles[tile] = true
 	_map.occupied_tiles[tile] = Map.OccupiedType.BLOCK_BUILDING
-	_map.plant_wheat(tile)
+	_map.wheat.plant_wheat(tile, Constants.wheat_grow_time_ms / 1000.0)
 	$Worker.navigate_to(_map.tile_to_world(tile))
 	_state = State.GO_TO_PLANT
 
@@ -69,7 +69,7 @@ func _find_my_ready_tile() -> Vector2i:
 	var best := Vector2i(-1, -1)
 	var best_dist := INF
 	for tile: Vector2i in _my_tiles:
-		if _map.is_wheat_ready(tile):
+		if _map.wheat.is_wheat_ready(tile):
 			var dist := _wheat_farm.position.distance_to(_map.tile_to_world(tile))
 			if dist < best_dist:
 				best_dist = dist
@@ -85,7 +85,7 @@ func _on_arrived() -> void:
 			_state = State.HARVEST
 
 func _finish_harvest() -> void:
-	_map.finish_wheat_harvest(_target_tile)
+	_map.wheat.finish_wheat_harvest(_target_tile)
 	if not $Worker.is_output_full(_output_pile, Constants.output_pile_capacity):
 		_output_pile.add_resource(WheatScene)
 	_my_tiles.erase(_target_tile)

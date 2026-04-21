@@ -4,7 +4,7 @@ extends Node2D
 signal building_button_pressed(key: String)
 signal building_placed(key: String)
 
-enum CostTier { FREE = 0, PLANK = 1, BRICK = 2 }
+enum CostTier {FREE = 0, PLANK = 1, BRICK = 2}
 
 const WoodcutterHutScene = preload("res://Scenes/Buildings/WoodcutterHut/WoodcutterHut.tscn")
 const BuilderHutScene = preload("res://Scenes/Buildings/BuilderHut/BuilderHut.tscn")
@@ -83,24 +83,24 @@ func _ready() -> void:
 
     # Tier -1 = builder (always first, disabled once placed)
     _button_key_pairs = [
-        ["BuilderHut",    _build_builder_button,    -1],
+        ["BuilderHut", _build_builder_button, -1],
         ["WoodcutterHut", _build_woodcutter_button, CostTier.FREE],
-        ["Sawmill",       _build_sawmill_button,    CostTier.FREE],
-        ["AppleFarm",     _build_apple_farm_button, CostTier.PLANK],
-        ["CiderMill",     _build_cider_mill_button, CostTier.PLANK],
-        ["SheepFarm",     _build_sheep_farm_button, CostTier.PLANK],
-        ["WoolMill",      _build_wool_mill_button,  CostTier.PLANK],
-        ["ClayPit",       _build_clay_pit_button,   CostTier.PLANK],
-        ["ClayKiln",      _build_clay_kiln_button,  CostTier.PLANK],
-        ["CoalMine",      _build_coal_mine_button,  CostTier.BRICK],
-        ["IronMine",      _build_iron_mine_button,  CostTier.BRICK],
-        ["SteelMill",     _build_steel_mill_button, CostTier.BRICK],
-        ["Toolsmith",     _build_toolsmith_button,  CostTier.BRICK],
-        ["Fromage",       _build_fromage_button,    CostTier.BRICK],
-        ["WheatFarm",     _build_wheat_farm_button, CostTier.PLANK],
-        ["Gritsmill",     _build_gritsmill_button,  CostTier.PLANK],
-        ["Bakery",        _build_bakery_button,     CostTier.BRICK],
-        ["Brewery",       _build_brewery_button,    CostTier.BRICK],
+        ["Sawmill", _build_sawmill_button, CostTier.FREE],
+        ["AppleFarm", _build_apple_farm_button, CostTier.PLANK],
+        ["CiderMill", _build_cider_mill_button, CostTier.PLANK],
+        ["SheepFarm", _build_sheep_farm_button, CostTier.PLANK],
+        ["WoolMill", _build_wool_mill_button, CostTier.PLANK],
+        ["ClayPit", _build_clay_pit_button, CostTier.PLANK],
+        ["ClayKiln", _build_clay_kiln_button, CostTier.PLANK],
+        ["CoalMine", _build_coal_mine_button, CostTier.PLANK],
+        ["IronMine", _build_iron_mine_button, CostTier.PLANK],
+        ["SteelMill", _build_steel_mill_button, CostTier.BRICK],
+        ["Toolsmith", _build_toolsmith_button, CostTier.BRICK],
+        ["Fromage", _build_fromage_button, CostTier.BRICK],
+        ["WheatFarm", _build_wheat_farm_button, CostTier.PLANK],
+        ["Gritsmill", _build_gritsmill_button, CostTier.PLANK],
+        ["Bakery", _build_bakery_button, CostTier.BRICK],
+        ["Brewery", _build_brewery_button, CostTier.BRICK],
     ]
     for pair in _button_key_pairs:
         pair.append((pair[1] as Button).text)
