@@ -3,7 +3,7 @@ extends Node2D
 
 signal died
 
-enum NeedType { FOOD = 0, DRINK = 1, CLOTHING = 2, TOOL = 3 }
+enum NeedType {FOOD = 0, DRINK = 1, CLOTHING = 2, TOOL = 3}
 const NO_NEED := -1
 
 var _navigator: WorkerNavigator = null
@@ -11,6 +11,7 @@ var _needs: WorkerNeeds = null
 var _backpack: WorkerBackpack = null
 var _anim: AnimatedSprite2D = null
 var _working := false
+var display_name: String = ""
 
 func setup(home: Node2D, map: Map, coordination_manager: Node) -> void:
     _navigator = $WorkerNavigator
@@ -86,6 +87,28 @@ func _process(_delta: float) -> void:
     if _anim.animation != anim_name:
         _anim.play(anim_name)
     _anim.flip_h = flip
+
+func _input(event: InputEvent) -> void:
+    if not (event is InputEventMouseButton):
+        return
+    var mb := event as InputEventMouseButton
+    if not mb.pressed or mb.button_index != MOUSE_BUTTON_LEFT:
+        return
+    if get_parent().global_position.distance_to(get_global_mouse_position()) > 64.0:
+        return
+    _dump_debug()
+
+func _dump_debug() -> void:
+    var parent := get_parent()
+    print("=== Worker: %s ===" % (display_name if display_name != "" else String(parent.name)))
+    print("  pos=%s  working=%s  satisfying_need=%s  is_moving=%s" % [
+        str(parent.global_position), _working, _needs.is_satisfying_need(), _navigator.is_moving()])
+    print("  hunger=%.0f  thirst=%.0f  clothing=%.0f  tool=%.0f" % [
+        _needs.hunger, _needs.thirst, _needs.clothing, _needs._tool])
+    print("  active_needs=%d  blocked_needs=%s  anim=%s" % [
+        _needs._active_needs.size(), str(_needs._blocked_by_needs.keys()), _anim.animation])
+    if parent.has_method("debug_dump"):
+        parent.debug_dump()
 
 func carry(resource: Node2D) -> void:
     _backpack.carry(resource)

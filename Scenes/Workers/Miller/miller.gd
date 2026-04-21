@@ -14,7 +14,7 @@ var _output_pile: ResourcePile = null
 var _target_pile: ResourcePile = null
 var _work_elapsed := 0.0
 
-func setup(building: Node2D, map: Map, coordination_manager: Node, input_resource_type: int, output_scene: PackedScene, output_pile: ResourcePile) -> void:
+func setup(building: Node2D, map: Map, coordination_manager: Node, input_resource_type: int, output_scene: PackedScene, output_pile: ResourcePile, worker_name: String = "Miller") -> void:
 	_building = building
 	_map = map
 	_coordination_manager = coordination_manager
@@ -22,6 +22,7 @@ func setup(building: Node2D, map: Map, coordination_manager: Node, input_resourc
 	_output_scene = output_scene
 	_output_pile = output_pile
 	$Worker.setup(building, map, coordination_manager)
+	$Worker.display_name = worker_name
 
 func go_collect_resource(pile: ResourcePile) -> void:
 	_target_pile = pile

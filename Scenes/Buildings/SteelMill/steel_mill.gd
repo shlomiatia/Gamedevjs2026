@@ -43,5 +43,5 @@ func complete_construction() -> void:
 	_output_pile.visible = true
 	var worker := KilnWorkerScene.instantiate() as KilnWorker
 	worker.position = _spawn_pos
-	worker.setup(self, _map, _coordination_manager, IronBarScene, CoordinationManager.ResourceType.IRON_ORE, CoordinationManager.ResourceType.COAL, _output_pile)
+	worker.setup(self, _map, _coordination_manager, IronBarScene, CoordinationManager.ResourceType.IRON_ORE, CoordinationManager.ResourceType.COAL, _output_pile, "Smelter")
 	_spawn_parent.add_child(worker)

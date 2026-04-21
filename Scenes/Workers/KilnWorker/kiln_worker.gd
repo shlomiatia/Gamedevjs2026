@@ -19,7 +19,7 @@ var _resource_type_1: int = -1
 var _resource_type_2: int = -1
 var _work_elapsed := 0.0
 
-func setup(building: Node2D, map: Map, coordination_manager: Node, output_scene: PackedScene, resource_type_1: int, resource_type_2: int, output_pile: ResourcePile) -> void:
+func setup(building: Node2D, map: Map, coordination_manager: Node, output_scene: PackedScene, resource_type_1: int, resource_type_2: int, output_pile: ResourcePile, worker_name: String = "Worker") -> void:
 	_building = building
 	_map = map
 	_coordination_manager = coordination_manager
@@ -28,6 +28,7 @@ func setup(building: Node2D, map: Map, coordination_manager: Node, output_scene:
 	_resource_type_1 = resource_type_1
 	_resource_type_2 = resource_type_2
 	$Worker.setup(building, map, coordination_manager)
+	$Worker.display_name = worker_name
 
 func _ready() -> void:
 	_coordination_manager.queue_resource_collection(self, _resource_type_1)

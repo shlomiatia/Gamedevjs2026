@@ -46,5 +46,5 @@ func complete_construction() -> void:
 	var worker := KilnWorkerScene.instantiate() as KilnWorker
 	worker.position = _spawn_pos
 	worker.setup(self, _map, _coordination_manager, BeerScene,
-		CoordinationManager.ResourceType.WHEAT, CoordinationManager.ResourceType.LOG, _output_pile)
+		CoordinationManager.ResourceType.WHEAT, CoordinationManager.ResourceType.LOG, _output_pile, "Brewer")
 	_spawn_parent.add_child(worker)

@@ -142,12 +142,16 @@ func notify_free_resource(resource_type: int, pile: ResourcePile) -> void:
         _dispatch_need_queue(RESOURCE_TO_NEED[resource_type], pile, resource_type)
     if pile.free_count() == 0:
         return
+    _cleanup_resource_queue(resource_type)
     var queue: Array = _resource_queues[resource_type]
     if queue.is_empty():
         return
     var worker = queue.pop_front()
     pile.reserve(worker)
     worker.go_collect_resource(pile)
+
+func _cleanup_resource_queue(resource_type: int) -> void:
+    _resource_queues[resource_type] = _resource_queues[resource_type].filter(func(w): return is_instance_valid(w))
 
 func _dispatch_need_queue(need: int, pile: ResourcePile, resource_type: int) -> void:
     _cleanup_need_queue(need)

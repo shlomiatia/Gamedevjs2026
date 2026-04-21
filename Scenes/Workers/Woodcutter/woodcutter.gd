@@ -19,6 +19,7 @@ func setup(woodcutter_hut: WoodcutterHut, map: Map, forest: Forest, coordination
     _map = map
     _forest = forest
     $Worker.setup(woodcutter_hut, map, coordination_manager)
+    $Worker.display_name = "Woodcutter"
 
 func resume_work() -> void:
     match _state:

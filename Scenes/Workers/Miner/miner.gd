@@ -10,11 +10,12 @@ var _pile: ResourcePile = null
 var _output_scene: PackedScene = null
 var _mine_elapsed := 0.0
 
-func setup(clay_pit: Node2D, pile: ResourcePile, output_scene: PackedScene, map: Map, coordination_manager: Node) -> void:
+func setup(clay_pit: Node2D, pile: ResourcePile, output_scene: PackedScene, map: Map, coordination_manager: Node, worker_name: String = "Miner") -> void:
 	_clay_pit = clay_pit
 	_pile = pile
 	_output_scene = output_scene
 	$Worker.setup(clay_pit, map, coordination_manager)
+	$Worker.display_name = worker_name
 
 func _ready() -> void:
 	$Worker.navigate_to(_pile.global_position)

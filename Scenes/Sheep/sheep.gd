@@ -5,12 +5,10 @@ var is_sheared := false
 var _is_walking := false
 var _is_eating := false
 var _follow_delay := 0.0
-var _process_delta := 0.0
 
 func _ready() -> void:
 	$AnimatedSprite2D.play("unsheared_stand")
 	_follow_delay = randf_range(0.1, 0.8)
-	$NavigationAgent2D.velocity_computed.connect(_on_velocity_computed)
 	$NavigationAgent2D.target_position = global_position
 
 func reset_follow_delay() -> void:
@@ -30,7 +28,6 @@ func stop() -> void:
 	set_walking(false)
 
 func _process(delta: float) -> void:
-	_process_delta = delta
 	if _is_eating:
 		return
 	if _follow_delay > 0.0:
@@ -41,15 +38,15 @@ func _process(delta: float) -> void:
 		set_walking(false)
 		return
 	var next: Vector2 = $NavigationAgent2D.get_next_path_position()
-	var desired := (next - global_position).normalized() * Constants.sheep_follow_speed
-	$NavigationAgent2D.velocity = desired
-
-func _on_velocity_computed(safe_velocity: Vector2) -> void:
-	if _is_eating:
-		return
-	if safe_velocity.length() > 5.0:
+	var dir := next - global_position
+	var dist := dir.length()
+	if dist > 0.5:
 		set_walking(true)
-		position += safe_velocity * _process_delta
+		var step := Constants.sheep_follow_speed * delta
+		if step >= dist:
+			position += dir
+		else:
+			position += dir.normalized() * step
 	else:
 		set_walking(false)
 

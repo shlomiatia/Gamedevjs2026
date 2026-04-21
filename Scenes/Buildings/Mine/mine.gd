@@ -42,5 +42,11 @@ func complete_construction() -> void:
 	_output_pile.visible = true
 	var miner := MinerScene.instantiate() as Miner
 	miner.position = _spawn_pos
-	miner.setup(self, _output_pile, output_scene, _map, _coordination_manager)
+	var miner_name: String
+	match output_resource_type:
+		CoordinationManager.ResourceType.CLAY: miner_name = "Clay Digger"
+		CoordinationManager.ResourceType.COAL: miner_name = "Coal Miner"
+		CoordinationManager.ResourceType.IRON_ORE: miner_name = "Iron Miner"
+		_: miner_name = "Miner"
+	miner.setup(self, _output_pile, output_scene, _map, _coordination_manager, miner_name)
 	_spawn_parent.add_child(miner)

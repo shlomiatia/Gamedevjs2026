@@ -18,6 +18,7 @@ func setup(wheat_farm: Node2D, map: Map, coordination_manager: Node, output_pile
 	_map = map
 	_output_pile = output_pile
 	$Worker.setup(wheat_farm, map, coordination_manager)
+	$Worker.display_name = "Wheat Farmer"
 
 func resume_work() -> void:
 	match _state:

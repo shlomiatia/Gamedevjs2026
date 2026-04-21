@@ -34,6 +34,7 @@ func setup(sheep_farm: SheepFarm, map: Map, sheep: Sheep, spawn_parent: Node2D,
 	_wool_pile = wool_pile
 	_milk_pile = milk_pile
 	$Worker.setup(sheep_farm, map, coordination_manager)
+	$Worker.display_name = "Sheep Farmer"
 
 func resume_work() -> void:
 	match _state:
@@ -183,6 +184,10 @@ func _do_shear(delta: float) -> void:
 			sheep.shear()
 	if _shear_queue.is_empty():
 		_do_spawn_if_needed()
+
+func debug_dump() -> void:
+	print("  [SheepFarmer] state=%s  herd=%d  farmer_at_graze=%s  shear_queue=%d  action_elapsed=%.0f" % [
+		State.keys()[_state], _herd.size(), _farmer_at_graze, _shear_queue.size(), _action_elapsed])
 
 func _do_spawn_if_needed() -> void:
 	if _spawn_new_sheep:

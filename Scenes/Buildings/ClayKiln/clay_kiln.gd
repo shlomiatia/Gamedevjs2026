@@ -40,7 +40,7 @@ func complete_construction() -> void:
 	_output_pile.visible = true
 	var worker := KilnWorkerScene.instantiate() as KilnWorker
 	worker.position = _spawn_pos
-	worker.setup(self, _map, _coordination_manager, BrickScene, CoordinationManager.ResourceType.CLAY, CoordinationManager.ResourceType.LOG, _output_pile)
+	worker.setup(self, _map, _coordination_manager, BrickScene, CoordinationManager.ResourceType.CLAY, CoordinationManager.ResourceType.LOG, _output_pile, "Brick Maker")
 	_spawn_parent.add_child(worker)
 
 func set_smoking(value: bool) -> void:

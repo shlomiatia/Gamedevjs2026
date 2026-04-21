@@ -39,6 +39,6 @@ func complete_construction() -> void:
 	_output_pile.visible = true
 	var miller := MillerScene.instantiate() as Miller
 	miller.position = _spawn_pos
-	miller.setup(self, _map, _coordination_manager, CoordinationManager.ResourceType.LOG, PlankScene, _output_pile)
+	miller.setup(self, _map, _coordination_manager, CoordinationManager.ResourceType.LOG, PlankScene, _output_pile, "Sawmiller")
 	_spawn_parent.add_child(miller)
 

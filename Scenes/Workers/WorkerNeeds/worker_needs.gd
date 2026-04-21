@@ -142,7 +142,9 @@ func _draw() -> void:
     var x0 := -col_w
 
     if _mover != null:
-        _ds(font, Vector2(x0, NAME_Y), _mover.name, 64, Color.WHITE)
+        var worker := _mover.get_node_or_null("Worker") as Worker
+        var label: String = worker.display_name if (worker != null and worker.display_name != "") else String(_mover.name)
+        _ds(font, Vector2(x0, NAME_Y), label, 64, Color.WHITE)
 
     var hr := hunger / Constants.initial_hunger
     _ds(font, Vector2(x0, NUM_Y), "%d" % int(hunger), col_w,
