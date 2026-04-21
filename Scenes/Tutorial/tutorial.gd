@@ -80,7 +80,7 @@ func _build_steps() -> void:
         _w("building_placed:BuilderHut"),
         _mc("Your first building is free, but others are not."),
         _mc("You have 2 planks.", func(): return _hud.get_planks_rect()),
-        _meu("Use them to secure plank production.", "woodcutter_or_sawmill_clicked",
+        _mc("Use them to secure plank production.",
             func(): return _building_manager.get_woodcutter_sawmill_rect()),
         _w("construction_queued"),
         _mc("You have 1 building site.", func(): return _hud.get_planks_rect()),

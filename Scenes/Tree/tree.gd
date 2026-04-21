@@ -25,7 +25,7 @@ func set_chop_progress(progress: float) -> void:
         progress,
         1.0, # Total duration set to 1.0 for easy mapping
         Tween.TRANS_SINE,
-        Tween.EASE_OUT_IN
+        Tween.EASE_IN_OUT
     )
 
 func set_pick_progress(progress: float) -> void:

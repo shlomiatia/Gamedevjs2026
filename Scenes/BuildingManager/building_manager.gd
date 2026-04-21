@@ -38,7 +38,7 @@ var _tooltip_manager: BuildingTooltipManager = null
 var _placed_keys: Dictionary = {}
 var _button_key_pairs: Array = [] # [key, btn, tier, base_text_or_null]
 var _dropdown_pairs: Array = [] # [trigger_btn, tier]
-var _dropdowns: Array = []      # [trigger_btn, popup_control] — for process-based hide
+var _dropdowns: Array = [] # [trigger_btn, popup_control] — for process-based hide
 var _valid_tiles: Array[Vector2i] = []
 var _overlay_layer: CanvasLayer = null
 var _overlay: PlacementOverlay = null
@@ -105,7 +105,7 @@ func _build_panel_ui() -> void:
     sections_row.add_child(VSeparator.new())
     _build_tools_section(sections_row)
 
-func _make_section(parent: HBoxContainer, icon_path: String, label_text: String) -> HBoxContainer:
+func _make_section(parent: HBoxContainer, icon_path: String, label_text: String, mat: ShaderMaterial = null) -> HBoxContainer:
     var section := VBoxContainer.new()
     section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
     section.add_theme_constant_override("separation", 2)
@@ -122,6 +122,7 @@ func _make_section(parent: HBoxContainer, icon_path: String, label_text: String)
     header.add_theme_constant_override("separation", 3)
     var icon := TextureRect.new()
     icon.texture = load(icon_path) as Texture2D
+    icon.material = mat
     icon.custom_minimum_size = Vector2(18, 18)
     icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
     icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -150,22 +151,11 @@ func _make_palette_mat(originals: Array, replacements: Array) -> ShaderMaterial:
         mat.set_shader_parameter("replace_%d" % i, replacements[i])
     return mat
 
-func _attach_shader_icon(btn: Button, texture_path: String, mat: ShaderMaterial) -> void:
-    var rect := TextureRect.new()
-    rect.texture = load(texture_path) as Texture2D
-    rect.material = mat
-    rect.set_anchors_preset(Control.PRESET_FULL_RECT)
-    rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-    rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-    rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    btn.add_child(rect)
-
 func _make_dropdown(
     parent_row: HBoxContainer,
     icon_path: String,
     tier: int,
-    items: Array,
-    icon_mat: ShaderMaterial = null
+    items: Array
 ) -> Array:
     var section: Control = parent_row.get_parent()
 
@@ -202,9 +192,7 @@ func _make_dropdown(
 
     var trigger := Button.new()
     trigger.focus_mode = Control.FOCUS_NONE
-    if icon_mat != null:
-        _attach_shader_icon(trigger, icon_path, icon_mat)
-    elif icon_path != "":
+    if icon_path != "":
         trigger.icon = load(icon_path) as Texture2D
     trigger.custom_minimum_size = Vector2(44, 40)
     parent_row.add_child(trigger)
@@ -222,6 +210,7 @@ func _build_construction_section(parent: HBoxContainer) -> void:
     var row := _make_section(parent, "res://Textures/house.png", "Construction")
 
     var builder_btn := _make_direct_btn("Builder")
+    builder_btn.focus_mode = Control.FOCUS_NONE
     row.add_child(builder_btn)
     _build_builder_button = builder_btn
     builder_btn.pressed.connect(func(): _start_building(BuilderHutScene, Vector2i(BuilderHut.SIZE_X, BuilderHut.SIZE_Y), "BuilderHut"))
@@ -251,6 +240,7 @@ func _build_food_section(parent: HBoxContainer) -> void:
     var row := _make_section(parent, "res://Textures/food.png", "Food")
 
     var apple_btn := _make_direct_btn("Apple Farm")
+    apple_btn.focus_mode = Control.FOCUS_NONE
     row.add_child(apple_btn)
     apple_btn.pressed.connect(func(): _start_building(AppleFarmScene, Vector2i(AppleFarm.SIZE_X, AppleFarm.SIZE_Y), "AppleFarm"))
     _tooltip_manager.connect_button(apple_btn, "AppleFarm")
@@ -277,26 +267,26 @@ func _build_food_section(parent: HBoxContainer) -> void:
     _button_key_pairs.append(["WoodcutterHut", bread_btns[3], CostTier.FREE, "Woodcutter"])
 
 func _build_drink_section(parent: HBoxContainer) -> void:
-    var row := _make_section(parent, "res://Textures/cider.png", "Drink")
+    var drink_mat := ShaderMaterial.new()
+    drink_mat.shader = load("res://Shaders/pallete_swap.gdshader") as Shader
+    drink_mat.set_shader_parameter("original_0", Color(0.972549, 0.250980, 0.105882, 1))
+    drink_mat.set_shader_parameter("replace_0", Color(0, 0, 0, 0))
+    drink_mat.set_shader_parameter("original_1", Color(0.741176, 0.152941, 0.035294, 1))
+    drink_mat.set_shader_parameter("replace_1", Color(0, 0, 0, 0))
+    drink_mat.set_shader_parameter("original_2", Color(0.486275, 0.070588, 0.168627, 1))
+    drink_mat.set_shader_parameter("replace_2", Color(0, 0, 0, 0))
+    drink_mat.set_shader_parameter("original_3", Color(0.615686, 0.113725, 0.101961, 1))
+    drink_mat.set_shader_parameter("replace_3", Color(0, 0, 0, 0))
+    var row := _make_section(parent, "res://Textures/cider.png", "Drink", drink_mat)
 
     var _orig := [
         Color(0.97255, 0.25098, 0.10588), Color(0.74118, 0.15294, 0.03529),
         Color(0.48627, 0.07059, 0.16863), Color(0.6156863, 0.11372549, 0.10196),
     ]
-    var milk_mat := _make_palette_mat(_orig, [
-        Color(1, 1, 1), Color(0.91765, 0.91765, 0.9098),
-        Color(0.80784, 0.79216, 0.78824), Color(0.8627451, 0.85490197, 0.8509804),
-    ])
-    var beer_mat := _make_palette_mat(_orig, [
-        Color(1, 0.87843, 0.54510), Color(0.98039, 0.75294, 0.35294),
-        Color(0.92157, 0.56078, 0.28235), Color(0.95294, 0.65882, 0.31765),
-    ])
 
-    # Sheep Farm button with milk-coloured cider icon
-    var sheep_btn := Button.new()
+    var sheep_btn := _make_direct_btn("Sheep Farm")
     sheep_btn.focus_mode = Control.FOCUS_NONE
     sheep_btn.custom_minimum_size = Vector2(44, 40)
-    _attach_shader_icon(sheep_btn, "res://Textures/cider.png", milk_mat)
     row.add_child(sheep_btn)
     sheep_btn.pressed.connect(func(): _start_building(SheepFarmScene, Vector2i(SheepFarm.SIZE_X, SheepFarm.SIZE_Y), "SheepFarm"))
     _tooltip_manager.connect_button(sheep_btn, "SheepFarm")
@@ -310,11 +300,11 @@ func _build_drink_section(parent: HBoxContainer) -> void:
     _button_key_pairs.append(["CiderMill", cider_btns[1], CostTier.PLANK, "Cider Mill"])
 
     # Beer dropdown with beer-coloured cider icon
-    var beer_btns := _make_dropdown(row, "res://Textures/cider.png", CostTier.BRICK, [
+    var beer_btns := _make_dropdown(row, "res://Textures/beer.png", CostTier.BRICK, [
         {"key": "WheatFarm", "scene": WheatFarmScene, "size_x": WheatFarm.SIZE_X, "size_y": WheatFarm.SIZE_Y, "text": "Wheat Farm"},
         {"key": "Brewery", "scene": BreweryScene, "size_x": Brewery.SIZE_X, "size_y": Brewery.SIZE_Y, "text": "Brewery"},
         {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": "Woodcutter"},
-    ], beer_mat)
+    ])
     _button_key_pairs.append(["WheatFarm", beer_btns[0], CostTier.PLANK, "Wheat Farm"])
     _button_key_pairs.append(["Brewery", beer_btns[1], CostTier.BRICK, "Brewery"])
     _button_key_pairs.append(["WoodcutterHut", beer_btns[2], CostTier.FREE, "Woodcutter"])
