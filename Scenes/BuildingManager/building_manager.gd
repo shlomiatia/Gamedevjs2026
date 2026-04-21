@@ -252,7 +252,7 @@ func _add_nav_obstacle(building: Node2D, size: Vector2i) -> void:
     ])
     building.add_child(obstacle)
     var p := building.position
-    var e := 16.0
+    var e := 4.0
     _map.add_nav_hole(PackedVector2Array([
         p + Vector2(-hw - e, -h - e), p + Vector2(-hw - e, e),
         p + Vector2(hw + e, e), p + Vector2(hw + e, -h - e)

@@ -2,7 +2,7 @@ class_name Bakery
 extends Node2D
 
 const SIZE_X := 5
-const SIZE_Y := 1
+const SIZE_Y := 2
 const BUILDING_NAME := "Bakery"
 const CONSTRUCTION_RESOURCE_TYPE = CoordinationManager.ResourceType.BRICK
 
