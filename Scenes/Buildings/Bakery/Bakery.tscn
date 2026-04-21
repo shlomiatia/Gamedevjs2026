@@ -1,8 +1,17 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://Scenes/Buildings/Bakery/bakery.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://bap1qcvbb4owg" path="res://Scenes/Buildings/Building/Building.tscn" id="2_building"]
-[ext_resource type="Texture2D" uid="uid://doy1ell80b8ho" path="res://Textures/bricks_house.png" id="3_texture"]
+[ext_resource type="Shader" uid="uid://b8yka2iqauytq" path="res://Shaders/pallete_swap.gdshader" id="3_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wheat"]
+shader = ExtResource("3_shader")
+shader_parameter/original_0 = Color(0.537255, 0.623529, 0.4, 1)
+shader_parameter/original_1 = Color(0.380392, 0.521569, 0.352941, 1)
+shader_parameter/original_2 = Color(0.298039, 0.376471, 0.317647, 1)
+shader_parameter/replace_0 = Color(1.0, 0.878431, 0.545098, 1)
+shader_parameter/replace_1 = Color(0.980392, 0.752941, 0.352941, 1)
+shader_parameter/replace_2 = Color(0.921569, 0.560784, 0.282353, 1)
 
 [node name="Bakery" type="Node2D"]
 script = ExtResource("1_script")
@@ -11,7 +20,7 @@ script = ExtResource("1_script")
 building_name = "Bakery"
 
 [node name="Sprite2D" parent="Building" index="1"]
-texture = ExtResource("3_texture")
+material = SubResource("ShaderMaterial_wheat")
 
 [node name="Smoke" type="CPUParticles2D" parent="."]
 position = Vector2(-36, -201)

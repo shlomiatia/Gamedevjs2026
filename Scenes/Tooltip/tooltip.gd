@@ -3,7 +3,8 @@ extends CanvasLayer
 
 # Integer keys match CoordinationManager.ResourceType enum order:
 # LOG=0, PLANK=1, APPLE=2, CIDER=3, WOOL=4, CLOTHES=5, CLAY=6, BRICK=7,
-# COAL=8, IRON_ORE=9, IRON_BAR=10, TOOL=11, MILK=12, CHEESE=13
+# COAL=8, IRON_ORE=9, IRON_BAR=10, TOOL=11, MILK=12, CHEESE=13,
+# WHEAT=14, FLOUR=15, BREAD=16, BEER=17
 const _ICON_TEXTURE := {
 	0: preload("res://Textures/Log.png"),
 	1: preload("res://Textures/planks.png"),
@@ -19,6 +20,10 @@ const _ICON_TEXTURE := {
 	11: preload("res://Textures/tool.png"),
 	12: preload("res://Textures/cider.png"),
 	13: preload("res://Textures/cheese.png"),
+	14: preload("res://Textures/wheat.png"),
+	15: preload("res://Textures/flour.png.png"),
+	16: preload("res://Textures/bread.png.png"),
+	17: preload("res://Textures/cider.png"),
 }
 
 const _RESOURCE_NEED := {

@@ -1,40 +1,44 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://cnuqss5bk6shl"]
 
-[ext_resource type="Script" path="res://Scenes/Resources/Beer/beer.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://Textures/cider.png" id="2_cider"]
+[ext_resource type="Script" uid="uid://ecph6n7oqrj2" path="res://Scenes/Resources/Beer/beer.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://7l47drsij0cv" path="res://Textures/cider.png" id="2_cider"]
 [ext_resource type="Shader" uid="uid://b8yka2iqauytq" path="res://Shaders/pallete_swap.gdshader" id="3_shader"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_beer"]
 shader = ExtResource("3_shader")
-shader_parameter/original_0 = Color(0.615686, 0.113725, 0.101961, 1)
-shader_parameter/original_1 = Color(0, 0, 0, 1)
-shader_parameter/original_2 = Color(0.741176, 0.152941, 0.035294, 1)
-shader_parameter/original_3 = Color(0.486275, 0.070588, 0.168627, 1)
-shader_parameter/original_4 = Color(0.972549, 0.25098, 0.105882, 1)
-shader_parameter/original_5 = Color(0.670588, 0.686275, 0.72549, 1)
-shader_parameter/original_6 = Color(0.917647, 0.917647, 0.909804, 1)
-shader_parameter/original_7 = Color(1, 1, 1, 1)
-shader_parameter/original_8 = Color(0.658824, 0.345098, 0.282353, 1)
-shader_parameter/original_9 = Color(0.513726, 0.25098, 0.298039, 1)
-shader_parameter/original_10 = Color(0.403922, 0.192157, 0.294118, 1)
-shader_parameter/original_11 = Color(0.807843, 0.792157, 0.788235, 1)
-shader_parameter/replace_0 = Color(0.921569, 0.560784, 0.282353, 1)
-shader_parameter/replace_1 = Color(0.819608, 0.454902, 0.254902, 1)
-shader_parameter/replace_2 = Color(0.921569, 0.560784, 0.282353, 1)
-shader_parameter/replace_3 = Color(0.819608, 0.454902, 0.254902, 1)
-shader_parameter/replace_4 = Color(0.980392, 0.752941, 0.352941, 1)
-shader_parameter/replace_5 = Color(0.980392, 0.752941, 0.352941, 1)
-shader_parameter/replace_6 = Color(1, 0.878431, 0.545098, 1)
-shader_parameter/replace_7 = Color(1, 0.878431, 0.545098, 1)
-shader_parameter/replace_8 = Color(0.921569, 0.560784, 0.282353, 1)
-shader_parameter/replace_9 = Color(0.921569, 0.560784, 0.282353, 1)
-shader_parameter/replace_10 = Color(0.921569, 0.560784, 0.282353, 1)
-shader_parameter/replace_11 = Color(1, 0.878431, 0.545098, 1)
+shader_parameter/is_disabled = false
+shader_parameter/original_0 = Color(0.972549, 0.2509804, 0.105882354, 1)
+shader_parameter/original_1 = Color(0.7411765, 0.15294118, 0.03529412, 1)
+shader_parameter/original_2 = Color(0.4862745, 0.07058824, 0.16862746, 1)
+shader_parameter/original_3 = Color(0.6156863, 0.11372549, 0.101960786, 1)
+shader_parameter/original_4 = Color(0, 0, 0, 1)
+shader_parameter/original_5 = Color(0, 0, 0, 1)
+shader_parameter/original_6 = Color(0, 0, 0, 1)
+shader_parameter/original_7 = Color(0, 0, 0, 1)
+shader_parameter/original_8 = Color(0, 0, 0, 1)
+shader_parameter/original_9 = Color(0, 0, 0, 1)
+shader_parameter/original_10 = Color(0, 0, 0, 1)
+shader_parameter/original_11 = Color(0, 0, 0, 1)
+shader_parameter/original_12 = Color(0, 0, 0, 1)
+shader_parameter/replace_0 = Color(1, 0.8784314, 0.54509807, 1)
+shader_parameter/replace_1 = Color(0.98039216, 0.7529412, 0.3529412, 1)
+shader_parameter/replace_2 = Color(0.92156863, 0.56078434, 0.28235295, 1)
+shader_parameter/replace_3 = Color(0.9529412, 0.65882355, 0.31764707, 1)
+shader_parameter/replace_4 = Color(0, 0, 0, 1)
+shader_parameter/replace_5 = Color(0, 0, 0, 1)
+shader_parameter/replace_6 = Color(0, 0, 0, 1)
+shader_parameter/replace_7 = Color(0, 0, 0, 1)
+shader_parameter/replace_8 = Color(0, 0, 0, 1)
+shader_parameter/replace_9 = Color(0, 0, 0, 1)
+shader_parameter/replace_10 = Color(0, 0, 0, 1)
+shader_parameter/replace_11 = Color(0, 0, 0, 1)
+shader_parameter/replace_12 = Color(0, 0, 0, 1)
+shader_parameter/modulate = Color(1, 1, 1, 1)
 
 [node name="Beer" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_beer")
-texture = ExtResource("2_cider")
 position = Vector2(0, -16)
+texture = ExtResource("2_cider")

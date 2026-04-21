@@ -47,9 +47,11 @@ func _ready() -> void:
 	_gap(row1)
 	_lbl_bricks = _icon_label(row1, load("res://Textures/brick.png"), ": 0/0")
 
-	_lbl_food     = _icon_label(row2, load("res://Textures/apple.png"),   ": 0/0")
+	_lbl_food     = _icon_label(row2, load("res://Textures/food.png"),   ": 0/0")
 	_gap(row2)
-	_lbl_drink    = _icon_label(row2, load("res://Textures/cider.png"),   ": 0/0")
+	var _drink_mat := ShaderMaterial.new()
+	_drink_mat.shader = load("res://Shaders/transparent.gdshader") as Shader
+	_lbl_drink    = _icon_label(row2, load("res://Textures/cider.png"),   ": 0/0", _drink_mat)
 	_gap(row2)
 	_lbl_clothing = _icon_label(row2, load("res://Textures/Clothes.png"), ": 0/0")
 	_gap(row2)
@@ -61,12 +63,14 @@ func _make_row() -> HBoxContainer:
 	row.add_theme_constant_override("separation", 0)
 	return row
 
-func _icon_label(parent: HBoxContainer, texture: Texture2D, initial_text: String) -> Label:
+func _icon_label(parent: HBoxContainer, texture: Texture2D, initial_text: String, mat: Material = null) -> Label:
 	var icon := TextureRect.new()
 	icon.texture = texture
 	icon.custom_minimum_size = ICON_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	if mat != null:
+		icon.material = mat
 	parent.add_child(icon)
 	var lbl := Label.new()
 	lbl.text = initial_text

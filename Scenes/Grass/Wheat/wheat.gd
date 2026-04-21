@@ -14,7 +14,7 @@ func setup(grass_layer: TileMapLayer, occupied_tiles: Dictionary) -> void:
 	_occupied_tiles = occupied_tiles
 	_wheat_texture = AtlasTexture.new()
 	_wheat_texture.atlas = load("res://Textures/wheat tileset.png") as Texture2D
-	_wheat_texture.region = Rect2(32, 64, 32, 32)
+	_wheat_texture.region = Rect2(0, 96, 32, 32)
 
 func plant_wheat(tile: Vector2i, grow_duration: float) -> void:
 	var sprite := Sprite2D.new()
