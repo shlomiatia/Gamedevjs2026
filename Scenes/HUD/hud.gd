@@ -50,7 +50,15 @@ func _ready() -> void:
 	_lbl_food     = _icon_label(row2, load("res://Textures/food.png"),   ": 0/0")
 	_gap(row2)
 	var _drink_mat := ShaderMaterial.new()
-	_drink_mat.shader = load("res://Shaders/transparent.gdshader") as Shader
+	_drink_mat.shader = load("res://Shaders/pallete_swap.gdshader") as Shader
+	_drink_mat.set_shader_parameter("original_0", Color(0.972549, 0.250980, 0.105882, 1))
+	_drink_mat.set_shader_parameter("replace_0",  Color(0, 0, 0, 0))
+	_drink_mat.set_shader_parameter("original_1", Color(0.741176, 0.152941, 0.035294, 1))
+	_drink_mat.set_shader_parameter("replace_1",  Color(0, 0, 0, 0))
+	_drink_mat.set_shader_parameter("original_2", Color(0.486275, 0.070588, 0.168627, 1))
+	_drink_mat.set_shader_parameter("replace_2",  Color(0, 0, 0, 0))
+	_drink_mat.set_shader_parameter("original_3", Color(0.615686, 0.113725, 0.101961, 1))
+	_drink_mat.set_shader_parameter("replace_3",  Color(0, 0, 0, 0))
 	_lbl_drink    = _icon_label(row2, load("res://Textures/cider.png"),   ": 0/0", _drink_mat)
 	_gap(row2)
 	_lbl_clothing = _icon_label(row2, load("res://Textures/Clothes.png"), ": 0/0")

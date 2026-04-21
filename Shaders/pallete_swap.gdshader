@@ -44,7 +44,7 @@ vec4 swap_color(vec4 color){
 		if (distance(color, original_colors[i]) <= precision){
             vec3 delta = color.rgb - original_colors[i].rgb;
             vec3 result_rgb = clamp(replace_colors[i].rgb + delta, 0.0, 1.0);
-            return vec4(result_rgb, color.a);
+            return vec4(result_rgb, color.a * replace_colors[i].a);
 		}
 	}
 	return color;
