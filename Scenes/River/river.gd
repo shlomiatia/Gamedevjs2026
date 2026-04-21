@@ -27,6 +27,7 @@ func _process(delta: float) -> void:
 		_river_timer -= 1.0 / RIVER_FPS
 		_river_frame = (_river_frame + 1) % RIVER_FRAMES
 		var col := _river_frame % RIVER_COLS
+		@warning_ignore("integer_division")
 		var row: int = _river_frame / RIVER_COLS
 		for x in _level_width:
 			for r in _river_rows:

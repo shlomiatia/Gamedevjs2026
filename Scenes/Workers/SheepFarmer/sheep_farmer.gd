@@ -159,7 +159,7 @@ func _setup_shear_cycle() -> void:
 
 func _split_into_shear_queue(sheep_list: Array[Sheep]) -> void:
 	var n := sheep_list.size()
-	var half := n / 2
+	var half: int = n >> 1
 	for i in half:
 		_shear_queue.append({sheep = sheep_list[i], is_milk = false})
 	for i in half:

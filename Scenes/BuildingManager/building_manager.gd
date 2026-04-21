@@ -260,7 +260,7 @@ func _add_nav_obstacle(building: Node2D, size: Vector2i) -> void:
 func _get_footprint_top_left() -> Vector2i:
     # Offset so the cursor tracks the bottom-center tile of the footprint
     var mouse_tile := _map.get_mouse_tile()
-    return mouse_tile - Vector2i(_active_size.x / 2, _active_size.y - 1)
+    return mouse_tile - Vector2i(_active_size.x >> 1, _active_size.y - 1)
 
 func _footprint_position(top_left_tile: Vector2i) -> Vector2:
     var tl := _map.tile_to_world(top_left_tile)

@@ -77,10 +77,11 @@ func add_nav_hole(hole: PackedVector2Array) -> void:
 
 func _bake_nav_mesh() -> void:
 	var nav_poly := NavigationPolygon.new()
-	nav_poly.add_outline(_nav_outer)
+	var source_geometry := NavigationMeshSourceGeometryData2D.new()
+	source_geometry.add_traversable_outline(_nav_outer)
 	for hole in _nav_holes:
-		nav_poly.add_outline(hole)
-	nav_poly.make_polygons_from_outlines()
+		source_geometry.add_obstruction_outline(hole)
+	NavigationServer2D.bake_from_source_geometry_data(nav_poly, source_geometry)
 	_nav_region.navigation_polygon = nav_poly
 
 func set_occupied_tiles_rect(top_left: Vector2i, size: Vector2i, value) -> void:
@@ -148,7 +149,7 @@ func _ring_clockwise(top_left: Vector2i, size: Vector2i) -> Array[Vector2i]:
 	var bottom := top_left.y + size.y
 	var left := top_left.x - 1
 	var top := top_left.y - 1
-	var center_x := top_left.x + size.x / 2
+	var center_x: int = top_left.x + (size.x >> 1)
 	for x in range(center_x, right + 1):
 		result.append(Vector2i(x, bottom))
 	for y in range(bottom - 1, top - 1, -1):

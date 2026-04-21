@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cusvdq7py32al"]
 
 [ext_resource type="Script" path="res://Scenes/Workers/AppleFarmer/apple_farmer.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://Scenes/Workers/Worker/Worker.tscn" id="2_worker"]
+[ext_resource type="PackedScene" uid="uid://dgt4raq3utqpl" path="res://Scenes/Workers/Worker/Worker.tscn" id="2_worker"]
 
 [node name="AppleFarmer" type="Node2D"]
 script = ExtResource("1_script")
