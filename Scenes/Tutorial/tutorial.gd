@@ -192,7 +192,7 @@ func _finish() -> void:
 func _process(delta: float) -> void:
     if not _started:
         return
-    if _auto_timer > 0.0:
+    if _auto_timer >= 0.0:
         _auto_timer -= delta
         if _auto_timer <= 0.0:
             _auto_timer = -1.0

@@ -23,6 +23,10 @@ const TOOLTIP_DATA := {
     "SteelMill":     {"display_name": "Steel Mill", "cost": 7, "action": "convert", "inputs": [9, 8], "output": 10},
     "Toolsmith":     {"display_name": "Toolsmith",  "cost": 7, "action": "convert", "inputs": [8, 10], "output": 11},
     "Fromage":       {"display_name": "Fromage",    "cost": 7, "action": "convert", "inputs": [12, 0], "output": 13},
+    "WheatFarm":     {"display_name": "Wheat Farm",  "cost": 1, "action": "produce", "output": 14},
+    "Gritsmill":     {"display_name": "Gritsmill",  "cost": 1, "action": "convert", "inputs": [14],    "output": 15},
+    "Bakery":        {"display_name": "Bakery",      "cost": 7, "action": "convert", "inputs": [15, 0], "output": 16},
+    "Brewery":       {"display_name": "Brewery",     "cost": 7, "action": "convert", "inputs": [14, 0], "output": 17},
 }
 
 var _tooltip: BuildingTooltip

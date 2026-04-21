@@ -38,19 +38,41 @@ func _setup_navigation() -> void:
 	_bake_nav_mesh()
 
 func add_nav_hole(hole: PackedVector2Array) -> void:
-	var nav_min_y := _nav_outer[0].y
-	var nav_max_y := _nav_outer[0].y
-	var nav_min_x := _nav_outer[0].x
-	var nav_max_x := _nav_outer[0].x
-	for p in _nav_outer:
-		nav_min_x = min(nav_min_x, p.x)
-		nav_max_x = max(nav_max_x, p.x)
-		nav_min_y = min(nav_min_y, p.y)
-		nav_max_y = max(nav_max_y, p.y)
-	for p in hole:
-		if p.x < nav_min_x or p.x > nav_max_x or p.y < nav_min_y or p.y > nav_max_y:
-			return
-	_nav_holes.append(hole)
+	var nav_min_x: float = _nav_outer[0].x
+	var nav_max_x: float = _nav_outer[0].x
+	var nav_min_y: float = _nav_outer[0].y
+	var nav_max_y: float = _nav_outer[0].y
+	for p: Vector2 in _nav_outer:
+		if p.x < nav_min_x: nav_min_x = p.x
+		if p.x > nav_max_x: nav_max_x = p.x
+		if p.y < nav_min_y: nav_min_y = p.y
+		if p.y > nav_max_y: nav_max_y = p.y
+	# Inset by 1px so holes never touch the outer polygon edge (breaks make_polygons_from_outlines)
+	var bx0: float = nav_min_x + 1.0
+	var bx1: float = nav_max_x - 1.0
+	var by0: float = nav_min_y + 1.0
+	var by1: float = nav_max_y - 1.0
+	# Find hole's axis-aligned bounding box
+	var hx0: float = hole[0].x
+	var hx1: float = hole[0].x
+	var hy0: float = hole[0].y
+	var hy1: float = hole[0].y
+	for p: Vector2 in hole:
+		if p.x < hx0: hx0 = p.x
+		if p.x > hx1: hx1 = p.x
+		if p.y < hy0: hy0 = p.y
+		if p.y > hy1: hy1 = p.y
+	# Clip hole rect to inset nav boundary
+	var cx0: float = hx0 if hx0 > bx0 else bx0
+	var cx1: float = hx1 if hx1 < bx1 else bx1
+	var cy0: float = hy0 if hy0 > by0 else by0
+	var cy1: float = hy1 if hy1 < by1 else by1
+	if cx0 >= cx1 or cy0 >= cy1:
+		return
+	_nav_holes.append(PackedVector2Array([
+		Vector2(cx0, cy0), Vector2(cx0, cy1),
+		Vector2(cx1, cy1), Vector2(cx1, cy0)
+	]))
 	_bake_nav_mesh()
 
 func _bake_nav_mesh() -> void:
