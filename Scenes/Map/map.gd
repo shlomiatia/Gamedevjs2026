@@ -1,7 +1,7 @@
 class_name Map
 extends Node2D
 
-const LEVEL_WIDTH := 70
+const LEVEL_WIDTH := 100
 const LEVEL_HEIGHT := 40
 const RIVER_ROW := 4
 

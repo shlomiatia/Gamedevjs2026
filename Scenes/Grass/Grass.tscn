@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://kf24dxx3lhib" path="res://Scenes/Grass/grass.gd" id="1_script"]
 [ext_resource type="TileSet" uid="uid://bvnoyr7mkjuo4" path="res://Textures/tileset.tres" id="2_tileset"]
-[ext_resource type="Script" path="res://Scenes/Grass/Wheat/wheat.gd" id="3_wheat_script"]
+[ext_resource type="Script" uid="uid://d4nqrvdhnj5b4" path="res://Scenes/Grass/Wheat/wheat.gd" id="3_wheat_script"]
 
 [node name="Grass" type="Node2D"]
 script = ExtResource("1_script")

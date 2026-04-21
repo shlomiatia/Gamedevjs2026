@@ -9,7 +9,7 @@ signal construction_queued
 
 const WIN_WORKER_COUNT := 50
 
-enum ResourceType { LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR, TOOL, MILK, CHEESE, WHEAT, FLOUR, BREAD, BEER }
+enum ResourceType {LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR, TOOL, MILK, CHEESE, WHEAT, FLOUR, BREAD, BEER}
 
 const RESOURCE_TO_NEED := {
     ResourceType.APPLE: Worker.NeedType.FOOD,
@@ -29,19 +29,17 @@ const NEED_TO_RESOURCE := {
     Worker.NeedType.TOOL: [ResourceType.TOOL],
 }
 
-const RESOURCE_SATISFACTION := {
-    ResourceType.APPLE: 150.0,
-    ResourceType.CHEESE: 300.0,
-    ResourceType.BREAD: 450.0,
-    ResourceType.MILK: 150.0,
-    ResourceType.CIDER: 300.0,
-    ResourceType.BEER: 300.0,
-    ResourceType.CLOTHES: 300.0,
-    ResourceType.TOOL: 300.0,
-}
-
 func get_satisfaction_for_resource(resource_type: int) -> float:
-    return RESOURCE_SATISFACTION.get(resource_type, 200.0)
+    match resource_type:
+        ResourceType.APPLE: return Constants.apple_satisfaction
+        ResourceType.CHEESE: return Constants.cheese_satisfaction
+        ResourceType.BREAD: return Constants.bread_satisfaction
+        ResourceType.MILK: return Constants.milk_satisfaction
+        ResourceType.CIDER: return Constants.cider_satisfaction
+        ResourceType.BEER: return Constants.beer_satisfaction
+        ResourceType.CLOTHES: return Constants.clothes_satisfaction
+        ResourceType.TOOL: return Constants.tool_satisfaction
+    return Constants.initial_hunger
 
 var _builders: Array = []
 var all_workers: Array = []

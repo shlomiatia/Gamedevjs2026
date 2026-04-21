@@ -21,6 +21,17 @@ const _ICON_TEXTURE := {
 	13: preload("res://Textures/cheese.png"),
 }
 
+const _RESOURCE_NEED := {
+	2:  ["hunger",   "apple_satisfaction"],
+	3:  ["thirst",   "cider_satisfaction"],
+	5:  ["clothing", "clothes_satisfaction"],
+	11: ["tools",    "tool_satisfaction"],
+	12: ["thirst",   "milk_satisfaction"],
+	13: ["hunger",   "cheese_satisfaction"],
+	16: ["hunger",   "bread_satisfaction"],
+	17: ["thirst",   "beer_satisfaction"],
+}
+
 # Modulate to distinguish resources that share the same base texture
 const _ICON_MODULATE := {
 	6: Color(0.85, 0.58, 0.32),  # CLAY — warm brown over ore.png
@@ -39,6 +50,7 @@ var _vbox: VBoxContainer
 var _name_label: Label
 var _cost_row: HBoxContainer
 var _action_row: HBoxContainer
+var _satisfy_row: HBoxContainer
 
 func _ready() -> void:
 	layer = 100
@@ -73,6 +85,9 @@ func _ready() -> void:
 
 	_action_row = HBoxContainer.new()
 	_vbox.add_child(_action_row)
+
+	_satisfy_row = HBoxContainer.new()
+	_vbox.add_child(_satisfy_row)
 
 	_panel.visible = false
 
@@ -138,6 +153,18 @@ func _populate(data: Dictionary, show_cost: bool) -> void:
 			_add_icon(_action_row, data["output"], icon_size)
 		"train":
 			_add_label(_action_row, "Build buildings", font_size)
+
+	for c in _satisfy_row.get_children():
+		c.queue_free()
+	_satisfy_row.add_theme_constant_override("separation", sep)
+	var output: int = data.get("output", -1)
+	if _RESOURCE_NEED.has(output):
+		var info: Array = _RESOURCE_NEED[output]
+		var sat: int = int(Constants.get(info[1]))
+		_add_label(_satisfy_row, "Satisfies %d %s" % [sat, info[0]], font_size)
+		_satisfy_row.visible = true
+	else:
+		_satisfy_row.visible = false
 
 func _add_label(parent: HBoxContainer, text: String, font_size: int) -> void:
 	var lbl := Label.new()

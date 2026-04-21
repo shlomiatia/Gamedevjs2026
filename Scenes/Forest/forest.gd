@@ -1,9 +1,9 @@
 class_name Forest
 extends Node2D
 
-const TREE_COUNT := 30
-const TREE_AREA_WIDTH := 20
-const TREE_AREA_HEIGHT := 15
+const TREE_COUNT := 100
+const TREE_AREA_WIDTH := 42
+const TREE_AREA_HEIGHT := 23
 
 const TreeScene = preload("res://Scenes/Tree/Tree.tscn")
 
