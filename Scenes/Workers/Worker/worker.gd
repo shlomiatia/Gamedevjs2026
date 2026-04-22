@@ -1,6 +1,8 @@
 class_name Worker
 extends Node2D
 
+@export var stream: AudioStream
+
 signal died
 
 enum NeedType {FOOD = 0, DRINK = 1, CLOTHING = 2, TOOL = 3}
@@ -30,6 +32,7 @@ func setup(home: Node2D, map: Map, coordination_manager: Node) -> void:
     )
     _needs.needs_satisfied.connect(func(): get_parent().resume_work())
     _apply_building_colors(home)
+    $AudioStreamPlayer2D.stream = stream
 
 func _apply_building_colors(home: Node2D) -> void:
     var sprite := home.get_node_or_null("Building/Sprite2D") as Sprite2D
@@ -72,6 +75,10 @@ func set_working(val: bool) -> void:
 func _process(_delta: float) -> void:
     if _navigator == null or _anim == null:
         return
+    if is_satisfying_need() || !_working:
+        $AudioStreamPlayer2D.stop()
+    elif _working && !$AudioStreamPlayer2D.is_playing():
+        $AudioStreamPlayer2D.play()
     var facing := _navigator.get_facing()
     var prefix: String
     var flip := false

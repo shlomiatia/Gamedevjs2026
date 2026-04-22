@@ -2,7 +2,7 @@ class_name Builder
 extends Node2D
 
 
-enum State { IDLE, WAIT_FOR_RESOURCE_GO_HOME, WAIT_FOR_RESOURCE_IDLE, GO_TO_RESOURCE, GO_TO_SITE, GO_TO_BUILD, BUILD, GO_HOME }
+enum State {IDLE, WAIT_FOR_RESOURCE_GO_HOME, WAIT_FOR_RESOURCE_IDLE, GO_TO_RESOURCE, GO_TO_SITE, GO_TO_BUILD, BUILD, GO_HOME}
 
 var _state := State.IDLE
 var _target_hut = null
@@ -14,112 +14,112 @@ var _build_elapsed := 0.0
 var _build_res_type: int = CoordinationManager.ResourceType.PLANK
 
 func setup(home_hut: BuilderHut, map: Map, coordination_manager: Node) -> void:
-	_home_hut = home_hut
-	_map = map
-	_coordination_manager = coordination_manager
-	$Worker.setup(home_hut, map, coordination_manager)
-	$Worker.display_name = "Builder"
-	coordination_manager.register_builder(self)
-	$Worker.died.connect(func(): coordination_manager.deregister_builder(self))
+    _home_hut = home_hut
+    _map = map
+    _coordination_manager = coordination_manager
+    $Worker.setup(home_hut, map, coordination_manager)
+    $Worker.display_name = "Builder"
+    coordination_manager.register_builder(self )
+    $Worker.died.connect(func(): coordination_manager.deregister_builder(self ))
 
 func is_free() -> bool:
-	return _state == State.IDLE or _state == State.GO_HOME
+    return _state == State.IDLE or _state == State.GO_HOME
 
 func assign_build_task(target) -> void:
-	assert(is_free(), "assign_build_task called on a non-free builder")
-	_target_hut = target
-	_state = State.WAIT_FOR_RESOURCE_GO_HOME
-	_build_res_type = _target_hut.get("CONSTRUCTION_RESOURCE_TYPE") if _target_hut.get("CONSTRUCTION_RESOURCE_TYPE") != null else CoordinationManager.ResourceType.PLANK
-	_coordination_manager.queue_resource_collection(self, _build_res_type)
-	if _state == State.WAIT_FOR_RESOURCE_GO_HOME and not $Worker.is_satisfying_need():
-		$Worker.navigate_to($Worker.home_world_pos())
+    assert(is_free(), "assign_build_task called on a non-free builder")
+    _target_hut = target
+    _state = State.WAIT_FOR_RESOURCE_GO_HOME
+    _build_res_type = _target_hut.get("CONSTRUCTION_RESOURCE_TYPE") if _target_hut.get("CONSTRUCTION_RESOURCE_TYPE") != null else CoordinationManager.ResourceType.PLANK
+    _coordination_manager.queue_resource_collection(self , _build_res_type)
+    if _state == State.WAIT_FOR_RESOURCE_GO_HOME and not $Worker.is_satisfying_need():
+        $Worker.navigate_to($Worker.home_world_pos())
 
 func go_collect_resource(pile: ResourcePile) -> void:
-	_target_pile = pile
-	_state = State.GO_TO_RESOURCE
-	if not $Worker.is_satisfying_need():
-		$Worker.navigate_to(pile.global_position)
+    _target_pile = pile
+    _state = State.GO_TO_RESOURCE
+    if not $Worker.is_satisfying_need():
+        $Worker.navigate_to(pile.global_position)
 
 func resume_work() -> void:
-	match _state:
-		State.GO_TO_RESOURCE:
-			$Worker.navigate_to(_target_pile.global_position)
-		State.GO_TO_SITE:
-			$Worker.navigate_to(_site_world_pos())
-		State.BUILD, State.GO_TO_BUILD:
-			_state = State.GO_TO_BUILD
-			$Worker.navigate_to(_site_world_pos())
-		State.WAIT_FOR_RESOURCE_GO_HOME, State.WAIT_FOR_RESOURCE_IDLE, State.GO_HOME:
-			_state = State.WAIT_FOR_RESOURCE_GO_HOME
-			$Worker.navigate_to($Worker.home_world_pos())
+    match _state:
+        State.GO_TO_RESOURCE:
+            $Worker.navigate_to(_target_pile.global_position)
+        State.GO_TO_SITE:
+            $Worker.navigate_to(_site_world_pos())
+        State.BUILD, State.GO_TO_BUILD:
+            _state = State.GO_TO_BUILD
+            $Worker.navigate_to(_site_world_pos())
+        State.WAIT_FOR_RESOURCE_GO_HOME, State.WAIT_FOR_RESOURCE_IDLE, State.GO_HOME:
+            _state = State.WAIT_FOR_RESOURCE_GO_HOME
+            $Worker.navigate_to($Worker.home_world_pos())
 
 func _process(delta: float) -> void:
-	$Worker.set_working(_state == State.BUILD)
-	if $Worker.is_satisfying_need():
-		return
-	match _state:
-		State.WAIT_FOR_RESOURCE_GO_HOME:
-			if $Worker.tick_movement(delta):
-				_state = State.WAIT_FOR_RESOURCE_IDLE
-		State.GO_TO_RESOURCE, State.GO_TO_SITE, State.GO_TO_BUILD, State.GO_HOME:
-			if $Worker.tick_movement(delta):
-				_on_path_finished()
-		State.BUILD:
-			_do_build(delta)
+    $Worker.set_working(_state == State.BUILD)
+    if $Worker.is_satisfying_need():
+        return
+    match _state:
+        State.WAIT_FOR_RESOURCE_GO_HOME:
+            if $Worker.tick_movement(delta):
+                _state = State.WAIT_FOR_RESOURCE_IDLE
+        State.GO_TO_RESOURCE, State.GO_TO_SITE, State.GO_TO_BUILD, State.GO_HOME:
+            if $Worker.tick_movement(delta):
+                _on_path_finished()
+        State.BUILD:
+            _do_build(delta)
 
 func _site_world_pos() -> Vector2:
-	var tile_size := _map.get_tile_size()
-	var size_x: int = _target_hut.SIZE_X
-	var size_y: int = _target_hut.SIZE_Y
-	var top_left := Vector2i(
-		roundi(_target_hut.position.x / tile_size.x - size_x / 2.0),
-		roundi(_target_hut.position.y / tile_size.y) - size_y
-	)
-	var best := Vector2i(-1, -1)
-	var best_dist := INF
-	for x in range(top_left.x - 1, top_left.x + size_x + 1):
-		for y in range(top_left.y - 1, top_left.y + size_y + 1):
-			if x >= top_left.x and x < top_left.x + size_x and y >= top_left.y and y < top_left.y + size_y:
-				continue
-			var tile := Vector2i(x, y)
-			if _map.occupied_tiles.get(tile, 0) == Map.OccupiedType.BLOCK_WORKERS:
-				continue
-			var d := position.distance_to(_map.tile_to_world(tile))
-			if d < best_dist:
-				best_dist = d
-				best = tile
-	return _map.tile_to_world(best) if best != Vector2i(-1, -1) else _target_hut.position
+    var tile_size := _map.get_tile_size()
+    var size_x: int = _target_hut.SIZE_X
+    var size_y: int = _target_hut.SIZE_Y
+    var top_left := Vector2i(
+        roundi(_target_hut.position.x / tile_size.x - size_x / 2.0),
+        roundi(_target_hut.position.y / tile_size.y) - size_y
+    )
+    var best := Vector2i(-1, -1)
+    var best_dist := INF
+    for x in range(top_left.x - 1, top_left.x + size_x + 1):
+        for y in range(top_left.y - 1, top_left.y + size_y + 1):
+            if x >= top_left.x and x < top_left.x + size_x and y >= top_left.y and y < top_left.y + size_y:
+                continue
+            var tile := Vector2i(x, y)
+            if _map.occupied_tiles.get(tile, 0) == Map.OccupiedType.BLOCK_WORKERS:
+                continue
+            var d := position.distance_to(_map.tile_to_world(tile))
+            if d < best_dist:
+                best_dist = d
+                best = tile
+    return _map.tile_to_world(best) if best != Vector2i(-1, -1) else _target_hut.position
 
 func _on_path_finished() -> void:
-	match _state:
-		State.GO_TO_RESOURCE:
-			$Worker.carry_from_pile(_target_pile)
-			_target_pile = null
-			$Worker.navigate_to(_site_world_pos())
-			_state = State.GO_TO_SITE
-		State.GO_TO_SITE:
-			$Worker.drop().queue_free()
-			_state = State.BUILD
-			_build_elapsed = 0.0
-		State.GO_TO_BUILD:
-			_state = State.BUILD
-		State.GO_HOME:
-			_state = State.IDLE
-			_coordination_manager.notify_idle_builder(self)
+    match _state:
+        State.GO_TO_RESOURCE:
+            $Worker.carry_from_pile(_target_pile)
+            _target_pile = null
+            $Worker.navigate_to(_site_world_pos())
+            _state = State.GO_TO_SITE
+        State.GO_TO_SITE:
+            $Worker.drop().queue_free()
+            _state = State.BUILD
+            _build_elapsed = 0.0
+        State.GO_TO_BUILD:
+            _state = State.BUILD
+        State.GO_HOME:
+            _state = State.IDLE
+            _coordination_manager.notify_idle_builder(self )
 
 func _do_build(delta: float) -> void:
-	_build_elapsed += delta * 1000.0
-	var progress: float = clampf(_build_elapsed / Constants.build_duration_ms, 0.0, 1.0)
-	(_target_hut.get_node("Building") as BuildingComponent).set_construction_progress(progress)
-	if progress >= 1.0:
-		_finish_build()
+    _build_elapsed += delta * 1000.0
+    var progress: float = clampf(_build_elapsed / Constants.build_duration_ms, 0.0, 1.0)
+    (_target_hut.get_node("Building") as BuildingComponent).set_construction_progress(progress)
+    if progress >= 1.0:
+        _finish_build()
 
 func _finish_build() -> void:
-	_target_hut.complete_construction()
-	_target_hut = null
-	_state = State.IDLE
-	_coordination_manager.notify_construction_complete(_build_res_type)
-	_coordination_manager.notify_idle_builder(self)
-	if _state == State.IDLE:
-		_state = State.GO_HOME
-		$Worker.navigate_to($Worker.home_world_pos())
+    _target_hut.complete_construction()
+    _target_hut = null
+    _state = State.IDLE
+    _coordination_manager.notify_construction_complete(_build_res_type)
+    _coordination_manager.notify_idle_builder(self )
+    if _state == State.IDLE:
+        _state = State.GO_HOME
+        $Worker.navigate_to($Worker.home_world_pos())

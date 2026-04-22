@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://b07q1n5r8s4ua"]
+[gd_scene load_steps=4 format=3 uid="uid://b07q1n5r8s4ua"]
 
 [ext_resource type="Script" uid="uid://ckxkyx12ov10q" path="res://Scenes/Workers/Builder/builder.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://dgt4raq3utqpl" path="res://Scenes/Workers/Worker/Worker.tscn" id="2_worker"]
+[ext_resource type="AudioStream" uid="uid://c2q7pohr1xdxb" path="res://Audio/builder.wav" id="3_py7rw"]
 
 [node name="Builder" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Worker" parent="." instance=ExtResource("2_worker")]
+stream = ExtResource("3_py7rw")

@@ -262,3 +262,5 @@ sprite_frames = SubResource("frames")
 animation = &"down_walk"
 autoplay = "down_stand"
 frame_progress = 0.70053905
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
