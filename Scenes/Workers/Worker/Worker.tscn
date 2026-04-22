@@ -224,7 +224,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_3wvfg")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_f3edw")
+"texture": SubResource("AtlasTexture_126dh")
 }],
 "loop": true,
 "name": &"up_walk",
@@ -261,7 +261,6 @@ position = Vector2(0, -26)
 sprite_frames = SubResource("frames")
 animation = &"down_walk"
 autoplay = "down_stand"
-frame_progress = 0.70053905
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 max_distance = 750.0

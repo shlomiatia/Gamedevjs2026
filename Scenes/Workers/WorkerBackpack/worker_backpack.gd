@@ -17,6 +17,7 @@ func carry_from_pile(pile: ResourcePile, collector: Node) -> void:
 
 func drop() -> Node2D:
     assert(_carried_resource != null, "drop called when not carrying")
+    _carried_resource.show_behind_parent = false
     var resource := _carried_resource
     _carried_resource = null
     _outer.remove_child(resource)
