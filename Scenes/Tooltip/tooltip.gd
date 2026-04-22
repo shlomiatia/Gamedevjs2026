@@ -115,13 +115,50 @@ func hide_tooltip() -> void:
 func _process(_delta: float) -> void:
     if not _panel.visible:
         return
+
     var mouse := get_viewport().get_mouse_position()
     var vp_size := get_viewport().get_visible_rect().size
-    var sz := _panel.get_minimum_size()
-    _panel.position = Vector2(
-        clamp(mouse.x + 12.0, 0.0, vp_size.x - sz.x),
-        clamp(mouse.y - sz.y - 8.0, 0.0, vp_size.y - sz.y)
-    )
+
+    # Use size if available, fallback to minimum size
+    var sz := _panel.size
+    if sz == Vector2.ZERO:
+        sz = _panel.get_minimum_size()
+
+    var margin_x := 12.0
+    var margin_y := 8.0
+
+    var x: float
+    var y: float
+
+    # --- Horizontal ---
+    var space_right := vp_size.x - mouse.x
+    var space_left := mouse.x
+
+    if space_right >= sz.x + margin_x:
+        # Enough room on the right
+        x = mouse.x + margin_x
+    elif space_left >= sz.x + margin_x:
+        # Otherwise try left
+        x = mouse.x - sz.x - margin_x
+    else:
+        # Neither fits fully → clamp
+        x = clamp(mouse.x + margin_x, 0.0, vp_size.x - sz.x)
+
+    # --- Vertical ---
+    var space_above := mouse.y
+    var space_below := vp_size.y - mouse.y
+
+    if space_above >= sz.y + margin_y:
+        # Prefer above
+        y = mouse.y - sz.y - margin_y
+    elif space_below >= sz.y + margin_y:
+        # Otherwise below
+        y = mouse.y + margin_y
+    else:
+        # Neither fits fully → clamp
+        y = clamp(mouse.y - sz.y - margin_y, 0.0, vp_size.y - sz.y)
+
+    _panel.position = Vector2(x, y)
 
 func _populate(data: Dictionary, show_cost: bool) -> void:
     var font_size := 14 if show_cost else 11
