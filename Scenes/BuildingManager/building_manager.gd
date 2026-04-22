@@ -387,6 +387,8 @@ func _start_building(scene: PackedScene, size: Vector2i, tooltip_key: String) ->
     _active_tooltip_key = tooltip_key
     _building_mode = true
     _preview = scene.instantiate()
+    if _preview_has_mill():
+        _active_size.y = 2
     _spawn_parent.add_child(_preview)
     var data := _compute_placement_data(size)
     _valid_tiles = data[0]
@@ -512,13 +514,21 @@ func _update_arrow() -> void:
     var world_tl := inv * Vector2.ZERO
     var world_br := inv * vp_size
     var world_visible := Rect2(world_tl, world_br - world_tl)
+    var building_comp := _preview.get_node_or_null("Building") as BuildingComponent
+    var is_mill := building_comp != null and building_comp.has_mill
+    var is_mine := _preview is Mine
+    if is_mill:
+        _overlay.center_text = "Mills must be built next to the river."
+    elif is_mine:
+        _overlay.center_text = "Mines must be built next to the mountain."
+    else:
+        _overlay.center_text = ""
+        
     for tile in _valid_tiles:
         if world_visible.has_point(_map.tile_to_world(tile)):
             _overlay.set_arrow(Vector2.ZERO, false)
             return
-    var building_comp := _preview.get_node_or_null("Building") as BuildingComponent
-    var is_mill := building_comp != null and building_comp.has_mill
-    var is_mine := _preview is Mine
+    
     if is_mill:
         _overlay.set_arrow(Vector2.UP, true)
     elif is_mine:
@@ -546,13 +556,13 @@ func _compute_placement_data(size: Vector2i) -> Array:
     var half := Vector2(tile_size) * 0.5
     var bounds := _map.get_tile_bounds()
 
-    var building_comp := _preview.get_node_or_null("Building") as BuildingComponent
-    var is_mill := building_comp != null and building_comp.has_mill
+    var is_mill := _preview_has_mill()
     var is_mine := _preview is Mine
 
     var valid_rows: Array[int] = []
     if is_mill:
         valid_rows.append(Map.RIVER_ROW + 2)
+        valid_rows.append(Map.RIVER_ROW + 3)
     elif is_mine:
         var mine_top := Map.LEVEL_HEIGHT - 6 - size.y
         for i in size.y:
@@ -574,3 +584,7 @@ func _compute_placement_data(size: Vector2i) -> Array:
                 valid_tiles.append(tile)
 
     return [valid_tiles, invalid_rects]
+
+func _preview_has_mill() -> bool:
+    var building_comp := _preview.get_node_or_null("Building") as BuildingComponent
+    return building_comp != null and building_comp.has_mill
