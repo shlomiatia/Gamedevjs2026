@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://cbsr2knwjhmes"]
 
-[ext_resource type="Script" path="res://Scenes/Workers/Miller/miller.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://c2hxgosq1knmm" path="res://Scenes/Workers/Miller/miller.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://dgt4raq3utqpl" path="res://Scenes/Workers/Worker/Worker.tscn" id="2_worker"]
+[ext_resource type="AudioStream" uid="uid://oo2if6g7o1i0" path="res://Audio/mill.wav" id="3_5hl2e"]
 
 [node name="Miller" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Worker" parent="." instance=ExtResource("2_worker")]
+stream = ExtResource("3_5hl2e")

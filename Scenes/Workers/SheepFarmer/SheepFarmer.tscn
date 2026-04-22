@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://fsxcxm3ygcff"]
 
-[ext_resource type="Script" path="res://Scenes/Workers/SheepFarmer/sheep_farmer.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://dothd2npat4at" path="res://Scenes/Workers/SheepFarmer/sheep_farmer.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://dgt4raq3utqpl" path="res://Scenes/Workers/Worker/Worker.tscn" id="2_worker"]
+[ext_resource type="AudioStream" uid="uid://b0nyqkigu0tcj" path="res://Audio/shear.wav" id="3_4owva"]
 
 [node name="SheepFarmer" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Worker" parent="." instance=ExtResource("2_worker")]
+stream = ExtResource("3_4owva")

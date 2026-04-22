@@ -76,7 +76,10 @@ func _process(_delta: float) -> void:
     if _navigator == null or _anim == null:
         return
     if is_satisfying_need() || !_working:
-        $AudioStreamPlayer2D.stop()
+        var tween = create_tween()
+        tween.tween_property($AudioStreamPlayer2D, "volume_db", -80.0, 1.0)
+        tween.tween_callback($AudioStreamPlayer2D.stop)
+        tween.tween_property($AudioStreamPlayer2D, "volume_db", 0.0, 0)
     elif _working && !$AudioStreamPlayer2D.is_playing():
         $AudioStreamPlayer2D.play()
     var facing := _navigator.get_facing()

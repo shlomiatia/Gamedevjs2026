@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://cu3khg8v8eplt"]
 
-[ext_resource type="Script" path="res://Scenes/Workers/WheatFarmer/wheat_farmer.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://c8fly32gs41gd" path="res://Scenes/Workers/WheatFarmer/wheat_farmer.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://dgt4raq3utqpl" path="res://Scenes/Workers/Worker/Worker.tscn" id="2_worker"]
+[ext_resource type="AudioStream" uid="uid://b0nyqkigu0tcj" path="res://Audio/shear.wav" id="3_c6m1x"]
 
 [node name="WheatFarmer" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Worker" parent="." instance=ExtResource("2_worker")]
+stream = ExtResource("3_c6m1x")

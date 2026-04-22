@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://cusvdq7py32al"]
+[gd_scene load_steps=4 format=3 uid="uid://cusvdq7py32al"]
 
-[ext_resource type="Script" path="res://Scenes/Workers/AppleFarmer/apple_farmer.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://1k1b0tk720ba" path="res://Scenes/Workers/AppleFarmer/apple_farmer.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://dgt4raq3utqpl" path="res://Scenes/Workers/Worker/Worker.tscn" id="2_worker"]
+[ext_resource type="AudioStream" uid="uid://bdwgtkbwdaedh" path="res://Audio/pick.wav" id="3_yhdbg"]
 
 [node name="AppleFarmer" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Worker" parent="." instance=ExtResource("2_worker")]
+stream = ExtResource("3_yhdbg")

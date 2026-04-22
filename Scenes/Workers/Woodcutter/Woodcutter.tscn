@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://c6cs006bg01nw"]
+[gd_scene load_steps=4 format=3 uid="uid://c6cs006bg01nw"]
 
-[ext_resource type="Script" path="res://Scenes/Workers/Woodcutter/woodcutter.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://ccmu6juskaaeo" path="res://Scenes/Workers/Woodcutter/woodcutter.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://dgt4raq3utqpl" path="res://Scenes/Workers/Worker/Worker.tscn" id="2_worker"]
+[ext_resource type="AudioStream" uid="uid://4gx77wbt57qf" path="res://Audio/woodcutter.wav" id="3_4jga1"]
 
 [node name="Woodcutter" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Worker" parent="." instance=ExtResource("2_worker")]
+stream = ExtResource("3_4jga1")
