@@ -564,7 +564,7 @@ func _compute_placement_data(size: Vector2i) -> Array:
     for tx in range(bounds.position.x, bounds.end.x):
         for ty in range(bounds.position.y, bounds.end.y):
             var tile := Vector2i(tx, ty)
-            var invalid: bool = _map.occupied_tiles.get(tile, 0) == Map.OccupiedType.BLOCK_WORKERS
+            var invalid: bool = _map.occupied_tiles.has(tile)
             if not invalid and not valid_rows.is_empty():
                 invalid = ty not in valid_rows
             if invalid:
