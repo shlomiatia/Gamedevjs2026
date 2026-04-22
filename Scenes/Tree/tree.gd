@@ -14,6 +14,8 @@ func setup(map: Map, tile_pos: Vector2i) -> void:
 
 func remove_from_map() -> void:
     _map.occupied_tiles.erase(_tile_pos)
+    await create_tween().tween_property(self , "modulate:a", 0.0, 1.0).finished
+    queue_free()
 
 func _ready() -> void:
     $ApplesSprite.visible = has_apples

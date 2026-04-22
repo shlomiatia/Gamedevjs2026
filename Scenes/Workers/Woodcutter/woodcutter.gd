@@ -4,7 +4,7 @@ extends Node2D
 
 const LogScene = preload("res://Scenes/Resources/Log/Log.tscn")
 
-enum State { IDLE, GO_TO_TREE, CHOP, GO_HOME, DEPOSIT }
+enum State {IDLE, GO_TO_TREE, CHOP, GO_HOME, DEPOSIT}
 
 var _state := State.IDLE
 var _woodcutter_hut: WoodcutterHut = null
@@ -70,7 +70,6 @@ func _do_chop(delta: float) -> void:
 
 func _finish_chop() -> void:
     _forest.remove_tree(_target_tree_tile)
-    _target_tree.queue_free()
     _target_tree = null
     $Worker.carry(LogScene.instantiate() as Node2D)
     $Worker.navigate_to($Worker.home_world_pos())

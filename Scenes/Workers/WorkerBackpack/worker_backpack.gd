@@ -30,5 +30,5 @@ func update(prefix: String) -> void:
         return
     if prefix == "up":
         _carried_resource.show_behind_parent = true
-    elif prefix == "side":
+    else:
         _carried_resource.show_behind_parent = false
