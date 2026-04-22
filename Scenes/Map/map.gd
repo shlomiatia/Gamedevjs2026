@@ -113,9 +113,6 @@ func get_tile_bounds() -> Rect2i:
 func get_mouse_tile() -> Vector2i:
 	return _grass.get_mouse_tile()
 
-func find_grass_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -> Vector2i:
-	return _grass.find_grass_tile(near_pos, extra_occupied)
-
 func find_sheep_grass_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -> Vector2i:
 	return _grass.find_sheep_grass_tile(near_pos, extra_occupied)
 

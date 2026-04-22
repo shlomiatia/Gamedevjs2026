@@ -46,7 +46,7 @@ func start_grass_fade(tiles: Array[Vector2i], duration: float) -> void:
     var snapshot: Dictionary = {}
     for tile in tiles:
         snapshot[tile] = true
-        for offset: Vector2i in [Vector2i(0,-1), Vector2i(1,0), Vector2i(0,1), Vector2i(-1,0)]:
+        for offset: Vector2i in [Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1), Vector2i(-1, 0)]:
             var n := tile + offset
             if _eaten_tiles.has(n):
                 snapshot[n] = true
@@ -76,22 +76,6 @@ func eat_grass(tile: Vector2i) -> void:
         if _eaten_tiles.has(neighbor):
             _update_dirt_tile(neighbor)
 
-func find_grass_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -> Vector2i:
-    var start := _grass_layer.local_to_map(near_pos)
-    var bounds := _grass_layer.get_used_rect()
-    var queue: Array[Vector2i] = [start]
-    var visited: Dictionary = {start: true}
-    while not queue.is_empty():
-        var tile: Vector2i = queue.pop_front()
-        if not _occupied_tiles.has(tile) and not extra_occupied.has(tile) and _grass_layer.get_cell_atlas_coords(tile) == Vector2i(0, 0):
-            return tile
-        for offset: Vector2i in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
-            var neighbor := tile + offset
-            if not visited.has(neighbor) and bounds.has_point(neighbor):
-                visited[neighbor] = true
-                queue.append(neighbor)
-    return Vector2i(-1, -1)
-
 func find_sheep_grass_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -> Vector2i:
     var start := _grass_layer.local_to_map(near_pos)
     var bounds := _grass_layer.get_used_rect()
@@ -111,8 +95,8 @@ func find_sheep_grass_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -
 func _update_dirt_tile(tile: Vector2i) -> void:
     var mask := 0
     if _eaten_tiles.has(tile + Vector2i(0, -1)): mask |= 1
-    if _eaten_tiles.has(tile + Vector2i(1,  0)): mask |= 2
-    if _eaten_tiles.has(tile + Vector2i(0,  1)): mask |= 4
+    if _eaten_tiles.has(tile + Vector2i(1, 0)): mask |= 2
+    if _eaten_tiles.has(tile + Vector2i(0, 1)): mask |= 4
     if _eaten_tiles.has(tile + Vector2i(-1, 0)): mask |= 8
     if mask == 15:
         _grass_layer.erase_cell(tile)
@@ -121,19 +105,19 @@ func _update_dirt_tile(tile: Vector2i) -> void:
 
 func _dirt_tile_for_mask(mask: int) -> Vector2i:
     match mask:
-        0:  return Vector2i(5, 0)
-        1:  return Vector2i(2, 2)
-        2:  return Vector2i(3, 2)
-        4:  return Vector2i(2, 3)
-        8:  return Vector2i(3, 3)
-        3:  return Vector2i(0, 5)
-        5:  return Vector2i(1, 1)
-        6:  return Vector2i(0, 4)
-        9:  return Vector2i(1, 5)
+        0: return Vector2i(5, 0)
+        1: return Vector2i(2, 2)
+        2: return Vector2i(3, 2)
+        4: return Vector2i(2, 3)
+        8: return Vector2i(3, 3)
+        3: return Vector2i(0, 5)
+        5: return Vector2i(1, 1)
+        6: return Vector2i(0, 4)
+        9: return Vector2i(1, 5)
         10: return Vector2i(0, 1)
         12: return Vector2i(1, 4)
-        7:  return Vector2i(6, 2)
+        7: return Vector2i(6, 2)
         11: return Vector2i(5, 1)
         13: return Vector2i(4, 2)
         14: return Vector2i(5, 3)
-        _:  return Vector2i(1, 0)
+        _: return Vector2i(1, 0)

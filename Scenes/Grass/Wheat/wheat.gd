@@ -44,14 +44,14 @@ func find_ready_wheat_tile(near_pos: Vector2) -> Vector2i:
                 best = tile
     return best
 
-func find_wheat_planting_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -> Vector2i:
+func find_wheat_planting_tile(near_pos: Vector2) -> Vector2i:
     var start := _grass_layer.local_to_map(near_pos)
     var bounds := _grass_layer.get_used_rect()
     var queue: Array[Vector2i] = [start]
     var visited: Dictionary = {start: true}
     while not queue.is_empty():
         var tile: Vector2i = queue.pop_front()
-        if not _occupied_tiles.has(tile) and not extra_occupied.has(tile) and not _wheat_sprites.has(tile) and _grass_layer.get_cell_atlas_coords(tile) == Vector2i(0, 0):
+        if _occupied_tiles.get(tile, 0) != Map.OccupiedType.BLOCK_WORKERS and not _wheat_sprites.has(tile) and _grass_layer.get_cell_atlas_coords(tile) == Vector2i(0, 0):
             return tile
         for offset: Vector2i in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
             var neighbor := tile + offset

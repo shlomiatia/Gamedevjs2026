@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://dvovpbck2767e"]
+[gd_scene load_steps=3 format=3 uid="uid://dvovpbck2767e"]
 
-[ext_resource type="Script" path="res://Scenes/Forest/forest.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bdw82l5vpsh6y" path="res://Scenes/Forest/forest.gd" id="1_script"]
+[ext_resource type="AudioStream" uid="uid://d0iul4sycax8b" path="res://Audio/forest.wav" id="2_cqo21"]
 
 [node name="Forest" type="Node2D"]
 script = ExtResource("1_script")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_cqo21")
+autoplay = true
+max_distance = 680.0
