@@ -91,6 +91,8 @@ func deregister_builder(builder: Builder) -> void:
     _builders.erase(builder)
     if _builders.is_empty():
         game_over.emit()
+    elif builder._target_hut != null:
+        queue_construction(builder._target_hut)
 
 func register_worker(worker_node: Node2D) -> void:
     all_workers.append(worker_node)
@@ -116,6 +118,14 @@ func queue_construction(target: Node2D) -> void:
         builder.assign_build_task(target)
     else:
         _construction_queue.append(target)
+
+func prepend_construction(target: Node2D) -> void:
+    construction_queued.emit()
+    var builder := _find_closest_free_builder(target.position)
+    if builder != null:
+        builder.assign_build_task(target)
+    else:
+        _construction_queue.push_front(target)
 
 func cancel_construction(target: Node2D) -> void:
     if target in _construction_queue:

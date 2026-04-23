@@ -37,7 +37,7 @@ func _setup_navigation() -> void:
 	_nav_outer = PackedVector2Array([tl, Vector2(br.x, tl.y), br, Vector2(tl.x, br.y)])
 	_bake_nav_mesh()
 
-func add_nav_hole(hole: PackedVector2Array) -> void:
+func add_nav_hole(hole: PackedVector2Array) -> PackedVector2Array:
 	var nav_min_x: float = _nav_outer[0].x
 	var nav_max_x: float = _nav_outer[0].x
 	var nav_min_y: float = _nav_outer[0].y
@@ -68,12 +68,36 @@ func add_nav_hole(hole: PackedVector2Array) -> void:
 	var cy0: float = hy0 if hy0 > by0 else by0
 	var cy1: float = hy1 if hy1 < by1 else by1
 	if cx0 >= cx1 or cy0 >= cy1:
-		return
-	_nav_holes.append(PackedVector2Array([
+		return PackedVector2Array()
+	var clipped := PackedVector2Array([
 		Vector2(cx0, cy0), Vector2(cx0, cy1),
 		Vector2(cx1, cy1), Vector2(cx1, cy0)
-	]))
+	])
+	_nav_holes.append(clipped)
 	_bake_nav_mesh()
+	return clipped
+
+func remove_nav_hole(hole: PackedVector2Array) -> void:
+	if hole.is_empty():
+		return
+	var idx := _nav_holes.find(hole)
+	if idx >= 0:
+		_nav_holes.remove_at(idx)
+		_bake_nav_mesh()
+
+func clear_occupied_tiles_rect(top_left: Vector2i, size: Vector2i) -> void:
+	for dx in size.x:
+		for dy in size.y:
+			occupied_tiles.erase(Vector2i(top_left.x + dx, top_left.y + dy))
+
+func clear_occupied_ring(top_left: Vector2i, size: Vector2i) -> void:
+	for x in range(top_left.x - 1, top_left.x + size.x + 1):
+		for y in range(top_left.y - 1, top_left.y + size.y + 1):
+			var tile := Vector2i(x, y)
+			if x >= top_left.x and x < top_left.x + size.x and y >= top_left.y and y < top_left.y + size.y:
+				continue
+			if occupied_tiles.get(tile, 0) == OccupiedType.BLOCK_BUILDING:
+				occupied_tiles.erase(tile)
 
 func _bake_nav_mesh() -> void:
 	var nav_poly := NavigationPolygon.new()

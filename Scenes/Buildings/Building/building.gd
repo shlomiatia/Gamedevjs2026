@@ -2,11 +2,16 @@ class_name BuildingComponent
 extends Node2D
 
 const SPRITE_OFFSET_Y := -104.0
+const SIZE := Vector2i(5, 2)
 
 @export var has_mill: bool = false
 @export var building_name: String = ""
 @export var building_texture: Texture2D = null
 @export var building_material: Material = null
+
+var _map: Map = null
+var _top_left: Vector2i
+var _nav_hole: PackedVector2Array
 
 func _ready() -> void:
     $Fence/Label.text = building_name
@@ -62,8 +67,38 @@ func validate_placement(top_left: Vector2i, map: Map) -> bool:
 func get_output_pile() -> ResourcePile:
     return $OutputPile as ResourcePile
 
+func register_on_map(map: Map, top_left: Vector2i) -> void:
+    _map = map
+    _top_left = top_left
+    map.set_occupied_tiles_rect(top_left, SIZE, Map.OccupiedType.BLOCK_WORKERS)
+    map.set_occupied_ring(top_left, SIZE, Map.OccupiedType.BLOCK_BUILDING)
+    var ts := map.get_tile_size()
+    var hw := SIZE.x * ts.x * 0.5
+    var h := SIZE.y * ts.y
+    var obstacle := NavigationObstacle2D.new()
+    obstacle.avoidance_enabled = true
+    obstacle.vertices = PackedVector2Array([
+        Vector2(-hw, -h), Vector2(hw, -h), Vector2(hw, 0.0), Vector2(-hw, 0.0)
+    ])
+    get_parent().add_child(obstacle)
+    var p: Vector2 = (get_parent() as Node2D).position
+    var e := 4.0
+    _nav_hole = map.add_nav_hole(PackedVector2Array([
+        p + Vector2(-hw - e, -h - e), p + Vector2(-hw - e, e),
+        p + Vector2(hw + e, e), p + Vector2(hw + e, -h - e)
+    ]))
+
+func unregister_from_map() -> void:
+    if _map == null:
+        return
+    _map.clear_occupied_tiles_rect(_top_left, SIZE)
+    _map.clear_occupied_ring(_top_left, SIZE)
+    _map.remove_nav_hole(_nav_hole)
+    _map = null
+
 func _on_button_pressed() -> void:
     $Fence/Button.disabled = true
+    unregister_from_map()
     get_parent()._coordination_manager.cancel_construction(get_parent())
     get_parent().queue_free()
 
