@@ -7,7 +7,7 @@ signal worker_registered(count: int)
 signal worker_became_hungry
 signal construction_queued
 
-const WIN_WORKER_COUNT := 40
+const WIN_WORKER_COUNT := 30
 
 enum ResourceType {LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR, TOOL, MILK, CHEESE, WHEAT, FLOUR, BREAD, BEER}
 
@@ -65,15 +65,21 @@ func get_site_count_by_resource() -> Dictionary:
         ResourceType.PLANK: 0,
         ResourceType.BRICK: 0
     }
+
+    prints("get_site_count_by_resource.1", _construction_queue.size())
     
     for b in _construction_queue:
         var res_type = b.get("CONSTRUCTION_RESOURCE_TYPE")
         if res_type == null:
             res_type = ResourceType.PLANK
+
+        prints("get_site_count_by_resource.2", res_type)
             
         if counts.has(res_type):
+            prints("get_site_count_by_resource.3")
             counts[res_type] += 1
             
+    prints("get_site_count_by_resource.4", counts)
     return counts
 
 func register_builder(builder: Builder) -> void:

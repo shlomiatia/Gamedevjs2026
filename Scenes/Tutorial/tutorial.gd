@@ -73,7 +73,7 @@ func _build_steps() -> void:
     _steps = [
         _mc("Welcome to Millville!"),
         _me("Use WASD, arrows, or middle mouse button to pan the map.", "panned", Callable(), 2.0),
-        _mc("Your goal is to reach a population of 40."),
+        _mc("Your goal is to reach a population of 30."),
         _mc("You currently have none.", func(): return _hud.get_workers_rect()),
         _meu("Let's fix this by building a Builder Hut.", "builder_button_clicked",
             func(): return _building_manager.get_builder_button_rect()),

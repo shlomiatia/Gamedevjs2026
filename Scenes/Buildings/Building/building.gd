@@ -11,6 +11,7 @@ const SPRITE_OFFSET_Y := -104.0
 func _ready() -> void:
     $Fence/Label.text = building_name
     $Mill.visible = false
+    $Fence.visible = false
     if building_texture != null:
         $Sprite2D.texture = building_texture
     if building_material != null:
@@ -19,7 +20,8 @@ func _ready() -> void:
             $Mill.get_node("WatermillSprite").material = building_material
 
 func start_construction() -> void:
-    set_construction_progress(0.00)
+    $Fence.visible = true
+    set_construction_progress(0.0)
 
 func set_construction_progress(progress: float) -> void:
     var sprite: Sprite2D = $Sprite2D
