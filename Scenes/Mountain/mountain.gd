@@ -26,7 +26,6 @@ func setup(level_width: int, level_height: int, tile_size: Vector2i) -> void:
     y_sort_enabled = true
     var ore_half_h := OreTexture.get_height() / 2.0
     audio_player.position.y = (level_height - 5) * tile_size.y
-    print(audio_player.position.y)
     for row in range(level_height - 5, level_height + 1):
         for x in level_width:
             var tile_center := Vector2(

@@ -100,6 +100,12 @@ func queue_construction(target: Node2D) -> void:
     else:
         _construction_queue.append(target)
 
+func cancel_construction(target: Node2D) -> void:
+    if target in _construction_queue:
+        _construction_queue.erase(target)
+        var res_type: int = target.get("CONSTRUCTION_RESOURCE_TYPE") if target.get("CONSTRUCTION_RESOURCE_TYPE") != null else ResourceType.PLANK
+        notify_construction_complete(res_type)
+
 func notify_construction_complete(res_type: int) -> void:
     if res_type == ResourceType.BRICK:
         brick_sites = maxi(0, brick_sites - 1)

@@ -9,6 +9,7 @@ const SPRITE_OFFSET_Y := -104.0
 @export var building_material: Material = null
 
 func _ready() -> void:
+    $Fence/Label.text = building_name
     $Mill.visible = false
     if building_texture != null:
         $Sprite2D.texture = building_texture
@@ -18,7 +19,7 @@ func _ready() -> void:
             $Mill.get_node("WatermillSprite").material = building_material
 
 func start_construction() -> void:
-    set_construction_progress(0.01)
+    set_construction_progress(0.00)
 
 func set_construction_progress(progress: float) -> void:
     var sprite: Sprite2D = $Sprite2D
@@ -34,10 +35,15 @@ func set_construction_progress(progress: float) -> void:
     if has_mill:
         $Mill.visible = true
         $Mill.set_construction_progress(progress)
-
+    if progress > 0.0:
+        $Fence/Button.hide()
+        
 func complete_construction() -> void:
     $Sprite2D.region_enabled = false
     $Sprite2D.position = Vector2(0, SPRITE_OFFSET_Y)
+    var tween := create_tween()
+    tween.tween_property($Fence, "modulate:a", 0.0, 1.0)
+    tween.tween_callback($Fence.queue_free)
     if has_mill:
         $Mill.complete_construction()
 
@@ -55,3 +61,11 @@ func validate_placement(top_left: Vector2i, map: Map) -> bool:
 
 func get_output_pile() -> ResourcePile:
     return $OutputPile as ResourcePile
+
+
+func _on_button_pressed() -> void:
+    $Fence/Button.hide()
+    get_parent()._coordination_manager.cancel_construction(get_parent())
+    var tween := create_tween()
+    tween.tween_property($Fence, "modulate:a", 0.0, 1.0)
+    tween.tween_callback(get_parent().queue_free)
