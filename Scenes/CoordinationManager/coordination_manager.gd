@@ -66,20 +66,21 @@ func get_site_count_by_resource() -> Dictionary:
         ResourceType.BRICK: 0
     }
 
-    prints("get_site_count_by_resource.1", _construction_queue.size())
-    
     for b in _construction_queue:
         var res_type = b.get("CONSTRUCTION_RESOURCE_TYPE")
         if res_type == null:
             res_type = ResourceType.PLANK
 
-        prints("get_site_count_by_resource.2", res_type)
-            
         if counts.has(res_type):
-            prints("get_site_count_by_resource.3")
             counts[res_type] += 1
+
+    for b in _builders:
+        var builder := b as Builder
+        if builder != null and not builder.is_free():
+            var res_type = builder._build_res_type
+            if counts.has(res_type):
+                counts[res_type] += 1
             
-    prints("get_site_count_by_resource.4", counts)
     return counts
 
 func register_builder(builder: Builder) -> void:
