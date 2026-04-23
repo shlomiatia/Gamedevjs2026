@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dk6u8o6v23cvk" path="res://Scenes/Map/map.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://b1eg8a2ym8d0h" path="res://Scenes/Grass/Grass.tscn" id="2_grass"]
-[ext_resource type="PackedScene" path="res://Scenes/River/River.tscn" id="3_river"]
-[ext_resource type="PackedScene" path="res://Scenes/Mountain/Mountain.tscn" id="4_mountain"]
+[ext_resource type="PackedScene" uid="uid://do5c5rmflgb46" path="res://Scenes/River/River.tscn" id="3_river"]
+[ext_resource type="PackedScene" uid="uid://xivk405tt66r" path="res://Scenes/Mountain/Mountain.tscn" id="4_mountain"]
 
 [node name="Map" type="Node2D"]
 script = ExtResource("1_script")

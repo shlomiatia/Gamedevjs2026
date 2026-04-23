@@ -103,4 +103,6 @@ func _on_button_pressed() -> void:
     get_parent().queue_free()
 
 func remove_cancel_button() -> void:
-    $Fence/Button.queue_free()
+    var button := get_node_or_null("Fence/Button")
+    if button:
+        button.queue_free()

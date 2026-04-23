@@ -22,7 +22,7 @@ func setup(level_width: int, level_height: int, tile_size: Vector2i) -> void:
     _iron_mat = iron_inst.get_node("Sprite2D").material as ShaderMaterial
     iron_inst.free()
 
-    z_index = 100
+    z_index = 4
     y_sort_enabled = true
     var ore_half_h := OreTexture.get_height() / 2.0
     audio_player.position.y = (level_height - 5) * tile_size.y
