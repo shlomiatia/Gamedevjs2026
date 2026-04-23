@@ -2,8 +2,7 @@ extends Camera2D
 
 signal panned
 
-@export var camera_speed: float = 400.0
-@export var edge_margin: float = 40.0
+@export var camera_speed: float = 600.0
 
 var _drag_active := false
 var _drag_start := Vector2.ZERO
