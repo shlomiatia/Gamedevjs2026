@@ -3,6 +3,8 @@ extends Node2D
 
 signal building_button_pressed(key: String)
 signal building_placed(key: String)
+signal planks_dropdown_hovered
+signal food_section_hovered
 
 enum CostTier {FREE = 0, PLANK = 1, BRICK = 2}
 
@@ -45,6 +47,7 @@ var _overlay: PlacementOverlay = null
 
 var _build_builder_button: Button = null
 var _planks_trigger: Button = null
+var _food_section: Control = null
 var _popup_container: Control = null
 
 func setup(map: Map, coordination_manager: Node, forest: Forest) -> void:
@@ -221,6 +224,7 @@ func _build_construction_section(parent: HBoxContainer) -> void:
         
     ])
     _planks_trigger = _dropdown_pairs.back()[0]
+    _planks_trigger.mouse_entered.connect(func(): planks_dropdown_hovered.emit())
     _button_key_pairs.append(["Sawmill", planks_btns[0], CostTier.FREE, "Sawmill"])
     _button_key_pairs.append(["WoodcutterHut", planks_btns[1], CostTier.FREE, "Woodcutter"])
     
@@ -237,6 +241,8 @@ func _build_construction_section(parent: HBoxContainer) -> void:
 
 func _build_food_section(parent: HBoxContainer) -> void:
     var row := _make_section(parent, "res://Textures/food.png", "Food")
+    _food_section = row.get_parent()
+    _food_section.mouse_entered.connect(func(): food_section_hovered.emit())
 
     var apple_btn := _make_direct_btn("Apple Farm")
     apple_btn.focus_mode = Control.FOCUS_NONE
@@ -550,6 +556,9 @@ func get_builder_button_rect() -> Rect2:
 
 func get_woodcutter_sawmill_rect() -> Rect2:
     return _planks_trigger.get_global_rect()
+
+func get_food_section_rect() -> Rect2:
+    return _food_section.get_global_rect()
 
 func _compute_placement_data(size: Vector2i) -> Array:
     var tile_size := _map.get_tile_size()

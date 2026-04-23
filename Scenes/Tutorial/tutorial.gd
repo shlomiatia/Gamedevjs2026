@@ -8,12 +8,13 @@ const WAIT_STEP_DELAY := 0.
 var _steps: Array = []
 var _step: int = 0
 var _waiting_for_event: String = ""
-var _buffered_events: Dictionary = {}
+var _buffered_event: String = ""
 var _auto_timer: float = -1.0
 var _started: bool = false
 
 var _overlay: TutorialOverlay
 var _msg_label: Label
+var _hover_detector: Control = null
 
 var _coordination_manager: CoordinationManager
 var _building_manager: BuildingManager
@@ -70,7 +71,7 @@ func start() -> void:
 func _build_steps() -> void:
     _steps = [
         _mc("Welcome to Millville!"),
-        _me("Use WASD, arrows, or middle mouse button to pan the map.", "panned", Callable(), 2.0),
+        _me("Use WASD, arrows, or middle mouse button to pan the map.", "panned", Callable(), 2.0, true),
         _mc("Your goal is to reach a population of 30."),
         _mc("You currently have none.", func(): return _hud.get_workers_rect()),
         _meu("Let's fix this by building a Builder Hut.", "builder_button_clicked",
@@ -79,7 +80,7 @@ func _build_steps() -> void:
         _mc("Your first building is free, but others are not."),
         _mc("You have 2 planks.", func(): return _hud.get_planks_rect()),
         _mc("Use them to secure plank production."),
-        _mc("Build a woodcutter and a sawmill.",
+        _meu("Build a woodcutter and a sawmill.", "planks_hovered",
             func(): return _building_manager.get_woodcutter_sawmill_rect()),
         _w("worker_count:3"),
         _mc("You already have 3 workers!", func(): return _hud.get_workers_rect()),
@@ -87,20 +88,22 @@ func _build_steps() -> void:
         _mc("Without food and drink, your workers will die.", func(): return _hud.get_food_drink_rect()),
         _mc("Without clothes and tools, they will stop working.", func(): return _hud.get_clothing_tool_rect()),
         _mc("You have some time before it happens."),
-        _mc("Start food production early, and good luck!"),
+        _meu("Start food production early, and good luck!", "food_hovered",
+            func(): return _building_manager.get_food_section_rect(),
+            0.0, func(): return _building_manager.get_food_section_rect()),
     ]
 
 # Click to continue
 func _mc(text: String, highlight: Callable = Callable()) -> Dictionary:
     return {type = "message", text = text, advance = _CLICK, highlight = highlight}
 
-# Event advance — blocks UI input (e.g. pan the camera)
-func _me(text: String, event: String, highlight: Callable = Callable(), delay: float = 0.0) -> Dictionary:
-    return {type = "message", text = text, advance = _EVENT, event = event, highlight = highlight, pass_input = false, delay = delay}
+# Event advance — blocks UI input (e.g. pan the camera); buffered=true allows the event to be caught before this step is reached
+func _me(text: String, event: String, highlight: Callable = Callable(), delay: float = 0.0, buffered: bool = false) -> Dictionary:
+    return {type = "message", text = text, advance = _EVENT, event = event, highlight = highlight, pass_input = false, delay = delay, buffered = buffered}
 
 # Event advance — allows UI input so player can click a button
-func _meu(text: String, event: String, highlight: Callable = Callable(), delay: float = 0.0) -> Dictionary:
-    return {type = "message", text = text, advance = _EVENT, event = event, highlight = highlight, pass_input = true, delay = delay}
+func _meu(text: String, event: String, highlight: Callable = Callable(), delay: float = 0.0, hover_area: Callable = Callable()) -> Dictionary:
+    return {type = "message", text = text, advance = _EVENT, event = event, highlight = highlight, pass_input = true, delay = delay, hover_area = hover_area}
 
 func _w(event: String) -> Dictionary:
     return {type = "wait", event = event}
@@ -126,7 +129,22 @@ func _input(event: InputEvent) -> void:
     # Block everything else from reaching the game
     get_viewport().set_input_as_handled()
 
+func _setup_hover_detector(rect: Rect2, event_name: String) -> void:
+    _hover_detector = Control.new()
+    _hover_detector.process_mode = Node.PROCESS_MODE_ALWAYS
+    _hover_detector.position = rect.position
+    _hover_detector.size = rect.size
+    _hover_detector.mouse_filter = Control.MOUSE_FILTER_STOP
+    _hover_detector.mouse_entered.connect(func(): on_event(event_name))
+    add_child(_hover_detector)
+
+func _clear_hover_detector() -> void:
+    if _hover_detector:
+        _hover_detector.queue_free()
+        _hover_detector = null
+
 func _show_step() -> void:
+    _clear_hover_detector()
     if _step >= _steps.size():
         _finish()
         return
@@ -135,8 +153,6 @@ func _show_step() -> void:
         visible = false
         get_tree().paused = false
         _waiting_for_event = step.event
-        if _buffered_events.erase(_waiting_for_event):
-            _trigger_event_advance()
         return
 
     visible = true
@@ -151,17 +167,34 @@ func _show_step() -> void:
 
     if step.get("advance", "") == _EVENT:
         _waiting_for_event = step.get("event", "")
-        if _buffered_events.erase(_waiting_for_event):
+        if step.get("buffered", false) and _buffered_event == _waiting_for_event:
+            _buffered_event = ""
             _trigger_event_advance()
+            return
+        var hover_area: Callable = step.get("hover_area", Callable())
+        if hover_area.is_valid():
+            _setup_hover_detector(hover_area.call(), step.event)
 
 func on_event(event_name: String) -> void:
     if not _started:
         return
     if _waiting_for_event != event_name:
-        _buffered_events[event_name] = true
+        # Only buffer if the upcoming step marked itself as buffered
+        var next := _find_next_buffered_event()
+        if next == event_name:
+            _buffered_event = event_name
         return
     _waiting_for_event = ""
     _trigger_event_advance()
+
+func _find_next_buffered_event() -> String:
+    for i in range(_step, _steps.size()):
+        var s: Dictionary = _steps[i]
+        if s.type == "wait":
+            break
+        if s.get("buffered", false):
+            return s.get("event", "")
+    return ""
 
 func _trigger_event_advance() -> void:
     var delay: float = _steps[_step].get("delay", 0.0) if _step < _steps.size() else 0.0

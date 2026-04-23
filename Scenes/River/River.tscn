@@ -11,6 +11,7 @@ script = ExtResource("1_script")
 tile_set = ExtResource("2_tileset")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+process_mode = 3
 position = Vector2(0, 192)
 stream = ExtResource("3_sfoon")
 autoplay = true

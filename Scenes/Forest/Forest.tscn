@@ -7,6 +7,7 @@
 script = ExtResource("1_script")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+process_mode = 3
 stream = ExtResource("2_cqo21")
 autoplay = true
 max_distance = 680.0
