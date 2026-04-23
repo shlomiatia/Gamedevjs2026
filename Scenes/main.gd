@@ -21,7 +21,7 @@ func _on_game_won() -> void:
 func _ready() -> void:
 	var tile_size := _map.get_tile_size()
 	camera.setup(Vector2i(Map.LEVEL_WIDTH * tile_size.x, Map.LEVEL_HEIGHT * tile_size.y))
-	_forest.setup(_map, self)
+	_forest.setup(_map, self )
 	_building_manager.setup(_map, _coordination_manager, _forest)
 	_coordination_manager.game_over.connect(_on_game_over)
 	_coordination_manager.game_won.connect(_on_game_won)
@@ -41,21 +41,13 @@ func _ready() -> void:
 	_building_manager.building_button_pressed.connect(func(key: String):
 		if key == "BuilderHut":
 			_tutorial.on_event("builder_button_clicked")
-		elif key == "WoodcutterHut" or key == "Sawmill":
-			_tutorial.on_event("woodcutter_or_sawmill_clicked")
 	)
 	_building_manager.building_placed.connect(func(key: String):
 		_tutorial.on_event("building_placed:" + key)
 	)
-	_coordination_manager.construction_queued.connect(func():
-		_tutorial.on_event("construction_queued")
-	)
 	_coordination_manager.worker_registered.connect(func(count: int):
 		if count >= 3:
 			_tutorial.on_event("worker_count:3")
-	)
-	_coordination_manager.worker_became_hungry.connect(func():
-		_tutorial.on_event("hungry_worker")
 	)
 
 	_show_start_screen()

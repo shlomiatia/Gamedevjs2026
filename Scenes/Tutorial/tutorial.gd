@@ -15,8 +15,6 @@ var _started: bool = false
 var _overlay: TutorialOverlay
 var _msg_label: Label
 
-var _branch_appended: bool = false
-
 var _coordination_manager: CoordinationManager
 var _building_manager: BuildingManager
 var _hud: HUD
@@ -83,19 +81,13 @@ func _build_steps() -> void:
         _mc("Use them to secure plank production."),
         _mc("Build a woodcutter and a sawmill.",
             func(): return _building_manager.get_woodcutter_sawmill_rect()),
-        _w("construction_queued"),
-        _mc("You have 1 building site.", func(): return _hud.get_planks_rect()),
-        _mc("Your builder will take a plank and go build it."),
         _w("worker_count:3"),
-        _mc("You already have 3 people!", func(): return _hud.get_workers_rect()),
-        _mc("But they have needs."),
-        _mc("Without food and drink, workers will die.", func(): return _hud.get_food_drink_rect()),
+        _mc("You already have 3 workers!", func(): return _hud.get_workers_rect()),
+        _mc("But remember, they have needs."),
+        _mc("Without food and drink, your workers will die.", func(): return _hud.get_food_drink_rect()),
         _mc("Without clothes and tools, they will stop working.", func(): return _hud.get_clothing_tool_rect()),
         _mc("You have some time before it happens."),
-        _mc("Plan your town wisely!"),
-        _w("hungry_worker"),
-        _mc("You have a hungry worker!"),
-        # Branch appended dynamically in _advance()
+        _mc("Start food production early, and good luck!"),
     ]
 
 # Click to continue
@@ -182,21 +174,6 @@ func _trigger_event_advance() -> void:
 
 func _advance() -> void:
     _step += 1
-    if not _branch_appended and _step == _steps.size():
-        _branch_appended = true
-        var cm := _coordination_manager
-        var food := 0
-        for rt in [CoordinationManager.ResourceType.APPLE, CoordinationManager.ResourceType.CHEESE]:
-            for building in cm.buildings:
-                var pile: ResourcePile = building.get_pile_for_type(rt)
-                if pile != null:
-                    food += pile.get_child_count()
-        if food > 0:
-            _steps.append(_mc("But you also have %d food!" % food))
-            _steps.append(_mc("The worker will go eat."))
-        else:
-            _steps.append(_mc("But you have no food!"))
-            _steps.append(_mc("Build one of the food buildings!"))
     _show_step()
 
 func _finish() -> void:
