@@ -54,6 +54,8 @@ func setup(map: Map, coordination_manager: Node, forest: Forest) -> void:
     _map = map
     _coordination_manager = coordination_manager
     _forest = forest
+    if _overlay != null:
+        _overlay.setup(_map)
 
 func _ready() -> void:
     z_index = 10
@@ -398,7 +400,7 @@ func _start_building(scene: PackedScene, size: Vector2i, tooltip_key: String) ->
     _spawn_parent.add_child(_preview)
     var data := _compute_placement_data(size)
     _valid_tiles = data[0]
-    _overlay.show_rects(data[1])
+    _overlay.show_tiles(data[1])
     building_button_pressed.emit(tooltip_key)
 
 func _cancel_building() -> void:
@@ -460,7 +462,6 @@ func _process(_delta: float) -> void:
     if _building_mode:
         _update_preview()
         _update_arrow()
-        _overlay.queue_redraw()
     _update_dropdowns()
 
 func _update_dropdowns() -> void:
@@ -486,10 +487,7 @@ func _update_preview() -> void:
     var blocked: bool = _is_footprint_blocked(top_left) or not _preview.validate_placement(top_left, _map)
     _preview.position = _footprint_position(top_left)
     _preview.modulate = Color(1, 1, 1, 0.5)
-    var tile_size := _map.get_tile_size()
-    var half := Vector2(tile_size) * 0.5
-    var tl_world := _map.tile_to_world(top_left) - half
-    _overlay.set_footprint(Rect2(tl_world, Vector2(_active_size) * Vector2(tile_size)), not blocked)
+    _overlay.set_footprint(top_left, _active_size, not blocked)
 
 func _update_arrow() -> void:
     if _valid_tiles.is_empty():
@@ -542,8 +540,6 @@ func get_food_section_rect() -> Rect2:
     return _food_section.get_global_rect()
 
 func _compute_placement_data(size: Vector2i) -> Array:
-    var tile_size := _map.get_tile_size()
-    var half := Vector2(tile_size) * 0.5
     var bounds := _map.get_tile_bounds()
 
     var is_mill := _preview_has_mill()
@@ -558,7 +554,7 @@ func _compute_placement_data(size: Vector2i) -> Array:
         for i in size.y:
             valid_rows.append(mine_top + i)
 
-    var invalid_rects: Array[Rect2] = []
+    var invalid_tiles: Array[Vector2i] = []
     var valid_tiles: Array[Vector2i] = []
 
     for tx in range(bounds.position.x, bounds.end.x):
@@ -568,12 +564,11 @@ func _compute_placement_data(size: Vector2i) -> Array:
             if not invalid and not valid_rows.is_empty():
                 invalid = ty not in valid_rows
             if invalid:
-                var center := _map.tile_to_world(tile)
-                invalid_rects.append(Rect2(center - half, Vector2(tile_size)))
+                invalid_tiles.append(tile)
             else:
                 valid_tiles.append(tile)
 
-    return [valid_tiles, invalid_rects]
+    return [valid_tiles, invalid_tiles]
 
 func _preview_has_mill() -> bool:
     var building_comp := _preview.get_node_or_null("Building") as BuildingComponent
