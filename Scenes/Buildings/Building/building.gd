@@ -35,8 +35,6 @@ func set_construction_progress(progress: float) -> void:
     if has_mill:
         $Mill.visible = true
         $Mill.set_construction_progress(progress)
-    if progress > 0.0:
-        $Fence/Button.hide()
         
 func complete_construction() -> void:
     $Sprite2D.region_enabled = false
@@ -62,10 +60,10 @@ func validate_placement(top_left: Vector2i, map: Map) -> bool:
 func get_output_pile() -> ResourcePile:
     return $OutputPile as ResourcePile
 
-
 func _on_button_pressed() -> void:
-    $Fence/Button.hide()
+    $Fence/Button.disabled = true
     get_parent()._coordination_manager.cancel_construction(get_parent())
-    var tween := create_tween()
-    tween.tween_property($Fence, "modulate:a", 0.0, 1.0)
-    tween.tween_callback(get_parent().queue_free)
+    get_parent().queue_free()
+
+func remove_cancel_button() -> void:
+    $Fence/Button.queue_free()

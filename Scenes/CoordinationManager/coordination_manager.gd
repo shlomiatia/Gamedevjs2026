@@ -46,8 +46,6 @@ var all_workers: Array = []
 var _dead_count: int = 0
 var buildings: Array = []
 var _construction_queue: Array = []
-var plank_sites: int = 0
-var brick_sites: int = 0
 var _resource_queues: Dictionary = {}
 var _need_queues: Dictionary = {}
 
@@ -60,6 +58,23 @@ func _ready() -> void:
     _need_queues[Worker.NeedType.TOOL] = []
 
 # --- Builder / building registration ---
+
+func get_site_count_by_resource() -> Dictionary:
+    # Initialize your counts
+    var counts = {
+        ResourceType.PLANK: 0,
+        ResourceType.BRICK: 0
+    }
+    
+    for b in _construction_queue:
+        var res_type = b.get("CONSTRUCTION_RESOURCE_TYPE")
+        if res_type == null:
+            res_type = ResourceType.PLANK
+            
+        if counts.has(res_type):
+            counts[res_type] += 1
+            
+    return counts
 
 func register_builder(builder: Builder) -> void:
     _builders.append(builder)
@@ -89,11 +104,6 @@ var _hungry_signal_emitted := false
 
 func queue_construction(target: Node2D) -> void:
     construction_queued.emit()
-    var res_type: int = target.get("CONSTRUCTION_RESOURCE_TYPE") if target.get("CONSTRUCTION_RESOURCE_TYPE") != null else ResourceType.PLANK
-    if res_type == ResourceType.BRICK:
-        brick_sites += 1
-    else:
-        plank_sites += 1
     var builder := _find_closest_free_builder(target.position)
     if builder != null:
         builder.assign_build_task(target)
@@ -103,14 +113,7 @@ func queue_construction(target: Node2D) -> void:
 func cancel_construction(target: Node2D) -> void:
     if target in _construction_queue:
         _construction_queue.erase(target)
-        var res_type: int = target.get("CONSTRUCTION_RESOURCE_TYPE") if target.get("CONSTRUCTION_RESOURCE_TYPE") != null else ResourceType.PLANK
-        notify_construction_complete(res_type)
-
-func notify_construction_complete(res_type: int) -> void:
-    if res_type == ResourceType.BRICK:
-        brick_sites = maxi(0, brick_sites - 1)
-    else:
-        plank_sites = maxi(0, plank_sites - 1)
+        buildings.erase(target)
 
 func notify_idle_builder(builder: Builder) -> void:
     if _construction_queue.is_empty():

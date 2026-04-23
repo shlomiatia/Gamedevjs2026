@@ -71,7 +71,7 @@ func start() -> void:
 
 func _build_steps() -> void:
     _steps = [
-        _mc("Welcome to Logistictown!"),
+        _mc("Welcome to Millville!"),
         _me("Use WASD, arrows, or middle mouse button to pan the map.", "panned", Callable(), 2.0),
         _mc("Your goal is to reach a population of 40."),
         _mc("You currently have none.", func(): return _hud.get_workers_rect()),

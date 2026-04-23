@@ -28,6 +28,7 @@ func is_free() -> bool:
 func assign_build_task(target) -> void:
     assert(is_free(), "assign_build_task called on a non-free builder")
     _target_hut = target
+    (_target_hut.get_node("Building") as BuildingComponent).remove_cancel_button()
     _state = State.WAIT_FOR_RESOURCE_GO_HOME
     _build_res_type = _target_hut.get("CONSTRUCTION_RESOURCE_TYPE") if _target_hut.get("CONSTRUCTION_RESOURCE_TYPE") != null else CoordinationManager.ResourceType.PLANK
     _coordination_manager.queue_resource_collection(self , _build_res_type)
@@ -118,7 +119,6 @@ func _finish_build() -> void:
     _target_hut.complete_construction()
     _target_hut = null
     _state = State.IDLE
-    _coordination_manager.notify_construction_complete(_build_res_type)
     _coordination_manager.notify_idle_builder(self )
     if _state == State.IDLE:
         _state = State.GO_HOME

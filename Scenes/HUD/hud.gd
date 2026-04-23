@@ -47,23 +47,23 @@ func _ready() -> void:
     _gap(row1)
     _lbl_bricks = _icon_label(row1, load("res://Textures/brick.png"), ": 0/0")
 
-    _lbl_food     = _icon_label(row2, load("res://Textures/food.png"),   ": 0/0")
+    _lbl_food = _icon_label(row2, load("res://Textures/food.png"), ": 0/0")
     _gap(row2)
     var _drink_mat := ShaderMaterial.new()
     _drink_mat.shader = load("res://Shaders/pallete_swap.gdshader") as Shader
     _drink_mat.set_shader_parameter("original_0", Color(0.972549, 0.250980, 0.105882, 1))
-    _drink_mat.set_shader_parameter("replace_0",  Color(0, 0, 0, 0))
+    _drink_mat.set_shader_parameter("replace_0", Color(0, 0, 0, 0))
     _drink_mat.set_shader_parameter("original_1", Color(0.741176, 0.152941, 0.035294, 1))
-    _drink_mat.set_shader_parameter("replace_1",  Color(0, 0, 0, 0))
+    _drink_mat.set_shader_parameter("replace_1", Color(0, 0, 0, 0))
     _drink_mat.set_shader_parameter("original_2", Color(0.486275, 0.070588, 0.168627, 1))
-    _drink_mat.set_shader_parameter("replace_2",  Color(0, 0, 0, 0))
+    _drink_mat.set_shader_parameter("replace_2", Color(0, 0, 0, 0))
     _drink_mat.set_shader_parameter("original_3", Color(0.615686, 0.113725, 0.101961, 1))
-    _drink_mat.set_shader_parameter("replace_3",  Color(0, 0, 0, 0))
-    _lbl_drink    = _icon_label(row2, load("res://Textures/cider.png"),   ": 0/0", _drink_mat)
+    _drink_mat.set_shader_parameter("replace_3", Color(0, 0, 0, 0))
+    _lbl_drink = _icon_label(row2, load("res://Textures/cider.png"), ": 0/0", _drink_mat)
     _gap(row2)
     _lbl_clothing = _icon_label(row2, load("res://Textures/Clothes.png"), ": 0/0")
     _gap(row2)
-    _lbl_tool     = _icon_label(row2, load("res://Textures/tool.png"),    ": 0/0")
+    _lbl_tool = _icon_label(row2, load("res://Textures/tool.png"), ": 0/0")
 
 func _make_row() -> HBoxContainer:
     var row := HBoxContainer.new()
@@ -161,10 +161,12 @@ func _refresh() -> void:
                 total += pile.get_child_count()
         res[type] = total
 
+    var site_counts := cm.get_site_count_by_resource()
+
     _lbl_workers.text = " %d / %d" % [cm.all_workers.size(), CoordinationManager.WIN_WORKER_COUNT]
-    _lbl_planks.text  = ": %d/%d" % [res[R.PLANK], cm.plank_sites]
-    _lbl_bricks.text  = ": %d/%d" % [res[R.BRICK], cm.brick_sites]
-    _lbl_food.text     = ": %d/%d" % [res[R.APPLE] + res[R.CHEESE] + res[R.BREAD], hungry]
-    _lbl_drink.text    = ": %d/%d" % [res[R.CIDER] + res[R.MILK] + res[R.BEER],   thirsty]
+    _lbl_planks.text = ": %d/%d" % [res[R.PLANK], site_counts[R.PLANK]]
+    _lbl_bricks.text = ": %d/%d" % [res[R.BRICK], site_counts[R.BRICK]]
+    _lbl_food.text = ": %d/%d" % [res[R.APPLE] + res[R.CHEESE] + res[R.BREAD], hungry]
+    _lbl_drink.text = ": %d/%d" % [res[R.CIDER] + res[R.MILK] + res[R.BEER], thirsty]
     _lbl_clothing.text = ": %d/%d" % [res[R.CLOTHES], no_clothing]
-    _lbl_tool.text     = ": %d/%d" % [res[R.TOOL],    no_tool]
+    _lbl_tool.text = ": %d/%d" % [res[R.TOOL], no_tool]
