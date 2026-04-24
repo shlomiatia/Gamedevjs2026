@@ -44,12 +44,11 @@ var _coordination_manager: CoordinationManager = null
 @onready var _need_tool_icon: TextureRect   = $Content/Panel/VBox/GridRow/ToolsCol/ToolsNeedRow/ToolsNeedIcon
 @onready var _need_tool_lbl:  Label         = $Content/Panel/VBox/GridRow/ToolsCol/ToolsNeedRow/ToolsNeedLabel
 
-# Broken / unusable row (outside panel)
-@onready var _broken_row:          HBoxContainer = $Content/BrokenRow
-@onready var _broken_clothing:     Control       = $Content/BrokenRow/BrokenClothingGroup
-@onready var _broken_clothing_lbl: Label         = $Content/BrokenRow/BrokenClothingGroup/BrokenClothingLabel
-@onready var _broken_tool:         Control       = $Content/BrokenRow/BrokenToolGroup
-@onready var _broken_tool_lbl:     Label         = $Content/BrokenRow/BrokenToolGroup/BrokenToolLabel
+# Broken / unusable rows (inside clothing/tools columns)
+@onready var _broken_clothing_row: HBoxContainer = $Content/Panel/VBox/GridRow/ClothesCol/ClothesBrokenRow
+@onready var _broken_clothing_lbl: Label         = $Content/Panel/VBox/GridRow/ClothesCol/ClothesBrokenRow/BrokenClothingLabel
+@onready var _broken_tool_row:     HBoxContainer = $Content/Panel/VBox/GridRow/ToolsCol/ToolsBrokenRow
+@onready var _broken_tool_lbl:     Label         = $Content/Panel/VBox/GridRow/ToolsCol/ToolsBrokenRow/BrokenToolLabel
 
 func setup(coordination_manager: CoordinationManager) -> void:
 	_coordination_manager = coordination_manager
@@ -123,9 +122,8 @@ func _refresh() -> void:
 	_update_need(_need_clothing_row, _need_clothing_icon, _need_clothing_lbl, worn_clothing, total_workers)
 	_update_need(_need_tool_row,     _need_tool_icon,     _need_tool_lbl,     worn_tool,     total_workers)
 
-	_update_broken(_broken_clothing, _broken_clothing_lbl, no_clothing)
-	_update_broken(_broken_tool,     _broken_tool_lbl,     no_tool)
-	_broken_row.visible = no_clothing > 0 or no_tool > 0
+	_update_broken(_broken_clothing_row, _broken_clothing_lbl, no_clothing)
+	_update_broken(_broken_tool_row,     _broken_tool_lbl,     no_tool)
 
 func _update_need(row: HBoxContainer, icon: TextureRect, lbl: Label, count: int, total: int) -> void:
 	if count == 0:
@@ -138,9 +136,12 @@ func _update_need(row: HBoxContainer, icon: TextureRect, lbl: Label, count: int,
 	lbl.add_theme_color_override("font_color", color)
 	row.modulate = Color.WHITE
 
-func _update_broken(container: Control, lbl: Label, count: int) -> void:
-	container.visible = count > 0
+func _update_broken(row: HBoxContainer, lbl: Label, count: int) -> void:
+	if count == 0:
+		row.modulate = Color(1, 1, 1, 0)
+		return
 	lbl.text = "%d" % count
+	row.modulate = Color.WHITE
 
 func _make_drink_mat() -> ShaderMaterial:
 	var mat := ShaderMaterial.new()

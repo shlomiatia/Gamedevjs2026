@@ -15,9 +15,9 @@
 
 [sub_resource type="StyleBoxFlat" id="sub_panel"]
 content_margin_left = 10.0
-content_margin_top = 6.0
+content_margin_top = 10.0
 content_margin_right = 10.0
-content_margin_bottom = 6.0
+content_margin_bottom = 8.0
 bg_color = Color(0, 0, 0, 0.55)
 
 [sub_resource type="AtlasTexture" id="sub_worker"]
@@ -27,6 +27,7 @@ region = Rect2(0, 0, 32, 32)
 [node name="HUD" type="HBoxContainer"]
 anchors_preset = 10
 anchor_right = 1.0
+offset_top = 4.0
 mouse_filter = 2
 alignment = 1
 script = ExtResource("1_script")
@@ -95,6 +96,7 @@ theme_override_constants/separation = 0
 alignment = 1
 
 [node name="PlanksCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
+custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 2
@@ -120,7 +122,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 13
-text = " 0"
+text = "0"
 
 [node name="PlanksBotRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/PlanksCol"]
 layout_mode = 2
@@ -149,6 +151,7 @@ text = " 0"
 layout_mode = 2
 
 [node name="BricksCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
+custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 2
@@ -203,6 +206,7 @@ text = " 0"
 layout_mode = 2
 
 [node name="FoodCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
+custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 2
@@ -257,6 +261,7 @@ text = "0"
 layout_mode = 2
 
 [node name="DrinkCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
+custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 2
@@ -311,6 +316,7 @@ text = "0"
 layout_mode = 2
 
 [node name="ClothesCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
+custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 2
@@ -361,10 +367,47 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 13
 text = "0"
 
+[node name="ClothesBrokenRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/ClothesCol"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+tooltip_text = "Workers with no clothing (unusable)"
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="BrokenClothingStack" type="Control" parent="Content/Panel/VBox/GridRow/ClothesCol/ClothesBrokenRow"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+
+[node name="BrokenClothingWorker" type="TextureRect" parent="Content/Panel/VBox/GridRow/ClothesCol/ClothesBrokenRow/BrokenClothingStack"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = SubResource("sub_worker")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BrokenClothingStrike" type="TextureRect" parent="Content/Panel/VBox/GridRow/ClothesCol/ClothesBrokenRow/BrokenClothingStack"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("12_strike")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BrokenClothingLabel" type="Label" parent="Content/Panel/VBox/GridRow/ClothesCol/ClothesBrokenRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 13
+text = "0"
+
 [node name="Sep5" type="VSeparator" parent="Content/Panel/VBox/GridRow"]
 layout_mode = 2
 
 [node name="ToolsCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
+custom_minimum_size = Vector2(56, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 2
@@ -415,22 +458,18 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 13
 text = "0"
 
-[node name="BrokenRow" type="HBoxContainer" parent="Content"]
-visible = false
+[node name="ToolsBrokenRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/ToolsCol"]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 2
+tooltip_text = "Workers with no tools (broken/unusable)"
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="BrokenClothingGroup" type="HBoxContainer" parent="Content/BrokenRow"]
-layout_mode = 2
-tooltip_text = "Unusable clothing (workers with 0 clothing)"
-theme_override_constants/separation = 3
-
-[node name="BrokenClothingStack" type="Control" parent="Content/BrokenRow/BrokenClothingGroup"]
+[node name="BrokenToolStack" type="Control" parent="Content/Panel/VBox/GridRow/ToolsCol/ToolsBrokenRow"]
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 
-[node name="BrokenClothingWorker" type="TextureRect" parent="Content/BrokenRow/BrokenClothingGroup/BrokenClothingStack"]
+[node name="BrokenToolWorker" type="TextureRect" parent="Content/Panel/VBox/GridRow/ToolsCol/ToolsBrokenRow/BrokenToolStack"]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -438,7 +477,7 @@ texture = SubResource("sub_worker")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BrokenClothingStrike" type="TextureRect" parent="Content/BrokenRow/BrokenClothingGroup/BrokenClothingStack"]
+[node name="BrokenToolStrike" type="TextureRect" parent="Content/Panel/VBox/GridRow/ToolsCol/ToolsBrokenRow/BrokenToolStack"]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -446,45 +485,7 @@ texture = ExtResource("12_strike")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BrokenClothingLabel" type="Label" parent="Content/BrokenRow/BrokenClothingGroup"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
-text = "0"
-
-[node name="BrokenSpacer" type="Control" parent="Content/BrokenRow"]
-custom_minimum_size = Vector2(12, 0)
-layout_mode = 2
-
-[node name="BrokenToolGroup" type="HBoxContainer" parent="Content/BrokenRow"]
-layout_mode = 2
-tooltip_text = "Broken tools (workers with 0 tools)"
-theme_override_constants/separation = 3
-
-[node name="BrokenToolStack" type="Control" parent="Content/BrokenRow/BrokenToolGroup"]
-custom_minimum_size = Vector2(20, 20)
-layout_mode = 2
-
-[node name="BrokenToolWorker" type="TextureRect" parent="Content/BrokenRow/BrokenToolGroup/BrokenToolStack"]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-texture = SubResource("sub_worker")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="BrokenToolStrike" type="TextureRect" parent="Content/BrokenRow/BrokenToolGroup/BrokenToolStack"]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-texture = ExtResource("12_strike")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="BrokenToolLabel" type="Label" parent="Content/BrokenRow/BrokenToolGroup"]
+[node name="BrokenToolLabel" type="Label" parent="Content/Panel/VBox/GridRow/ToolsCol/ToolsBrokenRow"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
