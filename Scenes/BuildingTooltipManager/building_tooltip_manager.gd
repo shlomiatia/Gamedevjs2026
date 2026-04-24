@@ -39,11 +39,12 @@ func _ready() -> void:
     _tooltip = BuildingTooltip.new()
     add_child(_tooltip)
 
-func connect_button(button: Button, key: String) -> void:
+func connect_button(button: Button, key: String, warning_fn: Callable = Callable()) -> void:
     button.mouse_entered.connect(func():
         _btn_hide_pending = false
         _cancel_hover()
-        _tooltip.show_tooltip(TOOLTIP_DATA[key])
+        var warning: String = warning_fn.call() if warning_fn.is_valid() else ""
+        _tooltip.show_tooltip(TOOLTIP_DATA[key], true, warning)
     )
     button.mouse_exited.connect(func():
         _btn_hide_pending = true

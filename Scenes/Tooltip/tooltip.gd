@@ -57,6 +57,7 @@ var _name_label: Label
 var _cost_row: HBoxContainer
 var _action_row: HBoxContainer
 var _satisfy_row: HBoxContainer
+var _warning_label: Label
 
 func _ready() -> void:
     layer = 100
@@ -103,10 +104,16 @@ func _ready() -> void:
     _satisfy_row = HBoxContainer.new()
     _vbox.add_child(_satisfy_row)
 
+    _warning_label = Label.new()
+    _warning_label.add_theme_color_override("font_color", Color(0.9, 0.2, 0.2, 1))
+    _warning_label.add_theme_font_size_override("font_size", 13)
+    _warning_label.visible = false
+    _vbox.add_child(_warning_label)
+
     _panel.visible = false
 
-func show_tooltip(data: Dictionary, show_cost: bool = true) -> void:
-    _populate(data, show_cost)
+func show_tooltip(data: Dictionary, show_cost: bool = true, warning: String = "") -> void:
+    _populate(data, show_cost, warning)
     _panel.visible = true
 
 func hide_tooltip() -> void:
@@ -160,7 +167,7 @@ func _process(_delta: float) -> void:
 
     _panel.position = Vector2(x, y)
 
-func _populate(data: Dictionary, show_cost: bool) -> void:
+func _populate(data: Dictionary, show_cost: bool, warning: String = "") -> void:
     var font_size := 14 if show_cost else 11
     var icon_size := 20 if show_cost else 14
     var pad := 8 if show_cost else 5
@@ -222,6 +229,9 @@ func _populate(data: Dictionary, show_cost: bool) -> void:
         _satisfy_row.visible = true
     else:
         _satisfy_row.visible = false
+
+    _warning_label.text = warning
+    _warning_label.visible = warning != ""
 
 func _add_label(parent: HBoxContainer, text: String, font_size: int) -> void:
     var lbl := Label.new()
