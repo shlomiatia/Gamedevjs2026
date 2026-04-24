@@ -15,6 +15,7 @@ var _started: bool = false
 var _overlay: TutorialOverlay
 var _msg_label: Label
 var _hover_detector: Control = null
+var _click_player: AudioStreamPlayer = null
 
 var _coordination_manager: CoordinationManager
 var _building_manager: BuildingManager
@@ -62,6 +63,11 @@ func _build_ui() -> void:
     _msg_label.add_theme_constant_override("shadow_offset_y", 2)
     _msg_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
     add_child(_msg_label)
+
+    _click_player = AudioStreamPlayer.new()
+    _click_player.stream = load("res://Audio/click.mp3")
+    _click_player.process_mode = Node.PROCESS_MODE_ALWAYS
+    add_child(_click_player)
 
 func start() -> void:
     _step = 0
@@ -124,6 +130,8 @@ func _input(event: InputEvent) -> void:
     if event is InputEventMouseButton and (event as InputEventMouseButton).pressed \
             and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
         if _step < _steps.size() and _steps[_step].get("advance", "") == _CLICK:
+            if _click_player:
+                _click_player.play()
             call_deferred("_advance")
     # Block everything else from reaching the game
     get_viewport().set_input_as_handled()

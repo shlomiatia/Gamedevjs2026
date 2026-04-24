@@ -19,13 +19,14 @@ var _cinematic_active := false
 var _saved_position := Vector2.ZERO
 var _saved_zoom := Vector2.ONE
 
-func setup(level_pixel_size: Vector2i) -> void:
+func setup(level_pixel_size: Vector2i, top_offset: int = 0) -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	limit_left = 0
-	limit_top = 0
+	limit_top = top_offset
 	limit_right = level_pixel_size.x
 	limit_bottom = level_pixel_size.y
-	position = get_viewport_rect().size / 2
+	position = get_viewport_rect().size / 2 + Vector2(0, top_offset)
+	_clamp_position()
 
 func zoom_out_to_map(level_pixel_size: Vector2i, duration: float, on_complete: Callable = Callable()) -> void:
 	_cinematic_active = true

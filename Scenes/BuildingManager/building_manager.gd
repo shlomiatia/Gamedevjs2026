@@ -58,6 +58,9 @@ func setup(map: Map, coordination_manager: Node, forest: Forest) -> void:
     if _overlay != null:
         _overlay.setup(_map)
 
+func set_ui_visible(val: bool) -> void:
+    $UI.visible = val
+
 func _ready() -> void:
     z_index = 10
     _spawn_parent = get_parent() as Node2D

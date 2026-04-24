@@ -2,8 +2,8 @@ class_name Map
 extends Node2D
 
 const LEVEL_WIDTH := 100
-const LEVEL_HEIGHT := 40
-const RIVER_ROW := 4
+const LEVEL_HEIGHT := 57
+const RIVER_ROW := 21
 
 enum OccupiedType {BLOCK_BUILDING = 1, BLOCK_WORKERS = 2}
 

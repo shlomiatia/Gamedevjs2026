@@ -16,6 +16,7 @@ var _level_pixel_size: Vector2i
 var _win_overlay: Control
 
 func _on_game_over() -> void:
+    BuilderHut._placed_count = 0
     _game_over_ui.visible = true
 
     var center := CenterContainer.new()
@@ -64,6 +65,7 @@ func _on_game_over() -> void:
 
 func _on_game_won() -> void:
     _hud_layer.visible = false
+    _building_manager.set_ui_visible(false)
     camera.zoom_out_to_map(_level_pixel_size, 2.5, func():
         await get_tree().create_timer(1.5).timeout
         _show_win_overlay()
@@ -72,16 +74,23 @@ func _on_game_won() -> void:
 func _show_win_overlay() -> void:
     _game_won_ui.visible = true
 
-    _win_overlay = CenterContainer.new()
+    _win_overlay = Control.new()
     _win_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+    _win_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
     _win_overlay.modulate = Color(1.0, 1.0, 1.0, 0.0)
     _game_won_ui.add_child(_win_overlay)
 
     var panel := PanelContainer.new()
     var style := StyleBoxFlat.new()
     style.bg_color = Color.TRANSPARENT
-
     panel.add_theme_stylebox_override("panel", style)
+    panel.anchor_left = 0.5
+    panel.anchor_right = 0.5
+    panel.anchor_top = 0.0
+    panel.anchor_bottom = 0.0
+    panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
+    panel.grow_vertical = Control.GROW_DIRECTION_END
+    panel.offset_top = 20.0
     _win_overlay.add_child(panel)
 
     var vbox := VBoxContainer.new()
@@ -120,6 +129,7 @@ func _on_continue_playing() -> void:
         _game_won_ui.visible = false
         camera.zoom_in_from_map(2.0, func():
             _hud_layer.visible = true
+            _building_manager.set_ui_visible(true)
         )
     )
 
@@ -130,7 +140,8 @@ func _unhandled_input(event: InputEvent) -> void:
 func _ready() -> void:
     var tile_size := _map.get_tile_size()
     _level_pixel_size = Vector2i(Map.LEVEL_WIDTH * tile_size.x, Map.LEVEL_HEIGHT * tile_size.y)
-    camera.setup(_level_pixel_size)
+    var scenic_top_px := (Map.RIVER_ROW - 4) * tile_size.y
+    camera.setup(_level_pixel_size, scenic_top_px)
     _forest.setup(_map, self )
     _building_manager.setup(_map, _coordination_manager, _forest)
     _coordination_manager.game_over.connect(_on_game_over)

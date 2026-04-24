@@ -1,6 +1,7 @@
 class_name ResourcePile
 extends Node2D
 
+var capacity: int = -1
 var _reserved_by: Array = []
 var _coordination_manager: Node = null
 var _resource_type: int = -1

@@ -31,7 +31,13 @@ func setup(home: Node2D, map: Map, coordination_manager: Node) -> void:
         coordination_manager.deregister_worker(get_parent())
         (home.get_node("Building") as BuildingComponent).on_worker_died()
         died.emit()
+        var grave := Sprite2D.new()
+        grave.texture = load("res://Textures/grave.png")
+        var worker_pos: Vector2 = get_parent().global_position
+        var world := get_parent().get_parent()
         get_parent().queue_free()
+        grave.global_position = worker_pos
+        world.add_child(grave)
     )
     _needs.needs_satisfied.connect(func(): get_parent().resume_work())
     _apply_building_colors(home)
@@ -121,4 +127,5 @@ func is_carrying() -> bool:
     return _backpack.is_carrying()
 
 func is_output_full(pile: ResourcePile) -> bool:
-    return pile.get_child_count() >= Constants.output_pile_capacity
+    var cap := pile.capacity if pile.capacity > 0 else Constants.output_pile_capacity
+    return pile.get_child_count() >= cap

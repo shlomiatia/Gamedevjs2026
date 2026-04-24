@@ -31,6 +31,7 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 	_coordination_manager = coordination_manager
 	_wool_pile = $Building.get_output_pile()
 	_wool_pile.setup(coordination_manager, CoordinationManager.ResourceType.WOOL)
+	_wool_pile.capacity = 4
 	var tiles := map.find_building_spawn_tiles(position, Vector2i(SIZE_X, SIZE_Y), 3)
 	_spawn_pos = map.tile_to_world(tiles[0])
 	_wool_pile.reparent(spawn_parent)
@@ -38,6 +39,7 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 	_wool_pile.visible = false
 	_milk_pile = ResourcePileScene.instantiate() as ResourcePile
 	_milk_pile.setup(coordination_manager, CoordinationManager.ResourceType.MILK)
+	_milk_pile.capacity = 4
 	spawn_parent.add_child(_milk_pile)
 	_milk_pile.global_position = map.tile_to_world(tiles[2])
 	_milk_pile.visible = false
