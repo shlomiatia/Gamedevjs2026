@@ -3,7 +3,7 @@ extends Node2D
 
 const SIZE_X := 5
 const SIZE_Y := 2
-const BUILDING_NAME := "WoodcutterHut"
+const BUILDING_NAME := "Woodcutter"
 
 const WoodcutterScene = preload("res://Scenes/Workers/Woodcutter/Woodcutter.tscn")
 
@@ -33,13 +33,12 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, fores
 	_output_pile.global_position = map.tile_to_world(tiles[1])
 	_output_pile.visible = false
 	$Building.start_construction()
-	coordination_manager.queue_construction(self)
+	coordination_manager.queue_construction(self )
 
 func complete_construction() -> void:
 	$Building.complete_construction()
 	_output_pile.visible = true
 	var woodcutter := WoodcutterScene.instantiate() as Woodcutter
 	woodcutter.position = _spawn_pos
-	woodcutter.setup(self, _map, _forest, _coordination_manager)
+	woodcutter.setup(self , _map, _forest, _coordination_manager)
 	_spawn_parent.add_child(woodcutter)
-

@@ -3,7 +3,7 @@ extends Node2D
 
 const SIZE_X := 5
 const SIZE_Y := 2
-const BUILDING_NAME := "SheepFarm"
+const BUILDING_NAME := "Sheep Farm"
 
 const SheepFarmerScene = preload("res://Scenes/Workers/SheepFarmer/SheepFarmer.tscn")
 const SheepScene = preload("res://Scenes/Sheep/Sheep.tscn")
@@ -42,7 +42,7 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 	_milk_pile.global_position = map.tile_to_world(tiles[2])
 	_milk_pile.visible = false
 	$Building.start_construction()
-	coordination_manager.queue_construction(self)
+	coordination_manager.queue_construction(self )
 
 func complete_construction() -> void:
 	$Building.complete_construction()
@@ -56,5 +56,5 @@ func complete_construction() -> void:
 
 	var farmer := SheepFarmerScene.instantiate() as SheepFarmer
 	farmer.position = _spawn_pos
-	farmer.setup(self, _map, sheep, _spawn_parent, _coordination_manager, _wool_pile, _milk_pile)
+	farmer.setup(self , _map, sheep, _spawn_parent, _coordination_manager, _wool_pile, _milk_pile)
 	_spawn_parent.add_child(farmer)

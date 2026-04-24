@@ -43,6 +43,6 @@ output_resource_type = 8
 output_scene = ExtResource("4_coal")
 
 [node name="Building" parent="." instance=ExtResource("2_building")]
-building_name = "CoalMine"
+building_name = "Coal Mine"
 building_texture = ExtResource("3_mine")
 building_material = SubResource("ShaderMaterial_coal")

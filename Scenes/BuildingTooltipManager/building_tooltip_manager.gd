@@ -12,7 +12,7 @@ const TOOLTIP_DATA := {
     "WoodcutterHut": {"display_name": "Woodcutter", "cost": 1, "action": "produce", "output": [0]},
     "BuilderHut": {"display_name": "Builder", "cost": 1, "action": "train"},
     "Sawmill": {"display_name": "Sawmill", "cost": 1, "action": "convert", "inputs": [0], "output": [1]},
-    "AppleFarm": {"display_name": "Apple Farm", "cost": 1, "action": "produce", "output": [2]},
+    "AppleFarm": {"display_name": "Apple Picker", "cost": 1, "action": "produce", "output": [2]},
     "CiderMill": {"display_name": "Cider Mill", "cost": 1, "action": "convert", "inputs": [2], "output": [3]},
     "SheepFarm": {"display_name": "Sheep Farm", "cost": 1, "action": "produce", "output": [12, 4]},
     "WoolMill": {"display_name": "Wool Mill", "cost": 1, "action": "convert", "inputs": [4], "output": [5]},

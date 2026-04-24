@@ -3,7 +3,7 @@ extends Node2D
 
 const SIZE_X := 5
 const SIZE_Y := 2
-const BUILDING_NAME := "BuilderHut"
+const BUILDING_NAME := "Builder"
 
 const BuilderScene = preload("res://Scenes/Workers/Builder/Builder.tscn")
 const PlankScene = preload("res://Scenes/Resources/Plank/Plank.tscn")

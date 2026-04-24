@@ -3,7 +3,7 @@ extends Node2D
 
 const SIZE_X := 5
 const SIZE_Y := 2
-const BUILDING_NAME := "ClayKiln"
+const BUILDING_NAME := "Clay Kiln"
 const CONSTRUCTION_RESOURCE_TYPE := CoordinationManager.ResourceType.BRICK
 
 const KilnWorkerScene = preload("res://Scenes/Workers/KilnWorker/KilnWorker.tscn")
@@ -33,14 +33,14 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 	_output_pile.global_position = map.tile_to_world(tiles[1])
 	_output_pile.visible = false
 	$Building.start_construction()
-	coordination_manager.queue_construction(self)
+	coordination_manager.queue_construction(self )
 
 func complete_construction() -> void:
 	$Building.complete_construction()
 	_output_pile.visible = true
 	var worker := KilnWorkerScene.instantiate() as KilnWorker
 	worker.position = _spawn_pos
-	worker.setup(self, _map, _coordination_manager, BrickScene, CoordinationManager.ResourceType.CLAY, CoordinationManager.ResourceType.LOG, _output_pile, "Brick Maker")
+	worker.setup(self , _map, _coordination_manager, BrickScene, CoordinationManager.ResourceType.CLAY, CoordinationManager.ResourceType.LOG, _output_pile, "Brick Maker")
 	_spawn_parent.add_child(worker)
 
 func set_smoking(value: bool) -> void:

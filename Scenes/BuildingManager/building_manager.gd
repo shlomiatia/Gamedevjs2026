@@ -246,12 +246,12 @@ func _build_food_section(parent: HBoxContainer) -> void:
     _food_section = row.get_parent()
     _food_section.mouse_entered.connect(func(): food_section_hovered.emit())
 
-    var apple_btn := _make_direct_btn("Apple Farm")
+    var apple_btn := _make_direct_btn("Apple Picker")
     apple_btn.focus_mode = Control.FOCUS_NONE
     row.add_child(apple_btn)
     apple_btn.pressed.connect(func(): _start_building(AppleFarmScene, Vector2i(AppleFarm.SIZE_X, AppleFarm.SIZE_Y), "AppleFarm"))
     _tooltip_manager.connect_button(apple_btn, "AppleFarm")
-    _button_key_pairs.append(["AppleFarm", apple_btn, CostTier.PLANK, "Apple Farm"])
+    _button_key_pairs.append(["AppleFarm", apple_btn, CostTier.PLANK, "Apple Picker"])
 
     var cheese_btns := _make_dropdown(row, "res://Textures/cheese.png", CostTier.BRICK, [
         {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": "Woodcutter"},
@@ -265,7 +265,7 @@ func _build_food_section(parent: HBoxContainer) -> void:
     var bread_btns := _make_dropdown(row, "res://Textures/bread.png.png", CostTier.BRICK, [
         {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": "Woodcutter"},
         {"key": "Bakery", "scene": BakeryScene, "size_x": Bakery.SIZE_X, "size_y": Bakery.SIZE_Y, "text": "Bakery"},
-        {"key": "Gritsmill", "scene": GritsmillScene, "size_x": Gritsmill.SIZE_X, "size_y": Gritsmill.SIZE_Y, "text": "Gritsmill"},
+        {"key": "Gritsmill", "scene": GritsmillScene, "size_x": Gritsmill.SIZE_X, "size_y": Gritsmill.SIZE_Y, "text": "Flor Mill"},
         {"key": "WheatFarm", "scene": WheatFarmScene, "size_x": WheatFarm.SIZE_X, "size_y": WheatFarm.SIZE_Y, "text": "Wheat Farm"},
     ])
     _button_key_pairs.append(["WoodcutterHut", bread_btns[0], CostTier.FREE, "Woodcutter"])
@@ -301,10 +301,10 @@ func _build_drink_section(parent: HBoxContainer) -> void:
 
     var cider_btns := _make_dropdown(row, "res://Textures/cider.png", CostTier.PLANK, [
         {"key": "CiderMill", "scene": CiderMillScene, "size_x": CiderMill.SIZE_X, "size_y": CiderMill.SIZE_Y, "text": "Cider Mill"},
-        {"key": "AppleFarm", "scene": AppleFarmScene, "size_x": AppleFarm.SIZE_X, "size_y": AppleFarm.SIZE_Y, "text": "Apple Farm"},
+        {"key": "AppleFarm", "scene": AppleFarmScene, "size_x": AppleFarm.SIZE_X, "size_y": AppleFarm.SIZE_Y, "text": "Apple Picker"},
     ])
     _button_key_pairs.append(["CiderMill", cider_btns[0], CostTier.PLANK, "Cider Mill"])
-    _button_key_pairs.append(["AppleFarm", cider_btns[1], CostTier.PLANK, "Apple Farm"])
+    _button_key_pairs.append(["AppleFarm", cider_btns[1], CostTier.PLANK, "Apple Picker"])
 
     # Beer dropdown with beer-coloured cider icon
     var beer_btns := _make_dropdown(row, "res://Textures/beer.png", CostTier.BRICK, [

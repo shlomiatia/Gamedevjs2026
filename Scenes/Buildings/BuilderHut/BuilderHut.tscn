@@ -8,7 +8,7 @@
 script = ExtResource("1_script")
 
 [node name="Building" parent="." instance=ExtResource("2_building")]
-building_name = "BuilderHut"
+building_name = "Builder"
 
 [node name="BrickPile" parent="." instance=ExtResource("3_pile")]
 position = Vector2(-32, 16)

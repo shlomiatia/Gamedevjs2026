@@ -3,7 +3,7 @@ extends Node2D
 
 const SIZE_X := 5
 const SIZE_Y := 2
-const BUILDING_NAME := "WheatFarm"
+const BUILDING_NAME := "Wheat Farm"
 
 const WheatFarmerScene = preload("res://Scenes/Workers/WheatFarmer/WheatFarmer.tscn")
 
@@ -31,12 +31,12 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 	_output_pile.global_position = map.tile_to_world(tiles[1])
 	_output_pile.visible = false
 	$Building.start_construction()
-	coordination_manager.queue_construction(self)
+	coordination_manager.queue_construction(self )
 
 func complete_construction() -> void:
 	$Building.complete_construction()
 	_output_pile.visible = true
 	var farmer := WheatFarmerScene.instantiate() as WheatFarmer
 	farmer.position = _spawn_pos
-	farmer.setup(self, _map, _coordination_manager, _output_pile)
+	farmer.setup(self , _map, _coordination_manager, _output_pile)
 	_spawn_parent.add_child(farmer)

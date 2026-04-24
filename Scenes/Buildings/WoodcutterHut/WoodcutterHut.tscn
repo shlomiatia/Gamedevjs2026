@@ -17,5 +17,5 @@ shader_parameter/replace_2 = Color(0.388235, 0.231373, 0.247059, 1)
 script = ExtResource("1_script")
 
 [node name="Building" parent="." instance=ExtResource("2_building")]
-building_name = "WoodcutterHut"
+building_name = "Woodcutter"
 building_material = SubResource("ShaderMaterial_wood")

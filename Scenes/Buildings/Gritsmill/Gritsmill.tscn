@@ -1,22 +1,44 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3 uid="uid://bufvkrb0jn8cf"]
 
-[ext_resource type="Script" path="res://Scenes/Buildings/Gritsmill/gritsmill.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://csn70s3lephy6" path="res://Scenes/Buildings/Gritsmill/gritsmill.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://bap1qcvbb4owg" path="res://Scenes/Buildings/Building/Building.tscn" id="2_building"]
 [ext_resource type="Shader" uid="uid://b8yka2iqauytq" path="res://Shaders/pallete_swap.gdshader" id="3_shader"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wheat"]
 shader = ExtResource("3_shader")
+shader_parameter/is_disabled = false
 shader_parameter/original_0 = Color(0.537255, 0.623529, 0.4, 1)
 shader_parameter/original_1 = Color(0.380392, 0.521569, 0.352941, 1)
 shader_parameter/original_2 = Color(0.298039, 0.376471, 0.317647, 1)
-shader_parameter/replace_0 = Color(1.0, 0.878431, 0.545098, 1)
+shader_parameter/original_3 = Color(0, 0, 0, 1)
+shader_parameter/original_4 = Color(0, 0, 0, 1)
+shader_parameter/original_5 = Color(0, 0, 0, 1)
+shader_parameter/original_6 = Color(0, 0, 0, 1)
+shader_parameter/original_7 = Color(0, 0, 0, 1)
+shader_parameter/original_8 = Color(0, 0, 0, 1)
+shader_parameter/original_9 = Color(0, 0, 0, 1)
+shader_parameter/original_10 = Color(0, 0, 0, 1)
+shader_parameter/original_11 = Color(0, 0, 0, 1)
+shader_parameter/original_12 = Color(0, 0, 0, 1)
+shader_parameter/replace_0 = Color(1, 0.878431, 0.545098, 1)
 shader_parameter/replace_1 = Color(0.980392, 0.752941, 0.352941, 1)
 shader_parameter/replace_2 = Color(0.921569, 0.560784, 0.282353, 1)
+shader_parameter/replace_3 = Color(0, 0, 0, 1)
+shader_parameter/replace_4 = Color(0, 0, 0, 1)
+shader_parameter/replace_5 = Color(0, 0, 0, 1)
+shader_parameter/replace_6 = Color(0, 0, 0, 1)
+shader_parameter/replace_7 = Color(0, 0, 0, 1)
+shader_parameter/replace_8 = Color(0, 0, 0, 1)
+shader_parameter/replace_9 = Color(0, 0, 0, 1)
+shader_parameter/replace_10 = Color(0, 0, 0, 1)
+shader_parameter/replace_11 = Color(0, 0, 0, 1)
+shader_parameter/replace_12 = Color(0, 0, 0, 1)
+shader_parameter/modulate = Color(1, 1, 1, 1)
 
 [node name="Gritsmill" type="Node2D"]
 script = ExtResource("1_script")
 
 [node name="Building" parent="." instance=ExtResource("2_building")]
-building_name = "Gritsmill"
 has_mill = true
+building_name = "Flour Mill"
 building_material = SubResource("ShaderMaterial_wheat")

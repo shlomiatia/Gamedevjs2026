@@ -4,7 +4,7 @@ extends Node2D
 
 const AppleScene = preload("res://Scenes/Resources/Apple/Apple.tscn")
 
-enum State { IDLE, GO_TO_TREE, PICK, GO_HOME, DEPOSIT }
+enum State {IDLE, GO_TO_TREE, PICK, GO_HOME, DEPOSIT}
 
 var _state := State.IDLE
 var _apple_farm: AppleFarm = null
@@ -19,7 +19,7 @@ func setup(apple_farm: AppleFarm, map: Map, forest: Forest, coordination_manager
     _map = map
     _forest = forest
     $Worker.setup(apple_farm, map, coordination_manager)
-    $Worker.display_name = "Apple Farmer"
+    $Worker.display_name = "Apple Picker"
 
 func resume_work() -> void:
     match _state:
