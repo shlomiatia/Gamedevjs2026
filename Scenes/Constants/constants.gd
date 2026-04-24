@@ -13,11 +13,11 @@ var hunger_threshold := initial_hunger / 2.0
 var initial_thirst := 400.0
 var thirst_threshold := initial_thirst / 2.0
 
-# Clothing (blocks worker at 0, no threshold replenishment)
 var initial_clothing := 400.0
+var clothing_threshold := initial_clothing / 2.0
 
-# Tool (blocks worker at 0, no threshold replenishment)
 var initial_tool := 400.0
+var tool_threshold := initial_tool / 2.0
 
 # Resource satisfaction (how much each item fills a need)
 var apple_satisfaction := initial_hunger * 0.5

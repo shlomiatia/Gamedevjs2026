@@ -73,8 +73,6 @@ func _refresh() -> void:
     var worn_tool := 0
     var no_clothing := 0
     var no_tool := 0
-    var clothing_half := Constants.initial_clothing / 2.0
-    var tool_half := Constants.initial_tool / 2.0
 
     for entity in cm.all_workers:
         var wn := entity.get_node_or_null("Worker/WorkerNeeds") as WorkerNeeds
@@ -84,10 +82,10 @@ func _refresh() -> void:
             hungry += 1
         if wn.thirst < Constants.thirst_threshold:
             thirsty += 1
-        if wn.clothing < clothing_half && wn.clothing > 0.0:
+        if wn.clothing < Constants.clothing_threshold:
             worn_clothing += 1
         var tool_val := wn.get_need_value(Worker.NeedType.TOOL)
-        if tool_val < tool_half && tool_val > 0.0:
+        if tool_val < Constants.tool_threshold && tool_val > 0.0:
             worn_tool += 1
         if wn.clothing == 0.0:
             no_clothing += 1
