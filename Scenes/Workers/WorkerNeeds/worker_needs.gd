@@ -129,38 +129,3 @@ func _process(delta: float) -> void:
     if not _active_needs.is_empty():
         if _navigator.tick(delta):
             _finish_need_trip()
-
-    queue_redraw()
-
-func _need_color(ratio: float, high: Color, mid: Color, low: Color) -> Color:
-    return high if ratio > 0.5 else (mid if ratio > 0.25 else low)
-
-func _ds(font: Font, pos: Vector2, text: String, width: int, color: Color) -> void:
-    draw_string_outline(font, pos, text, HORIZONTAL_ALIGNMENT_LEFT, width, FONT_SIZE, 2, Color.BLACK)
-    draw_string(font, pos, text, HORIZONTAL_ALIGNMENT_LEFT, width, FONT_SIZE, color)
-
-func _draw() -> void:
-    var font := ThemeDB.fallback_font
-    var col_w := 16
-    var x0 := -col_w
-
-    if _mover != null:
-        var worker := _mover.get_node_or_null("Worker") as Worker
-        var label: String = worker.display_name if (worker != null and worker.display_name != "") else String(_mover.name)
-        _ds(font, Vector2(x0, NAME_Y), label, 64, Color.WHITE)
-
-    var hr := hunger / Constants.initial_hunger
-    _ds(font, Vector2(x0, NUM_Y), "%d" % int(hunger), col_w,
-        _need_color(hr, Color(0.25, 0.8, 0.25), Color(0.9, 0.7, 0.1), Color(0.9, 0.2, 0.2)))
-
-    var tr_ratio := thirst / Constants.initial_thirst
-    _ds(font, Vector2(x0 + col_w, NUM_Y), "%d" % int(thirst), col_w,
-        _need_color(tr_ratio, Color(0.2, 0.6, 0.9), Color(0.9, 0.8, 0.2), Color(0.9, 0.3, 0.1)))
-
-    var cr := clothing / Constants.initial_clothing
-    _ds(font, Vector2(x0, NUM_Y - FONT_SIZE - 2), "%d" % int(clothing), col_w,
-        _need_color(cr, Color(0.7, 0.3, 0.9), Color(0.9, 0.7, 0.1), Color(0.9, 0.2, 0.2)))
-
-    var tool_r := _tool / Constants.initial_tool
-    _ds(font, Vector2(x0 + col_w, NUM_Y - FONT_SIZE - 2), "%d" % int(_tool), col_w,
-        _need_color(tool_r, Color(0.8, 0.6, 0.2), Color(0.9, 0.7, 0.1), Color(0.9, 0.2, 0.2)))
