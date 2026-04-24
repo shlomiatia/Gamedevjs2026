@@ -30,6 +30,7 @@ func resume_work() -> void:
 
 func _process(delta: float) -> void:
 	$Worker.set_working(_state == State.HARVEST)
+	$Worker.set_anim_working(_state == State.PLANT or _state == State.HARVEST)
 	if $Worker.is_satisfying_need():
 		return
 	match _state:

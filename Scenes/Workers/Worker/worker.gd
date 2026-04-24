@@ -13,6 +13,7 @@ var _needs: WorkerNeeds = null
 var _backpack: WorkerBackpack = null
 var _anim: AnimatedSprite2D = null
 var _working := false
+var _anim_working := false
 var display_name: String = ""
 
 func setup(home: Node2D, map: Map, coordination_manager: Node) -> void:
@@ -74,6 +75,9 @@ func set_working(val: bool) -> void:
     _working = val
     _needs.set_working(val)
 
+func set_anim_working(val: bool) -> void:
+    _anim_working = val
+
 func set_uses_tools(val: bool) -> void:
     _needs.uses_tools = val
 
@@ -97,7 +101,7 @@ func _process(_delta: float) -> void:
         prefix = "up"
     else:
         prefix = "down"
-    var suffix := "work" if (_working and not _needs.is_satisfying_need()) else ("walk" if _navigator.is_moving() && !_needs.is_waiting_for_need() else "stand")
+    var suffix := "work" if ((_working or _anim_working) and not _needs.is_satisfying_need()) else ("walk" if _navigator.is_moving() && !_needs.is_waiting_for_need() else "stand")
     var anim_name := prefix + "_" + suffix
     if _anim.animation != anim_name:
         _anim.play(anim_name)
