@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://ckrahtg4gj62a"]
+[gd_scene load_steps=16 format=3 uid="uid://ckrahtg4gj62a"]
 
 [ext_resource type="Script" uid="uid://bwvit6y44rljj" path="res://Scenes/HUD/hud.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cmysa80q0ep88" path="res://Textures/worker.png" id="2_worker"]
@@ -17,17 +17,25 @@
 content_margin_left = 10.0
 content_margin_top = 10.0
 content_margin_right = 10.0
-content_margin_bottom = 8.0
+content_margin_bottom = 10.0
 bg_color = Color(0, 0, 0, 0.55)
 
 [sub_resource type="AtlasTexture" id="sub_worker"]
 atlas = ExtResource("2_worker")
 region = Rect2(0, 6, 32, 32)
 
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_mattb"]
+content_margin_left = 0.0
+content_margin_top = 4.0
+content_margin_right = 0.0
+content_margin_bottom = 4.0
+color = Color(0.49803922, 0.49803922, 0.49803922, 1)
+vertical = true
+
 [node name="HUD" type="HBoxContainer"]
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 4.0
+offset_bottom = 106.0
 mouse_filter = 2
 alignment = 1
 script = ExtResource("1_script")
@@ -43,7 +51,6 @@ theme_override_styles/panel = SubResource("sub_panel")
 
 [node name="VBox" type="VBoxContainer" parent="Content/Panel"]
 layout_mode = 2
-theme_override_constants/separation = 4
 
 [node name="WorkersRow" type="HBoxContainer" parent="Content/Panel/VBox"]
 layout_mode = 2
@@ -92,17 +99,18 @@ text = " 0"
 
 [node name="GridRow" type="HBoxContainer" parent="Content/Panel/VBox"]
 layout_mode = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 5
 alignment = 1
 
 [node name="PlanksCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
-custom_minimum_size = Vector2(56, 0)
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 2
+theme_override_constants/separation = 10
 
 [node name="PlanksTopRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/PlanksCol"]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -122,10 +130,11 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 13
-text = "0"
+text = " 0"
 
 [node name="PlanksBotRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/PlanksCol"]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -149,15 +158,17 @@ text = " 0"
 
 [node name="Sep1" type="VSeparator" parent="Content/Panel/VBox/GridRow"]
 layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_mattb")
 
 [node name="BricksCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
-custom_minimum_size = Vector2(56, 0)
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 2
+theme_override_constants/separation = 10
 
 [node name="BricksTopRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/BricksCol"]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -181,6 +192,7 @@ text = " 0"
 
 [node name="BricksBotRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/BricksCol"]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -206,13 +218,14 @@ text = " 0"
 layout_mode = 2
 
 [node name="FoodCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
-custom_minimum_size = Vector2(56, 0)
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 2
+theme_override_constants/separation = 10
 
 [node name="FoodTopRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/FoodCol"]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -237,6 +250,7 @@ text = " 0"
 [node name="FoodNeedRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/FoodCol"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 tooltip_text = "Hungry workers (below 50% hunger)"
 theme_override_constants/separation = 0
 alignment = 1
@@ -261,13 +275,14 @@ text = "0"
 layout_mode = 2
 
 [node name="DrinkCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
-custom_minimum_size = Vector2(56, 0)
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 2
+theme_override_constants/separation = 10
 
 [node name="DrinkTopRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/DrinkCol"]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -292,6 +307,7 @@ text = " 0"
 [node name="DrinkNeedRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/DrinkCol"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 tooltip_text = "Thirsty workers (below 50% thirst)"
 theme_override_constants/separation = 0
 alignment = 1
@@ -310,19 +326,20 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 13
-text = "0"
+text = " 0"
 
 [node name="Sep4" type="VSeparator" parent="Content/Panel/VBox/GridRow"]
 layout_mode = 2
 
 [node name="ClothesCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
-custom_minimum_size = Vector2(56, 0)
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 2
+theme_override_constants/separation = 10
 
 [node name="ClothesTopRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/ClothesCol"]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -347,6 +364,7 @@ text = " 0"
 [node name="ClothesNeedRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/ClothesCol"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 tooltip_text = "Workers with worn clothing (below 50%)"
 theme_override_constants/separation = 0
 alignment = 1
@@ -370,6 +388,7 @@ text = "0"
 [node name="ClothesBrokenRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/ClothesCol"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 tooltip_text = "Workers with no clothing (unusable)"
 theme_override_constants/separation = 0
 alignment = 1
@@ -382,7 +401,7 @@ layout_mode = 2
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-texture = SubResource("sub_worker")
+texture = ExtResource("10_clothes")
 expand_mode = 1
 stretch_mode = 5
 
@@ -407,13 +426,14 @@ text = "0"
 layout_mode = 2
 
 [node name="ToolsCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
-custom_minimum_size = Vector2(56, 0)
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_constants/separation = 2
+theme_override_constants/separation = 10
 
 [node name="ToolsTopRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/ToolsCol"]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -473,7 +493,7 @@ layout_mode = 2
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-texture = SubResource("sub_worker")
+texture = ExtResource("11_tool")
 expand_mode = 1
 stretch_mode = 5
 

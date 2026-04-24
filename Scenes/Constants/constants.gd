@@ -7,7 +7,7 @@ var sheep_follow_stop_distance := 16.0
 
 # Hunger
 var initial_hunger := 400.0
-var hunger_threshold := initial_hunger / 2.0
+var hunger_threshold := initial_hunger
 
 # Thirst
 var initial_thirst := 400.0
