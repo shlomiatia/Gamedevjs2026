@@ -35,7 +35,9 @@ func tick(delta: float) -> bool:
 	return _agent.is_navigation_finished()
 
 func is_moving() -> bool:
-	return not _agent.is_navigation_finished()
+	if _agent.is_navigation_finished():
+		return false
+	return _agent.get_next_path_position().distance_squared_to(_mover.position) > 0.25
 
 func get_facing() -> Vector2:
 	return _facing

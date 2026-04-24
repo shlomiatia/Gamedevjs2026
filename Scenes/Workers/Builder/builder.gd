@@ -50,8 +50,10 @@ func resume_work() -> void:
         State.BUILD, State.GO_TO_BUILD:
             _state = State.GO_TO_BUILD
             $Worker.navigate_to(_site_world_pos())
-        State.WAIT_FOR_RESOURCE_GO_HOME, State.WAIT_FOR_RESOURCE_IDLE, State.GO_HOME:
+        State.WAIT_FOR_RESOURCE_GO_HOME, State.WAIT_FOR_RESOURCE_IDLE:
             _state = State.WAIT_FOR_RESOURCE_GO_HOME
+            $Worker.navigate_to($Worker.home_world_pos())
+        State.GO_HOME:
             $Worker.navigate_to($Worker.home_world_pos())
 
 func _process(delta: float) -> void:
