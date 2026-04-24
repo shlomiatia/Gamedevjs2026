@@ -276,7 +276,7 @@ func _build_food_section(parent: HBoxContainer) -> void:
     ])
     _button_key_pairs.append(["WoodcutterHut", bread_btns[0], CostTier.FREE, "Woodcutter"])
     _button_key_pairs.append(["Bakery", bread_btns[1], CostTier.BRICK, "Bakery"])
-    _button_key_pairs.append(["Gritsmill", bread_btns[2], CostTier.PLANK, "Gritsmill"])
+    _button_key_pairs.append(["Gritsmill", bread_btns[2], CostTier.PLANK, "Flour Mill"])
     _button_key_pairs.append(["WheatFarm", bread_btns[3], CostTier.PLANK, "Wheat Farm"])
 
 func _build_drink_section(parent: HBoxContainer) -> void:

@@ -123,6 +123,10 @@ func _on_continue_playing() -> void:
         )
     )
 
+func _unhandled_input(event: InputEvent) -> void:
+    if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F1:
+        _coordination_manager.debug_dump()
+
 func _ready() -> void:
     var tile_size := _map.get_tile_size()
     _level_pixel_size = Vector2i(Map.LEVEL_WIDTH * tile_size.x, Map.LEVEL_HEIGHT * tile_size.y)

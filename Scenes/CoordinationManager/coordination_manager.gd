@@ -262,3 +262,79 @@ func notify_tool_broken(worker_name: String) -> void:
 
 func notify_clothes_unusable(worker_name: String) -> void:
     worker_clothes_unusable.emit(worker_name)
+
+# --- Debug ---
+
+func debug_dump() -> void:
+    var out: PackedStringArray = []
+    out.append("=== DEBUG DUMP ===")
+    out.append("Workers (%d):" % all_workers.size())
+    for wnode in all_workers:
+        out.append_array(_worker_debug_lines(wnode))
+    out.append("Builders (%d):" % _builders.size())
+    for b in _builders:
+        out.append_array(_builder_debug_lines(b as Builder))
+    out.append("Construction queue (%d):" % _construction_queue.size())
+    for hut in _construction_queue:
+        var bname: String = str(hut.get("BUILDING_NAME")) if hut.get("BUILDING_NAME") != null else hut.name
+        out.append("  %s @ %s" % [bname, str(Vector2i(hut.position))])
+    out.append("Resource queues (workers waiting):")
+    for rt: int in _resource_queues:
+        var q: Array = _resource_queues[rt]
+        if not q.is_empty():
+            out.append("  %s: %d" % [ResourceType.keys()[rt], q.size()])
+    out.append("Need queues (workers waiting):")
+    for nt: int in _need_queues:
+        var q: Array = _need_queues[nt]
+        if not q.is_empty():
+            out.append("  %s: %d" % [Worker.NeedType.keys()[nt], q.size()])
+    out.append("==================")
+    print("\n".join(out))
+
+func _worker_debug_lines(wnode: Node2D) -> PackedStringArray:
+    var w := wnode.get_node_or_null("Worker") as Worker
+    var needs := wnode.get_node_or_null("Worker/WorkerNeeds") as WorkerNeeds
+    var nav := wnode.get_node_or_null("Worker/WorkerNavigator") as WorkerNavigator
+    var label: String = w.display_name if w != null else wnode.name
+    var out: PackedStringArray = []
+    out.append("  [%s] pos=%s  moving=%s" % [
+        label,
+        str(Vector2i(wnode.position)),
+        str(nav.is_moving()) if nav != null else "?",
+    ])
+    if needs != null:
+        out.append("    h=%.0f t=%.0f c=%.0f | satisfying=%s waiting=%s" % [
+            needs.hunger, needs.thirst, needs.clothing,
+            str(needs.is_satisfying_need()), str(needs.is_waiting_for_need()),
+        ])
+        if not needs._active_needs.is_empty():
+            var names := needs._active_needs.map(func(e: Dictionary) -> String: return Worker.NeedType.keys()[e.need])
+            out.append("    active_needs=%s" % str(names))
+        if not needs._blocked_by_needs.is_empty():
+            var names := needs._blocked_by_needs.keys().map(func(k: int) -> String: return Worker.NeedType.keys()[k])
+            out.append("    BLOCKED=%s" % str(names))
+    return out
+
+func _builder_debug_lines(b: Builder) -> PackedStringArray:
+    var needs := b.get_node_or_null("Worker/WorkerNeeds") as WorkerNeeds
+    var nav := b.get_node_or_null("Worker/WorkerNavigator") as WorkerNavigator
+    var hut_str := "null"
+    if b._target_hut != null:
+        hut_str = str(b._target_hut.get("BUILDING_NAME")) if b._target_hut.get("BUILDING_NAME") != null else b._target_hut.name
+    var pile_str := "null"
+    if b._target_pile != null:
+        pile_str = "pile@%s(free=%d)" % [str(Vector2i(b._target_pile.global_position)), b._target_pile.free_count()]
+    var out: PackedStringArray = []
+    out.append("  [Builder] state=%s  free=%s  pos=%s  moving=%s" % [
+        Builder.State.keys()[b._state],
+        str(b.is_free()),
+        str(Vector2i(b.position)),
+        str(nav.is_moving()) if nav != null else "?",
+    ])
+    out.append("    hut=%s  pile=%s" % [hut_str, pile_str])
+    if needs != null:
+        out.append("    h=%.0f t=%.0f | satisfying=%s waiting=%s" % [
+            needs.hunger, needs.thirst,
+            str(needs.is_satisfying_need()), str(needs.is_waiting_for_need()),
+        ])
+    return out

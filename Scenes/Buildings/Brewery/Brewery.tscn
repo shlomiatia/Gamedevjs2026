@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b6p57kds3vhd7" path="res://Scenes/Buildings/Brewery/brewery.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://bap1qcvbb4owg" path="res://Scenes/Buildings/Building/Building.tscn" id="2_building"]
-[ext_resource type="Texture2D" uid="uid://doy1ell80b8ho" path="res://Textures/bricks_house.png" id="3_krl3b"]
+[ext_resource type="Texture2D" uid="uid://b1s67fbuttl32" path="res://Textures/bricks_house.png" id="3_krl3b"]
 [ext_resource type="Shader" uid="uid://b8yka2iqauytq" path="res://Shaders/pallete_swap.gdshader" id="3_shader"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wheat"]
@@ -21,9 +21,9 @@ shader_parameter/original_9 = Color(0, 0, 0, 1)
 shader_parameter/original_10 = Color(0, 0, 0, 1)
 shader_parameter/original_11 = Color(0, 0, 0, 1)
 shader_parameter/original_12 = Color(0, 0, 0, 1)
-shader_parameter/replace_0 = Color(1, 0.878431, 0.545098, 1)
-shader_parameter/replace_1 = Color(0.980392, 0.752941, 0.352941, 1)
-shader_parameter/replace_2 = Color(0.921569, 0.560784, 0.282353, 1)
+shader_parameter/replace_0 = Color(1, 0.9411765, 0.77254903, 1)
+shader_parameter/replace_1 = Color(1, 0.8784314, 0.54509807, 1)
+shader_parameter/replace_2 = Color(0.98039216, 0.7529412, 0.3529412, 1)
 shader_parameter/replace_3 = Color(0, 0, 0, 1)
 shader_parameter/replace_4 = Color(0, 0, 0, 1)
 shader_parameter/replace_5 = Color(0, 0, 0, 1)
