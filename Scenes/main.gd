@@ -104,7 +104,7 @@ func _show_win_overlay() -> void:
     vbox.add_child(subtitle)
 
     var continue_btn := Button.new()
-    continue_btn.text = "Continue Playing"
+    continue_btn.text = "Continue playing"
     continue_btn.add_theme_font_size_override("font_size", 20)
     continue_btn.custom_minimum_size = Vector2(200, 48)
     continue_btn.pressed.connect(_on_continue_playing)
