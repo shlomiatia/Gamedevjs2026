@@ -32,7 +32,8 @@ func setup(home: Node2D, map: Map, coordination_manager: Node) -> void:
         (home.get_node("Building") as BuildingComponent).on_worker_died()
         died.emit()
         var grave := Sprite2D.new()
-        grave.texture = load("res://Textures/grave.png")
+        grave.texture = load("res://Textures/grave.png") as Texture2D
+        grave.offset = Vector2(0, -grave.texture.get_height() / 2.0)
         var worker_pos: Vector2 = get_parent().global_position
         var world := get_parent().get_parent()
         get_parent().queue_free()
