@@ -13,7 +13,7 @@ signal worker_tool_broken(worker_name: String)
 signal worker_clothes_unusable(worker_name: String)
 signal construction_queued
 
-const WIN_WORKER_COUNT := 1
+const WIN_WORKER_COUNT := 30
 
 enum ResourceType {LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR, TOOL, MILK, CHEESE, WHEAT, FLOUR, BREAD, BEER}
 
@@ -103,7 +103,7 @@ func deregister_builder(builder: Builder) -> void:
 func register_worker(worker_node: Node2D) -> void:
     all_workers.append(worker_node)
     worker_registered.emit(all_workers.size())
-    if all_workers.size() >= 1:
+    if all_workers.size() >= WIN_WORKER_COUNT:
         game_won.emit()
 
 func deregister_worker(worker_node: Node2D) -> void:
