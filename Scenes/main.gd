@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var _map: Map = $Map
-@onready var camera: Camera2D = $Camera
+@onready var camera: GameCamera = $Camera
 @onready var _building_manager: BuildingManager = $BuildingManager
 @onready var _coordination_manager: CoordinationManager = $CoordinationManager
 @onready var _forest: Forest = $Forest
@@ -10,28 +10,97 @@ extends Node2D
 @onready var _game_won_ui: CanvasLayer = $GameWonUI
 
 var _hud: HUD
+var _hud_layer: CanvasLayer
 var _tutorial: Tutorial
+var _level_pixel_size: Vector2i
+var _win_overlay: Control
 
 func _on_game_over() -> void:
     _game_over_ui.visible = true
 
 func _on_game_won() -> void:
+    _hud_layer.visible = false
+    camera.zoom_out_to_map(_level_pixel_size, 2.5, func():
+        await get_tree().create_timer(1.5).timeout
+        _show_win_overlay()
+    )
+
+func _show_win_overlay() -> void:
     _game_won_ui.visible = true
+
+    _win_overlay = CenterContainer.new()
+    _win_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+    _win_overlay.modulate = Color(1.0, 1.0, 1.0, 0.0)
+    _game_won_ui.add_child(_win_overlay)
+
+    var panel := PanelContainer.new()
+    var style := StyleBoxFlat.new()
+    style.bg_color = Color(0.08, 0.06, 0.04, 0.88)
+    style.corner_radius_top_left = 12
+    style.corner_radius_top_right = 12
+    style.corner_radius_bottom_left = 12
+    style.corner_radius_bottom_right = 12
+    style.content_margin_left = 40.0
+    style.content_margin_right = 40.0
+    style.content_margin_top = 28.0
+    style.content_margin_bottom = 28.0
+    panel.add_theme_stylebox_override("panel", style)
+    _win_overlay.add_child(panel)
+
+    var vbox := VBoxContainer.new()
+    vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+    vbox.add_theme_constant_override("separation", 16)
+    panel.add_child(vbox)
+
+    var title := Label.new()
+    title.text = "The town of Millville is flourishing..."
+    title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    title.add_theme_font_size_override("font_size", 36)
+    title.add_theme_color_override("font_color", Color.WHITE)
+    vbox.add_child(title)
+
+    var subtitle := Label.new()
+    subtitle.text = "Thanks for playing!"
+    subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    subtitle.add_theme_font_size_override("font_size", 24)
+    subtitle.add_theme_color_override("font_color", Color(0.9, 0.85, 0.7))
+    vbox.add_child(subtitle)
+
+    var continue_btn := Button.new()
+    continue_btn.text = "Continue Playing"
+    continue_btn.add_theme_font_size_override("font_size", 20)
+    continue_btn.custom_minimum_size = Vector2(200, 48)
+    continue_btn.pressed.connect(_on_continue_playing)
+    vbox.add_child(continue_btn)
+
+    var tween := create_tween()
+    tween.tween_property(_win_overlay, "modulate", Color.WHITE, 1.0)
+
+func _on_continue_playing() -> void:
+    var tween := create_tween()
+    tween.tween_property(_win_overlay, "modulate", Color(1.0, 1.0, 1.0, 0.0), 0.5)
+    tween.tween_callback(func():
+        _game_won_ui.visible = false
+        camera.zoom_in_from_map(2.0, func():
+            _hud_layer.visible = true
+        )
+    )
 
 func _ready() -> void:
     var tile_size := _map.get_tile_size()
-    camera.setup(Vector2i(Map.LEVEL_WIDTH * tile_size.x, Map.LEVEL_HEIGHT * tile_size.y))
+    _level_pixel_size = Vector2i(Map.LEVEL_WIDTH * tile_size.x, Map.LEVEL_HEIGHT * tile_size.y)
+    camera.setup(_level_pixel_size)
     _forest.setup(_map, self )
     _building_manager.setup(_map, _coordination_manager, _forest)
     _coordination_manager.game_over.connect(_on_game_over)
     _coordination_manager.game_won.connect(_on_game_won)
 
-    var hud_layer := CanvasLayer.new()
-    hud_layer.layer = 10
-    add_child(hud_layer)
+    _hud_layer = CanvasLayer.new()
+    _hud_layer.layer = 10
+    add_child(_hud_layer)
     _hud = preload("res://Scenes/HUD/HUD.tscn").instantiate() as HUD
     _hud.setup(_coordination_manager)
-    hud_layer.add_child(_hud)
+    _hud_layer.add_child(_hud)
 
     var msg_layer := CanvasLayer.new()
     msg_layer.layer = 20
