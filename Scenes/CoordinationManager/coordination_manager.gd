@@ -13,7 +13,7 @@ signal worker_tool_broken(worker_name: String)
 signal worker_clothes_unusable(worker_name: String)
 signal construction_queued
 
-const WIN_WORKER_COUNT := 30
+const WIN_WORKER_COUNT := 1
 
 enum ResourceType {LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR, TOOL, MILK, CHEESE, WHEAT, FLOUR, BREAD, BEER}
 

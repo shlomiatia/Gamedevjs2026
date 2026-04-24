@@ -79,15 +79,8 @@ func _show_win_overlay() -> void:
 
     var panel := PanelContainer.new()
     var style := StyleBoxFlat.new()
-    style.bg_color = Color(0.08, 0.06, 0.04, 0.88)
-    style.corner_radius_top_left = 12
-    style.corner_radius_top_right = 12
-    style.corner_radius_bottom_left = 12
-    style.corner_radius_bottom_right = 12
-    style.content_margin_left = 40.0
-    style.content_margin_right = 40.0
-    style.content_margin_top = 28.0
-    style.content_margin_bottom = 28.0
+    style.bg_color = Color.TRANSPARENT
+
     panel.add_theme_stylebox_override("panel", style)
     _win_overlay.add_child(panel)
 
@@ -107,7 +100,7 @@ func _show_win_overlay() -> void:
     subtitle.text = "Thanks for playing!"
     subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     subtitle.add_theme_font_size_override("font_size", 24)
-    subtitle.add_theme_color_override("font_color", Color(0.9, 0.85, 0.7))
+    subtitle.add_theme_color_override("font_color", Color.WHITE)
     vbox.add_child(subtitle)
 
     var continue_btn := Button.new()
