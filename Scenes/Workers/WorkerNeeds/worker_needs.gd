@@ -129,7 +129,7 @@ func _process(delta: float) -> void:
     thirst = maxf(0.0, thirst - thirst_drain * delta)
     clothing = maxf(0.0, clothing - 1.0 * delta)
     if is_working and uses_tools:
-        _tool = maxf(0.0, _tool - 2.0 * delta)
+        _tool = maxf(0.0, _tool - 3.0 * delta)
 
     if hunger == 0.0 or thirst == 0.0:
         _is_dead = true

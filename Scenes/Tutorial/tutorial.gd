@@ -26,6 +26,7 @@ func setup(cm: CoordinationManager, bm: BuildingManager, hud: HUD, cam: Camera2D
     _building_manager = bm
     _hud = hud
     _camera = cam
+    _build_steps()
 
 func _ready() -> void:
     layer = 20
@@ -63,7 +64,6 @@ func _build_ui() -> void:
     add_child(_msg_label)
 
 func start() -> void:
-    _build_steps()
     _step = 0
     _started = true
     _show_step()
@@ -176,6 +176,9 @@ func _show_step() -> void:
 
 func on_event(event_name: String) -> void:
     if not _started:
+        var next := _find_next_buffered_event()
+        if next == event_name:
+            _buffered_event = event_name
         return
     if _waiting_for_event != event_name:
         # Only buffer if the upcoming step marked itself as buffered
