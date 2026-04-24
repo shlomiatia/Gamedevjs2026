@@ -402,13 +402,13 @@ text = "0"
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "Workers with no clothing (unusable)"
 theme_override_constants/separation = 0
 alignment = 1
 
 [node name="BrokenClothingStack" type="Control" parent="Content/Panel/VBox/GridRow/ClothesCol/ClothesBrokenRow"]
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
+tooltip_text = "Unusuable clothing (workers can't work)"
 
 [node name="BrokenClothingWorker" type="TextureRect" parent="Content/Panel/VBox/GridRow/ClothesCol/ClothesBrokenRow/BrokenClothingStack"]
 layout_mode = 0
@@ -496,13 +496,13 @@ text = "0"
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "Workers with no tools (broken/unusable)"
 theme_override_constants/separation = 0
 alignment = 1
 
 [node name="BrokenToolStack" type="Control" parent="Content/Panel/VBox/GridRow/ToolsCol/ToolsBrokenRow"]
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
+tooltip_text = "Broken tools (workers can't work)"
 
 [node name="BrokenToolWorker" type="TextureRect" parent="Content/Panel/VBox/GridRow/ToolsCol/ToolsBrokenRow/BrokenToolStack"]
 layout_mode = 0

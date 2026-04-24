@@ -41,7 +41,7 @@ script = ExtResource("1_script")
 
 [node name="Building" parent="." instance=ExtResource("2_building")]
 has_mill = true
-building_name = "Stee lMill"
+building_name = "Steel Mill"
 building_texture = ExtResource("3_texture")
 building_material = SubResource("ShaderMaterial_iron")
 
