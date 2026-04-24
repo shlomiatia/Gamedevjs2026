@@ -74,6 +74,9 @@ func set_working(val: bool) -> void:
     _working = val
     _needs.set_working(val)
 
+func set_uses_tools(val: bool) -> void:
+    _needs.uses_tools = val
+
 func _process(_delta: float) -> void:
     if _navigator == null or _anim == null:
         return

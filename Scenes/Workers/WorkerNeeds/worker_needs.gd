@@ -13,8 +13,11 @@ var thirst := 0.0
 var clothing := 0.0
 var _tool := 0.0
 
+var uses_tools: bool = true
+
 var _need_icon: Sprite2D = null
 var _need_icon_textures: Dictionary = {}
+var _strike_line: Line2D = null
 
 var _blocked_by_needs: Dictionary = {}
 
@@ -39,6 +42,13 @@ func _ready() -> void:
     _need_icon.scale = Vector2(0.5, 0.5)
     _need_icon.visible = false
     add_child(_need_icon)
+    _strike_line = Line2D.new()
+    _strike_line.add_point(Vector2(-16.0, -16.0))
+    _strike_line.add_point(Vector2(16.0, 16.0))
+    _strike_line.default_color = Color(1.0, 0.15, 0.15, 1.0)
+    _strike_line.width = 6.0
+    _strike_line.visible = false
+    _need_icon.add_child(_strike_line)
 
 func setup(mover: Node2D, map: Map, coordination_manager: Node, navigator: WorkerNavigator) -> void:
     _mover = mover
@@ -118,7 +128,7 @@ func _process(delta: float) -> void:
     var thirst_drain := 2.0 if is_working else 1.0
     thirst = maxf(0.0, thirst - thirst_drain * delta)
     clothing = maxf(0.0, clothing - 1.0 * delta)
-    if is_working:
+    if is_working and uses_tools:
         _tool = maxf(0.0, _tool - 2.0 * delta)
 
     if hunger == 0.0 or thirst == 0.0:
@@ -141,14 +151,15 @@ func _process(delta: float) -> void:
             var w := _mover.get_node_or_null("Worker") as Worker
             if w != null:
                 (_coordination_manager as CoordinationManager).notify_clothes_unusable(w.display_name)
-        if not _need_requested.get(Worker.NeedType.TOOL, false) and _tool < Constants.tool_threshold:
-            _need_requested[Worker.NeedType.TOOL] = true
-            _coordination_manager.queue_need_collection(_mover, Worker.NeedType.TOOL)
-        if not _blocked_by_needs.get(Worker.NeedType.TOOL, false) and _tool == 0.0:
-            _blocked_by_needs[Worker.NeedType.TOOL] = true
-            var w := _mover.get_node_or_null("Worker") as Worker
-            if w != null:
-                (_coordination_manager as CoordinationManager).notify_tool_broken(w.display_name)
+        if uses_tools:
+            if not _need_requested.get(Worker.NeedType.TOOL, false) and _tool < Constants.tool_threshold:
+                _need_requested[Worker.NeedType.TOOL] = true
+                _coordination_manager.queue_need_collection(_mover, Worker.NeedType.TOOL)
+            if not _blocked_by_needs.get(Worker.NeedType.TOOL, false) and _tool == 0.0:
+                _blocked_by_needs[Worker.NeedType.TOOL] = true
+                var w := _mover.get_node_or_null("Worker") as Worker
+                if w != null:
+                    (_coordination_manager as CoordinationManager).notify_tool_broken(w.display_name)
 
     if not _active_needs.is_empty():
         if _navigator.tick(delta):
@@ -163,9 +174,13 @@ func _update_need_icon() -> void:
         _need_icon.visible = false
         return
     var need: int
+    var is_blocked: bool
     if not _active_needs.is_empty():
         need = _active_needs[0].need
+        is_blocked = false
     else:
         need = _blocked_by_needs.keys()[0]
+        is_blocked = true
     _need_icon.texture = _need_icon_textures.get(need)
     _need_icon.visible = true
+    _strike_line.visible = is_blocked

@@ -36,6 +36,7 @@ func setup(sheep_farm: SheepFarm, map: Map, sheep: Sheep, spawn_parent: Node2D,
     _milk_pile = milk_pile
     $Worker.setup(sheep_farm, map, coordination_manager)
     $Worker.display_name = "Sheep Farmer"
+    $Worker.set_uses_tools(false)
 
 func resume_work() -> void:
     match _state:

@@ -20,6 +20,7 @@ func setup(apple_farm: AppleFarm, map: Map, forest: Forest, coordination_manager
     _forest = forest
     $Worker.setup(apple_farm, map, coordination_manager)
     $Worker.display_name = "Apple Picker"
+    $Worker.set_uses_tools(false)
 
 func resume_work() -> void:
     match _state:

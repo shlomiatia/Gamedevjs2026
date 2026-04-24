@@ -18,6 +18,50 @@ var _win_overlay: Control
 func _on_game_over() -> void:
     _game_over_ui.visible = true
 
+    var center := CenterContainer.new()
+    center.set_anchors_preset(Control.PRESET_FULL_RECT)
+    _game_over_ui.add_child(center)
+
+    var panel := PanelContainer.new()
+    var style := StyleBoxFlat.new()
+    style.bg_color = Color(0.05, 0.02, 0.02, 0.92)
+    style.corner_radius_top_left = 12
+    style.corner_radius_top_right = 12
+    style.corner_radius_bottom_left = 12
+    style.corner_radius_bottom_right = 12
+    style.content_margin_left = 40.0
+    style.content_margin_right = 40.0
+    style.content_margin_top = 28.0
+    style.content_margin_bottom = 28.0
+    panel.add_theme_stylebox_override("panel", style)
+    center.add_child(panel)
+
+    var vbox := VBoxContainer.new()
+    vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+    vbox.add_theme_constant_override("separation", 16)
+    panel.add_child(vbox)
+
+    var title := Label.new()
+    title.text = "GAME OVER"
+    title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    title.add_theme_font_size_override("font_size", 48)
+    title.add_theme_color_override("font_color", Color(0.9, 0.2, 0.2))
+    vbox.add_child(title)
+
+    var reason := Label.new()
+    reason.text = "Your last builder has died."
+    reason.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    reason.add_theme_font_size_override("font_size", 22)
+    reason.add_theme_color_override("font_color", Color(0.85, 0.75, 0.7))
+    vbox.add_child(reason)
+
+    var restart_btn := Button.new()
+    restart_btn.text = "Restart"
+    restart_btn.add_theme_font_size_override("font_size", 20)
+    restart_btn.custom_minimum_size = Vector2(160, 44)
+    restart_btn.pressed.connect(func(): get_tree().reload_current_scene())
+    vbox.add_child(restart_btn)
+
 func _on_game_won() -> void:
     _hud_layer.visible = false
     camera.zoom_out_to_map(_level_pixel_size, 2.5, func():

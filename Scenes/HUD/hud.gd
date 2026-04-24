@@ -82,7 +82,7 @@ func _refresh() -> void:
             hungry += 1
         if wn.thirst < Constants.thirst_threshold:
             thirsty += 1
-        if wn.clothing < Constants.clothing_threshold:
+        if wn.clothing < Constants.clothing_threshold && wn.clothing > 0.0:
             worn_clothing += 1
         var tool_val := wn.get_need_value(Worker.NeedType.TOOL)
         if tool_val < Constants.tool_threshold && tool_val > 0.0:

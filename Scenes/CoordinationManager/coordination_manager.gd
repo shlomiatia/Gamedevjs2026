@@ -103,7 +103,7 @@ func deregister_builder(builder: Builder) -> void:
 func register_worker(worker_node: Node2D) -> void:
     all_workers.append(worker_node)
     worker_registered.emit(all_workers.size())
-    if all_workers.size() >= WIN_WORKER_COUNT:
+    if all_workers.size() >= 1:
         game_won.emit()
 
 func deregister_worker(worker_node: Node2D) -> void:
