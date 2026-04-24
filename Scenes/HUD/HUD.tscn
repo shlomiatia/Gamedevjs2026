@@ -22,7 +22,7 @@ bg_color = Color(0, 0, 0, 0.55)
 
 [sub_resource type="AtlasTexture" id="sub_worker"]
 atlas = ExtResource("2_worker")
-region = Rect2(0, 0, 32, 32)
+region = Rect2(0, 6, 32, 32)
 
 [node name="HUD" type="HBoxContainer"]
 anchors_preset = 10
