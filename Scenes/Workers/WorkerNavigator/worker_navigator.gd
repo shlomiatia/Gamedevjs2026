@@ -12,6 +12,7 @@ func setup(mover: Node2D, home: Node2D, map: Map, agent: NavigationAgent2D) -> v
 	_home = home
 	_map = map
 	_agent = agent
+	_agent.target_desired_distance = 8.0
 
 func home_world_pos() -> Vector2:
 	return _home.position + Vector2(0.0, float(_map.get_tile_size().y) * 0.5)
@@ -27,11 +28,11 @@ func tick(delta: float) -> bool:
 	var dist := dir.length()
 	if dist > 0.5:
 		_facing = dir.normalized()
-	var step := Constants.worker_move_speed * delta
-	if step >= dist:
-		_mover.position += dir
-	else:
-		_mover.position += dir.normalized() * step
+		var step := Constants.worker_move_speed * delta
+		if step >= dist:
+			_mover.position += dir
+		else:
+			_mover.position += dir.normalized() * step
 	return _agent.is_navigation_finished()
 
 func is_moving() -> bool:
