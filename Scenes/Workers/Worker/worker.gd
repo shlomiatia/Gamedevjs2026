@@ -92,7 +92,7 @@ func _process(_delta: float) -> void:
         prefix = "up"
     else:
         prefix = "down"
-    var suffix := "work" if (_working and not _needs.is_satisfying_need()) else ("walk" if _navigator.is_moving() else "stand")
+    var suffix := "work" if (_working and not _needs.is_satisfying_need()) else ("walk" if _navigator.is_moving() && !_needs.is_waiting_for_need() else "stand")
     var anim_name := prefix + "_" + suffix
     if _anim.animation != anim_name:
         _anim.play(anim_name)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://ckrahtg4gj62a"]
+[gd_scene load_steps=18 format=3 uid="uid://ckrahtg4gj62a"]
 
 [ext_resource type="Script" uid="uid://bwvit6y44rljj" path="res://Scenes/HUD/hud.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cmysa80q0ep88" path="res://Textures/worker.png" id="2_worker"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cynq145wdgd13" path="res://Textures/food.png" id="8_food"]
 [ext_resource type="Texture2D" uid="uid://7l47drsij0cv" path="res://Textures/cider.png" id="9_cider"]
 [ext_resource type="Texture2D" uid="uid://bkch8q7ckdsel" path="res://Textures/Clothes.png" id="10_clothes"]
+[ext_resource type="Texture2D" uid="uid://bn8sxoibt28hl" path="res://Textures/drink.png" id="10_mw35l"]
 [ext_resource type="Texture2D" uid="uid://cohysc4gp33fm" path="res://Textures/tool.png" id="11_tool"]
 [ext_resource type="Texture2D" uid="uid://csgc8cjgmkaey" path="res://Textures/strike.png" id="12_strike"]
 
@@ -30,6 +31,16 @@ content_margin_top = 4.0
 content_margin_right = 0.0
 content_margin_bottom = 4.0
 color = Color(0.49803922, 0.49803922, 0.49803922, 1)
+grow_end = -26.0
+vertical = true
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_mw35l"]
+content_margin_left = 0.0
+content_margin_top = 4.0
+content_margin_right = 0.0
+content_margin_bottom = 4.0
+color = Color(0.49803922, 0.49803922, 0.49803922, 1)
+grow_end = -26.0
 vertical = true
 
 [node name="HUD" type="HBoxContainer"]
@@ -52,58 +63,13 @@ theme_override_styles/panel = SubResource("sub_panel")
 [node name="VBox" type="VBoxContainer" parent="Content/Panel"]
 layout_mode = 2
 
-[node name="WorkersRow" type="HBoxContainer" parent="Content/Panel/VBox"]
-layout_mode = 2
-theme_override_constants/separation = 0
-alignment = 1
-
-[node name="WorkerIcon" type="TextureRect" parent="Content/Panel/VBox/WorkersRow"]
-custom_minimum_size = Vector2(20, 20)
-layout_mode = 2
-tooltip_text = "Workers: current count / target (30)"
-texture = SubResource("sub_worker")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="WorkersLabel" type="Label" parent="Content/Panel/VBox/WorkersRow"]
-layout_mode = 2
-tooltip_text = "Workers: current count / target (30)"
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
-text = " 0/30"
-
-[node name="DeadSpacer" type="Control" parent="Content/Panel/VBox/WorkersRow"]
-custom_minimum_size = Vector2(20, 0)
-layout_mode = 2
-
-[node name="DeadIcon" type="TextureRect" parent="Content/Panel/VBox/WorkersRow"]
-custom_minimum_size = Vector2(20, 20)
-layout_mode = 2
-tooltip_text = "Dead workers"
-texture = ExtResource("3_dead")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="DeadLabel" type="Label" parent="Content/Panel/VBox/WorkersRow"]
-layout_mode = 2
-tooltip_text = "Dead workers"
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
-text = " 0"
-
 [node name="GridRow" type="HBoxContainer" parent="Content/Panel/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 5
 alignment = 1
 
 [node name="PlanksCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 10
@@ -156,12 +122,35 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 13
 text = " 0"
 
+[node name="WorkersRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/PlanksCol"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 0
+
+[node name="WorkerIcon" type="TextureRect" parent="Content/Panel/VBox/GridRow/PlanksCol/WorkersRow"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+tooltip_text = "Workers: current count / target (30)"
+texture = SubResource("sub_worker")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WorkersLabel" type="Label" parent="Content/Panel/VBox/GridRow/PlanksCol/WorkersRow"]
+layout_mode = 2
+tooltip_text = "Workers: current count / target (30)"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 13
+text = " 30/30"
+
 [node name="Sep1" type="VSeparator" parent="Content/Panel/VBox/GridRow"]
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxLine_mattb")
 
 [node name="BricksCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 10
@@ -218,7 +207,7 @@ text = " 0"
 layout_mode = 2
 
 [node name="FoodCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 10
@@ -271,11 +260,35 @@ theme_override_constants/shadow_offset_y = 1
 theme_override_font_sizes/font_size = 13
 text = "0"
 
+[node name="DeadRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/FoodCol"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="DeadIcon" type="TextureRect" parent="Content/Panel/VBox/GridRow/FoodCol/DeadRow"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+tooltip_text = "Dead workers"
+texture = ExtResource("3_dead")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DeadLabel" type="Label" parent="Content/Panel/VBox/GridRow/FoodCol/DeadRow"]
+layout_mode = 2
+tooltip_text = "Dead workers"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 13
+text = " 0"
+
 [node name="Sep3" type="VSeparator" parent="Content/Panel/VBox/GridRow"]
 layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_mw35l")
 
 [node name="DrinkCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 10
@@ -315,7 +328,7 @@ alignment = 1
 [node name="DrinkNeedIcon" type="TextureRect" parent="Content/Panel/VBox/GridRow/DrinkCol/DrinkNeedRow"]
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
-texture = ExtResource("9_cider")
+texture = ExtResource("10_mw35l")
 expand_mode = 1
 stretch_mode = 5
 
@@ -332,7 +345,7 @@ text = " 0"
 layout_mode = 2
 
 [node name="ClothesCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 10
@@ -426,7 +439,7 @@ text = "0"
 layout_mode = 2
 
 [node name="ToolsCol" type="VBoxContainer" parent="Content/Panel/VBox/GridRow"]
-custom_minimum_size = Vector2(40, 0)
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 10
@@ -458,6 +471,7 @@ text = " 0"
 [node name="ToolsNeedRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/ToolsCol"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 tooltip_text = "Workers with worn tools (below 50%)"
 theme_override_constants/separation = 0
 alignment = 1
@@ -481,6 +495,7 @@ text = "0"
 [node name="ToolsBrokenRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/ToolsCol"]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 tooltip_text = "Workers with no tools (broken/unusable)"
 theme_override_constants/separation = 0
 alignment = 1

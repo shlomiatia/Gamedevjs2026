@@ -40,6 +40,9 @@ func set_working(val: bool) -> void:
 func is_satisfying_need() -> bool:
     return not _active_needs.is_empty() or not _blocked_by_needs.is_empty()
 
+func is_waiting_for_need() -> bool:
+    return _active_needs.is_empty() && !_blocked_by_needs.is_empty()
+
 func get_need_value(need: int) -> float:
     match need:
         Worker.NeedType.FOOD: return hunger
