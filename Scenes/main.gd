@@ -29,7 +29,7 @@ func _ready() -> void:
     var hud_layer := CanvasLayer.new()
     hud_layer.layer = 10
     add_child(hud_layer)
-    _hud = HUD.new()
+    _hud = preload("res://Scenes/HUD/HUD.tscn").instantiate() as HUD
     _hud.setup(_coordination_manager)
     hud_layer.add_child(_hud)
 
