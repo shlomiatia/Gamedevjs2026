@@ -19,14 +19,12 @@ func plant_wheat(tile: Vector2i, grow_duration: float) -> void:
     sprite.texture = _wheat_texture
     sprite.position = _grass_layer.map_to_local(tile)
     sprite.region_enabled = true
-    #sprite.region_rect = Rect2(0, 96, 96, 0)
-    sprite.region_rect = Rect2(0, 128, 32, 0)
+    sprite.region_rect = Rect2(0, 32, 32, 0)
     add_child(sprite)
     _wheat_sprites[tile] = sprite
     _wheat_ready[tile] = false
     var tween := create_tween()
-    #tween.tween_property(sprite, "region_rect", Rect2(0, 0, 96, 96), grow_duration)
-    tween.tween_property(sprite, "region_rect", Rect2(0, 96, 32, 32), grow_duration)
+    tween.tween_property(sprite, "region_rect", Rect2(0, 0, 32, 32), grow_duration)
     tween.tween_callback(func(): _wheat_ready[tile] = true)
 
 func is_wheat_ready(tile: Vector2i) -> bool:
