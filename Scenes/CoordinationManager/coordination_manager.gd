@@ -5,6 +5,12 @@ signal game_over
 signal game_won
 signal worker_registered(count: int)
 signal worker_became_hungry
+signal worker_became_thirsty
+signal worker_clothes_worn
+signal worker_tool_worn
+signal worker_died(worker_name: String, cause: String)
+signal worker_tool_broken(worker_name: String)
+signal worker_clothes_unusable(worker_name: String)
 signal construction_queued
 
 const WIN_WORKER_COUNT := 30
@@ -110,6 +116,9 @@ func register_building(building: Node2D) -> void:
 # --- Construction queue ---
 
 var _hungry_signal_emitted := false
+var _thirsty_signal_emitted := false
+var _clothes_worn_signal_emitted := false
+var _tool_worn_signal_emitted := false
 
 func queue_construction(target: Node2D) -> void:
     construction_queued.emit()
@@ -152,6 +161,15 @@ func queue_need_collection(worker: Node2D, need: int) -> void:
     if need == Worker.NeedType.FOOD and not _hungry_signal_emitted:
         _hungry_signal_emitted = true
         worker_became_hungry.emit()
+    if need == Worker.NeedType.DRINK and not _thirsty_signal_emitted:
+        _thirsty_signal_emitted = true
+        worker_became_thirsty.emit()
+    if need == Worker.NeedType.CLOTHING and not _clothes_worn_signal_emitted:
+        _clothes_worn_signal_emitted = true
+        worker_clothes_worn.emit()
+    if need == Worker.NeedType.TOOL and not _tool_worn_signal_emitted:
+        _tool_worn_signal_emitted = true
+        worker_tool_worn.emit()
     var result := _find_nearest_pile_for_need(need, worker.position)
     var pile: ResourcePile = result[0]
     var resource_type: int = result[1]
@@ -235,3 +253,12 @@ func _find_closest_free_builder(pos: Vector2) -> Builder:
                 min_dist = d
                 closest = builder
     return closest
+
+func notify_worker_died(worker_name: String, cause: String) -> void:
+    worker_died.emit(worker_name, cause)
+
+func notify_tool_broken(worker_name: String) -> void:
+    worker_tool_broken.emit(worker_name)
+
+func notify_clothes_unusable(worker_name: String) -> void:
+    worker_clothes_unusable.emit(worker_name)

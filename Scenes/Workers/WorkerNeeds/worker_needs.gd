@@ -13,6 +13,9 @@ var thirst := 0.0
 var clothing := 0.0
 var _tool := 0.0
 
+var _need_icon: Sprite2D = null
+var _need_icon_textures: Dictionary = {}
+
 var _blocked_by_needs: Dictionary = {}
 
 var _mover: Node2D = null
@@ -23,6 +26,19 @@ var _is_working := false
 var _is_dead := false
 var _need_requested: Dictionary = {}
 var _active_needs: Array = []
+
+func _ready() -> void:
+    _need_icon_textures = {
+        Worker.NeedType.FOOD: load("res://Textures/food.png"),
+        Worker.NeedType.DRINK: load("res://Textures/drink.png"),
+        Worker.NeedType.CLOTHING: load("res://Textures/Clothes.png"),
+        Worker.NeedType.TOOL: load("res://Textures/tool.png"),
+    }
+    _need_icon = Sprite2D.new()
+    _need_icon.position = Vector2(0.0, NUM_Y)
+    _need_icon.scale = Vector2(0.5, 0.5)
+    _need_icon.visible = false
+    add_child(_need_icon)
 
 func setup(mover: Node2D, map: Map, coordination_manager: Node, navigator: WorkerNavigator) -> void:
     _mover = mover
@@ -117,15 +133,39 @@ func _process(delta: float) -> void:
         if not _need_requested.get(Worker.NeedType.DRINK, false) and thirst < Constants.thirst_threshold:
             _need_requested[Worker.NeedType.DRINK] = true
             _coordination_manager.queue_need_collection(_mover, Worker.NeedType.DRINK)
-        if not _need_requested.get(Worker.NeedType.CLOTHING, false) and clothing == 0.0:
+        if not _need_requested.get(Worker.NeedType.CLOTHING, false) and clothing < Constants.clothing_threshold:
             _need_requested[Worker.NeedType.CLOTHING] = true
-            _blocked_by_needs[Worker.NeedType.CLOTHING] = true
             _coordination_manager.queue_need_collection(_mover, Worker.NeedType.CLOTHING)
-        if not _need_requested.get(Worker.NeedType.TOOL, false) and _tool == 0.0:
+        if not _blocked_by_needs.get(Worker.NeedType.CLOTHING, false) and clothing == 0.0:
+            _blocked_by_needs[Worker.NeedType.CLOTHING] = true
+            var w := _mover.get_node_or_null("Worker") as Worker
+            if w != null:
+                (_coordination_manager as CoordinationManager).notify_clothes_unusable(w.display_name)
+        if not _need_requested.get(Worker.NeedType.TOOL, false) and _tool < Constants.tool_threshold:
             _need_requested[Worker.NeedType.TOOL] = true
-            _blocked_by_needs[Worker.NeedType.TOOL] = true
             _coordination_manager.queue_need_collection(_mover, Worker.NeedType.TOOL)
+        if not _blocked_by_needs.get(Worker.NeedType.TOOL, false) and _tool == 0.0:
+            _blocked_by_needs[Worker.NeedType.TOOL] = true
+            var w := _mover.get_node_or_null("Worker") as Worker
+            if w != null:
+                (_coordination_manager as CoordinationManager).notify_tool_broken(w.display_name)
 
     if not _active_needs.is_empty():
         if _navigator.tick(delta):
             _finish_need_trip()
+
+    _update_need_icon()
+
+func _update_need_icon() -> void:
+    if _need_icon == null:
+        return
+    if _active_needs.is_empty() and _blocked_by_needs.is_empty():
+        _need_icon.visible = false
+        return
+    var need: int
+    if not _active_needs.is_empty():
+        need = _active_needs[0].need
+    else:
+        need = _blocked_by_needs.keys()[0]
+    _need_icon.texture = _need_icon_textures.get(need)
+    _need_icon.visible = true

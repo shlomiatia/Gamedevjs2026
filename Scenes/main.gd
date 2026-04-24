@@ -33,6 +33,13 @@ func _ready() -> void:
     _hud.setup(_coordination_manager)
     hud_layer.add_child(_hud)
 
+    var msg_layer := CanvasLayer.new()
+    msg_layer.layer = 20
+    add_child(msg_layer)
+    var message_system := MessageSystem.new()
+    msg_layer.add_child(message_system)
+    message_system.setup(_coordination_manager)
+
     _tutorial = Tutorial.new()
     add_child(_tutorial)
     _tutorial.setup(_coordination_manager, _building_manager, _hud, camera)
