@@ -22,6 +22,9 @@ func setup(fisherman_hut: Node2D, map: Map, coordination_manager: Node, output_p
 	$Worker.set_uses_tools(false)
 
 func _ready() -> void:
+	_claim_next_tile()
+
+func _claim_next_tile() -> void:
 	_fish_tile = _find_fishing_tile()
 	if _fish_tile != Vector2i(-1, -1):
 		_map.occupied_tiles[_fish_tile] = Map.OccupiedType.BLOCK_BUILDING
@@ -43,9 +46,7 @@ func _process(delta: float) -> void:
 		return
 	match _state:
 		State.IDLE:
-			if _fish_tile != Vector2i(-1, -1):
-				$Worker.navigate_to(_map.tile_to_world(_fish_tile))
-				_state = State.GO_TO_RIVER
+			_claim_next_tile()
 		State.GO_TO_RIVER, State.GO_HOME, State.DEPOSIT:
 			if $Worker.tick_movement(delta):
 				_on_arrived()
@@ -70,6 +71,7 @@ func _on_arrived() -> void:
 func _finish_fishing() -> void:
 	$Worker.carry(RawFishScene.instantiate() as Node2D)
 	$Worker.navigate_to($Worker.home_world_pos())
+	_fish_tile = Vector2i(-1, -1)
 	_state = State.GO_HOME
 
 func _find_fishing_tile() -> Vector2i:

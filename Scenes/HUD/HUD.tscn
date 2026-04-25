@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://ckrahtg4gj62a"]
+[gd_scene load_steps=19 format=3 uid="uid://ckrahtg4gj62a"]
 
 [ext_resource type="Script" uid="uid://bwvit6y44rljj" path="res://Scenes/HUD/hud.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cmysa80q0ep88" path="res://Textures/worker.png" id="2_worker"]
@@ -106,14 +106,13 @@ theme_override_constants/separation = 0
 alignment = 1
 
 [node name="PendingPlanksStack" type="Control" parent="Content/Panel/VBox/GridRow/PlanksCol/PlanksBotRow"]
+clip_children = 1
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
-clip_children = 1
 tooltip_text = "Pending building sites needing planks"
 
 [node name="PendingPlanksHouse" type="TextureRect" parent="Content/Panel/VBox/GridRow/PlanksCol/PlanksBotRow/PendingPlanksStack"]
 layout_mode = 0
-offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
 mouse_filter = 2
@@ -123,8 +122,9 @@ stretch_mode = 5
 
 [node name="PendingPlanksFence" type="TextureRect" parent="Content/Panel/VBox/GridRow/PlanksCol/PlanksBotRow/PendingPlanksStack"]
 layout_mode = 0
+offset_top = 9.0
 offset_right = 20.0
-offset_bottom = 20.0
+offset_bottom = 29.0
 mouse_filter = 2
 texture = ExtResource("13_fence")
 expand_mode = 1
@@ -204,14 +204,13 @@ theme_override_constants/separation = 0
 alignment = 1
 
 [node name="PendingBricksStack" type="Control" parent="Content/Panel/VBox/GridRow/BricksCol/BricksBotRow"]
+clip_children = 1
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
-clip_children = 1
 tooltip_text = "Pending building sites needing bricks"
 
 [node name="PendingBricksHouse" type="TextureRect" parent="Content/Panel/VBox/GridRow/BricksCol/BricksBotRow/PendingBricksStack"]
 layout_mode = 0
-offset_top = -20.0
 offset_right = 20.0
 offset_bottom = 20.0
 mouse_filter = 2
@@ -221,8 +220,9 @@ stretch_mode = 5
 
 [node name="PendingBricksFence" type="TextureRect" parent="Content/Panel/VBox/GridRow/BricksCol/BricksBotRow/PendingBricksStack"]
 layout_mode = 0
+offset_top = 9.0
 offset_right = 20.0
-offset_bottom = 20.0
+offset_bottom = 29.0
 mouse_filter = 2
 texture = ExtResource("13_fence")
 expand_mode = 1

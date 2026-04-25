@@ -27,6 +27,7 @@ offset_left = -87.0
 offset_top = -12.0
 offset_right = -31.0
 offset_bottom = 11.0
+theme_override_font_sizes/font_size = 14
 
 [node name="Button" type="Button" parent="Fence"]
 offset_left = 27.0
