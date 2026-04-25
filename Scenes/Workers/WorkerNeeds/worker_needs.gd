@@ -150,7 +150,7 @@ func _process(delta: float) -> void:
             _blocked_by_needs[Worker.NeedType.CLOTHING] = true
             var w := _mover.get_node_or_null("Worker") as Worker
             if w != null:
-                (_coordination_manager as CoordinationManager).notify_clothes_unusable(w.display_name)
+                (_coordination_manager as CoordinationManager).notify_clothes_unusable(w.building_name)
         if uses_tools:
             if not _need_requested.get(Worker.NeedType.TOOL, false) and _tool < Constants.tool_threshold:
                 _need_requested[Worker.NeedType.TOOL] = true
@@ -159,7 +159,7 @@ func _process(delta: float) -> void:
                 _blocked_by_needs[Worker.NeedType.TOOL] = true
                 var w := _mover.get_node_or_null("Worker") as Worker
                 if w != null:
-                    (_coordination_manager as CoordinationManager).notify_tool_broken(w.display_name)
+                    (_coordination_manager as CoordinationManager).notify_tool_broken(w.building_name)
 
     if not _active_needs.is_empty():
         if _navigator.tick(delta):

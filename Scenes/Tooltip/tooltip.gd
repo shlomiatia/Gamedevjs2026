@@ -4,7 +4,8 @@ extends CanvasLayer
 # Integer keys match CoordinationManager.ResourceType enum order:
 # LOG=0, PLANK=1, APPLE=2, CIDER=3, WOOL=4, CLOTHES=5, CLAY=6, BRICK=7,
 # COAL=8, IRON_ORE=9, IRON_BAR=10, TOOL=11, MILK=12, CHEESE=13,
-# WHEAT=14, FLOUR=15, BREAD=16, BEER=17
+# WHEAT=14, FLOUR=15, BREAD=16, BEER=17,
+# RAW_FISH=18, SMOKED_FISH=19, FLAX=20, FLAX_CLOTHES=21
 const _ICON_TEXTURE := {
     0: preload("res://Textures/Log.png"),
     1: preload("res://Textures/planks.png"),
@@ -24,6 +25,10 @@ const _ICON_TEXTURE := {
     15: preload("res://Textures/flour.png.png"),
     16: preload("res://Textures/bread.png.png"),
     17: preload("res://Textures/cider.png"),
+    18: preload("res://Textures/raw fish.png"),
+    19: preload("res://Textures/smoked fish.png"),
+    20: preload("res://Textures/flax.png"),
+    21: preload("res://Textures/flax clothes.png"),
 }
 
 const _RESOURCE_NEED := {
@@ -35,6 +40,8 @@ const _RESOURCE_NEED := {
     13: ["hunger", "cheese_satisfaction"],
     16: ["hunger", "bread_satisfaction"],
     17: ["thirst", "beer_satisfaction"],
+    19: ["hunger", "smoked_fish_satisfaction"],
+    21: ["clothing", "flax_clothes_satisfaction"],
 }
 
 # Modulate to distinguish resources that share the same base texture

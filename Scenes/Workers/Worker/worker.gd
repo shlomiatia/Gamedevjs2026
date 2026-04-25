@@ -15,19 +15,21 @@ var _anim: AnimatedSprite2D = null
 var _working := false
 var _anim_working := false
 var display_name: String = ""
+var building_name: String = ""
 
 func setup(home: Node2D, map: Map, coordination_manager: Node) -> void:
     _navigator = $WorkerNavigator
     _needs = $WorkerNeeds
     _backpack = $WorkerBackpack
     _anim = $AnimatedSprite2D
+    building_name = str(home.get("BUILDING_NAME")) if home.get("BUILDING_NAME") != null else ""
     _navigator.setup(get_parent(), home, map, $NavigationAgent2D)
     _needs.setup(get_parent(), map, coordination_manager, _navigator)
     _backpack.setup(get_parent())
     coordination_manager.register_worker(get_parent())
     _needs.died.connect(func():
         var cause := "starvation" if _needs.hunger <= 0.0 else "dehydration"
-        (coordination_manager as CoordinationManager).notify_worker_died(display_name, cause)
+        (coordination_manager as CoordinationManager).notify_worker_died(building_name, cause)
         coordination_manager.deregister_worker(get_parent())
         (home.get_node("Building") as BuildingComponent).on_worker_died()
         died.emit()

@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://bmxsj8i45f5kj"]
 
-[ext_resource type="Script" path="res://Scenes/Resources/RawFish/raw_fish.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://Textures/raw fish.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://xdhke1ss5h02" path="res://Scenes/Resources/RawFish/raw_fish.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://txknnp8bwv0n" path="res://Textures/raw fish.png" id="2_tex"]
 
 [node name="RawFish" type="Node2D"]
 script = ExtResource("1_script")
