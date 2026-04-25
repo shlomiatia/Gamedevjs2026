@@ -8,6 +8,7 @@ const RIVER_ROW := 21
 enum OccupiedType {BLOCK_BUILDING = 1, BLOCK_WORKERS = 2}
 
 var occupied_tiles: Dictionary = {}
+var visited_fish_tiles: Dictionary = {}
 
 @onready var _grass: Grass = $Grass
 @onready var _river: River = $River

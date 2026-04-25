@@ -99,9 +99,18 @@ func unregister_from_map() -> void:
 
 func _on_button_pressed() -> void:
     $Fence/Button.disabled = true
+    var parent := get_parent()
+    var cm: CoordinationManager = parent._coordination_manager
+    var saved_map := _map
     unregister_from_map()
-    get_parent()._coordination_manager.cancel_construction(get_parent())
-    get_parent().queue_free()
+    # Re-apply rings for remaining buildings so tiles shared with neighbors are preserved
+    for b in cm.buildings:
+        if b != parent:
+            var bc := b.get_node_or_null("Building") as BuildingComponent
+            if bc != null and bc._map != null:
+                saved_map.set_occupied_ring(bc._top_left, BuildingComponent.SIZE, Map.OccupiedType.BLOCK_BUILDING)
+    cm.cancel_construction(parent)
+    parent.queue_free()
 
 func remove_cancel_button() -> void:
     var button := get_node_or_null("Fence/Button")

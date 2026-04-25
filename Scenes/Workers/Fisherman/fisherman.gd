@@ -27,7 +27,7 @@ func _ready() -> void:
 func _claim_next_tile() -> void:
 	_fish_tile = _find_fishing_tile()
 	if _fish_tile != Vector2i(-1, -1):
-		_map.occupied_tiles[_fish_tile] = Map.OccupiedType.BLOCK_BUILDING
+		_map.visited_fish_tiles[_fish_tile] = true
 		$Worker.navigate_to(_map.tile_to_world(_fish_tile))
 		_state = State.GO_TO_RIVER
 
@@ -82,7 +82,7 @@ func _find_fishing_tile() -> Vector2i:
 	var best_dist := INF
 	for x in range(bounds.position.x, bounds.end.x):
 		var tile := Vector2i(x, row)
-		if _map.occupied_tiles.get(tile, 0) == 0:
+		if not _map.visited_fish_tiles.has(tile):
 			var dist := float(abs(x - from_x))
 			if dist < best_dist:
 				best_dist = dist
