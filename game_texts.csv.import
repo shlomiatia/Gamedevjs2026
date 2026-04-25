@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://u7f6xtnwhc7"
+
+[deps]
+
+files=["res://game_texts.key.translation", "res://game_texts.text.translation", "res://game_texts.source.translation", "res://game_texts.notes.translation"]
+
+source_file="res://game_texts.csv"
+dest_files=["res://game_texts.key.translation", "res://game_texts.text.translation", "res://game_texts.source.translation", "res://game_texts.notes.translation"]
+
+[params]
+
+compress=true
+delimiter=0
