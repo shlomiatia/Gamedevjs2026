@@ -4,6 +4,7 @@ extends Node2D
 const SIZE_X := 5
 const SIZE_Y := 2
 const BUILDING_NAME := "Flax Farm"
+const WORKER_NAME := "Flax Farmer"
 
 const CropFarmerScene = preload("res://Scenes/Workers/CropFarmer/CropFarmer.tscn")
 const FlaxScene = preload("res://Scenes/Resources/Flax/Flax.tscn")
@@ -39,5 +40,5 @@ func complete_construction() -> void:
 	_output_pile.visible = true
 	var farmer := CropFarmerScene.instantiate() as CropFarmer
 	farmer.position = _spawn_pos
-	farmer.setup(self, _map, _coordination_manager, _output_pile, _map.flax, FlaxScene, "Flax Farmer")
+	farmer.setup(self, _map, _coordination_manager, _output_pile, _map.flax, FlaxScene, WORKER_NAME)
 	_spawn_parent.add_child(farmer)

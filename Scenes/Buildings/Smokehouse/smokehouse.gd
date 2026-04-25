@@ -4,6 +4,7 @@ extends Node2D
 const SIZE_X := 5
 const SIZE_Y := 2
 const BUILDING_NAME := "Smokehouse"
+const WORKER_NAME := "Smoker"
 const CONSTRUCTION_RESOURCE_TYPE := CoordinationManager.ResourceType.BRICK
 
 const KilnWorkerScene = preload("res://Scenes/Workers/KilnWorker/KilnWorker.tscn")
@@ -44,5 +45,5 @@ func complete_construction() -> void:
 	var worker := KilnWorkerScene.instantiate() as KilnWorker
 	worker.position = _spawn_pos
 	worker.setup(self, _map, _coordination_manager, SmokedFishScene,
-		CoordinationManager.ResourceType.RAW_FISH, CoordinationManager.ResourceType.LOG, _output_pile, "Smoker")
+		CoordinationManager.ResourceType.RAW_FISH, CoordinationManager.ResourceType.LOG, _output_pile, WORKER_NAME)
 	_spawn_parent.add_child(worker)

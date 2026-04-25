@@ -18,7 +18,7 @@ func setup(fisherman_hut: Node2D, map: Map, coordination_manager: Node, output_p
 	_map = map
 	_output_pile = output_pile
 	$Worker.setup(fisherman_hut, map, coordination_manager)
-	$Worker.display_name = "Fisherman"
+	$Worker.display_name = FishermanHut.WORKER_NAME
 	$Worker.set_uses_tools(false)
 
 func _ready() -> void:

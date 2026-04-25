@@ -4,6 +4,7 @@ extends Node2D
 const SIZE_X := 5
 const SIZE_Y := 1
 const BUILDING_NAME := "Weaving Mill"
+const WORKER_NAME := "Weaver"
 
 const MillerScene = preload("res://Scenes/Workers/Miller/Miller.tscn")
 const FlaxClothesScene = preload("res://Scenes/Resources/FlaxClothes/FlaxClothes.tscn")
@@ -39,5 +40,5 @@ func complete_construction() -> void:
 	_output_pile.visible = true
 	var miller := MillerScene.instantiate() as Miller
 	miller.position = _spawn_pos
-	miller.setup(self, _map, _coordination_manager, CoordinationManager.ResourceType.FLAX, FlaxClothesScene, _output_pile, "Weaver")
+	miller.setup(self, _map, _coordination_manager, CoordinationManager.ResourceType.FLAX, FlaxClothesScene, _output_pile, WORKER_NAME)
 	_spawn_parent.add_child(miller)

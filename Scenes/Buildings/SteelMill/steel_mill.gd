@@ -4,6 +4,7 @@ extends Node2D
 const SIZE_X := 5
 const SIZE_Y := 1
 const BUILDING_NAME := "Steel Mill"
+const WORKER_NAME := "Smelter"
 const CONSTRUCTION_RESOURCE_TYPE := CoordinationManager.ResourceType.BRICK
 
 const KilnWorkerScene = preload("res://Scenes/Workers/KilnWorker/KilnWorker.tscn")
@@ -43,5 +44,5 @@ func complete_construction() -> void:
 	_output_pile.visible = true
 	var worker := KilnWorkerScene.instantiate() as KilnWorker
 	worker.position = _spawn_pos
-	worker.setup(self , _map, _coordination_manager, IronBarScene, CoordinationManager.ResourceType.IRON_ORE, CoordinationManager.ResourceType.COAL, _output_pile, "Smelter")
+	worker.setup(self, _map, _coordination_manager, IronBarScene, CoordinationManager.ResourceType.IRON_ORE, CoordinationManager.ResourceType.COAL, _output_pile, WORKER_NAME)
 	_spawn_parent.add_child(worker)

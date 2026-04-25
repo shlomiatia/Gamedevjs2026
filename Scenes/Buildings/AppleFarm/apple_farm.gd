@@ -4,6 +4,7 @@ extends Node2D
 const SIZE_X := 5
 const SIZE_Y := 2
 const BUILDING_NAME := "Apple Picker"
+const WORKER_NAME := "Apple Picker"
 
 const AppleFarmerScene = preload("res://Scenes/Workers/AppleFarmer/AppleFarmer.tscn")
 
