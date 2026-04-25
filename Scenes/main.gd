@@ -44,7 +44,7 @@ func _on_game_over() -> void:
 	panel.add_child(vbox)
 
 	var title := Label.new()
-	title.text = "GAME OVER"
+	title.text = "GAME  OVER"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	var red_title_settings := (preload("res://Themes/label_title.tres") as LabelSettings).duplicate()
 	red_title_settings.font_color = Color(0.9, 0.2, 0.2)
@@ -142,7 +142,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	_click_player = AudioStreamPlayer.new()
-	_click_player.stream = load("res://Audio/click.mp3") as AudioStream
+	_click_player.stream = load("res://Audio/click.wav") as AudioStream
 	add_child(_click_player)
 
 	var tile_size := _map.get_tile_size()

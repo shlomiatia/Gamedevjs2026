@@ -61,7 +61,7 @@ func _build_ui() -> void:
     add_child(_msg_label)
 
     _click_player = AudioStreamPlayer.new()
-    _click_player.stream = load("res://Audio/click.mp3")
+    _click_player.stream = load("res://Audio/click.wav")
     _click_player.process_mode = Node.PROCESS_MODE_ALWAYS
     add_child(_click_player)
 

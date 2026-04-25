@@ -80,7 +80,7 @@ func _ready() -> void:
     _overlay_layer.add_child(_overlay)
 
     _click_player = AudioStreamPlayer.new()
-    _click_player.stream = load("res://Audio/click.mp3") as AudioStream
+    _click_player.stream = load("res://Audio/click.wav") as AudioStream
     add_child(_click_player)
 
     _build_panel_ui()

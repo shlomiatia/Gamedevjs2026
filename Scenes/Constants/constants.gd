@@ -20,14 +20,14 @@ var initial_tool := 400.0
 var tool_threshold := initial_tool / 2.0
 
 # Resource satisfaction (how much each item fills a need)
-var apple_satisfaction := initial_hunger * 0.5
+var apple_satisfaction := initial_hunger * 0.25
 var cheese_satisfaction := initial_hunger * 1.0
 var bread_satisfaction := initial_hunger * 2.0
-var milk_satisfaction := initial_thirst * 0.5
-var cider_satisfaction := initial_thirst * 0.75
+var milk_satisfaction := initial_thirst * 0.25
+var cider_satisfaction := initial_thirst * 0.5
 var beer_satisfaction := initial_thirst * 1.0
-var clothes_satisfaction := initial_clothing * 0.75
-var flax_clothes_satisfaction := initial_clothing * 0.75
+var clothes_satisfaction := initial_clothing * 0.5
+var flax_clothes_satisfaction := initial_clothing * 0.5
 var smoked_fish_satisfaction := initial_hunger * 1.0
 var tool_satisfaction := initial_tool * 2.0
 
