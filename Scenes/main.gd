@@ -103,7 +103,7 @@ func _show_win_overlay() -> void:
 	panel.add_child(vbox)
 
 	var title := Label.new()
-	title.text = "The town of Millville is flourishing..."
+	title.text = "The  town  of  Millville  is  flourishing..."
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.label_settings = preload("res://Themes/label_title.tres")
 	vbox.add_child(title)
