@@ -15,6 +15,7 @@ var _nav_hole: PackedVector2Array
 
 func _ready() -> void:
     $Fence/Label.text = building_name
+    $Fence/Label.label_settings = preload("res://Themes/label_medium.tres")
     $Mill.visible = false
     $Fence.visible = false
     if building_texture != null:

@@ -17,7 +17,7 @@ var uses_tools: bool = true
 
 var _need_icon: Sprite2D = null
 var _need_icon_textures: Dictionary = {}
-var _strike_line: Line2D = null
+var _strike_sprite: Sprite2D = null
 
 var _blocked_by_needs: Dictionary = {}
 
@@ -42,13 +42,10 @@ func _ready() -> void:
     _need_icon.scale = Vector2(0.5, 0.5)
     _need_icon.visible = false
     add_child(_need_icon)
-    _strike_line = Line2D.new()
-    _strike_line.add_point(Vector2(-16.0, -16.0))
-    _strike_line.add_point(Vector2(16.0, 16.0))
-    _strike_line.default_color = Color(1.0, 0.15, 0.15, 1.0)
-    _strike_line.width = 6.0
-    _strike_line.visible = false
-    _need_icon.add_child(_strike_line)
+    _strike_sprite = Sprite2D.new()
+    _strike_sprite.texture = load("res://Textures/strike.png")
+    _strike_sprite.visible = false
+    _need_icon.add_child(_strike_sprite)
 
 func setup(mover: Node2D, map: Map, coordination_manager: Node, navigator: WorkerNavigator) -> void:
     _mover = mover
@@ -170,17 +167,35 @@ func _process(delta: float) -> void:
 func _update_need_icon() -> void:
     if _need_icon == null:
         return
-    if _active_needs.is_empty() and _blocked_by_needs.is_empty():
-        _need_icon.visible = false
-        return
-    var need: int
-    var is_blocked: bool
     if not _active_needs.is_empty():
-        need = _active_needs[0].need
-        is_blocked = false
+        _need_icon.texture = _need_icon_textures.get(_active_needs[0].need)
+        _need_icon.modulate = Color.WHITE
+        _need_icon.visible = true
+        _strike_sprite.visible = false
+        return
+    if not _blocked_by_needs.is_empty():
+        _need_icon.texture = _need_icon_textures.get(_blocked_by_needs.keys()[0])
+        _need_icon.modulate = Color.WHITE
+        _need_icon.visible = true
+        _strike_sprite.visible = true
+        return
+    var lowest_need := -1
+    var lowest_val := INF
+    var need_checks := [
+        [Worker.NeedType.FOOD, hunger, Constants.hunger_threshold],
+        [Worker.NeedType.DRINK, thirst, Constants.thirst_threshold],
+        [Worker.NeedType.CLOTHING, clothing, Constants.clothing_threshold],
+    ]
+    if uses_tools:
+        need_checks.append([Worker.NeedType.TOOL, _tool, Constants.tool_threshold])
+    for check in need_checks:
+        if check[1] < check[2] and check[1] < lowest_val:
+            lowest_need = check[0]
+            lowest_val = check[1]
+    if lowest_need >= 0:
+        _need_icon.texture = _need_icon_textures.get(lowest_need)
+        _need_icon.modulate = Color("f22f46")
+        _need_icon.visible = true
+        _strike_sprite.visible = false
     else:
-        need = _blocked_by_needs.keys()[0]
-        is_blocked = true
-    _need_icon.texture = _need_icon_textures.get(need)
-    _need_icon.visible = true
-    _strike_line.visible = is_blocked
+        _need_icon.visible = false

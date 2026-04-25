@@ -13,7 +13,7 @@ var hunger_threshold := initial_hunger / 2.0
 var initial_thirst := 400.0
 var thirst_threshold := initial_thirst / 2.0
 
-var initial_clothing := 400.0
+var initial_clothing := 10.0
 var clothing_threshold := initial_clothing / 2.0
 
 var initial_tool := 400.0

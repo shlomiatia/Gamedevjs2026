@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bn8sxoibt28hl" path="res://Textures/drink.png" id="10_mw35l"]
 [ext_resource type="Texture2D" uid="uid://cohysc4gp33fm" path="res://Textures/tool.png" id="11_tool"]
 [ext_resource type="Texture2D" uid="uid://csgc8cjgmkaey" path="res://Textures/strike.png" id="12_strike"]
+[ext_resource type="Texture2D" uid="uid://br4jf66vfi4nf" path="res://Textures/fence.png" id="13_fence"]
 
 [sub_resource type="StyleBoxFlat" id="sub_panel"]
 content_margin_left = 10.0
@@ -104,11 +105,28 @@ size_flags_horizontal = 0
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="PendingPlanksIcon" type="TextureRect" parent="Content/Panel/VBox/GridRow/PlanksCol/PlanksBotRow"]
+[node name="PendingPlanksStack" type="Control" parent="Content/Panel/VBox/GridRow/PlanksCol/PlanksBotRow"]
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
+clip_children = 1
 tooltip_text = "Pending building sites needing planks"
+
+[node name="PendingPlanksHouse" type="TextureRect" parent="Content/Panel/VBox/GridRow/PlanksCol/PlanksBotRow/PendingPlanksStack"]
+layout_mode = 0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+mouse_filter = 2
 texture = ExtResource("5_house")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PendingPlanksFence" type="TextureRect" parent="Content/Panel/VBox/GridRow/PlanksCol/PlanksBotRow/PendingPlanksStack"]
+layout_mode = 0
+offset_right = 20.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("13_fence")
 expand_mode = 1
 stretch_mode = 5
 
@@ -185,11 +203,28 @@ size_flags_horizontal = 0
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="PendingBricksIcon" type="TextureRect" parent="Content/Panel/VBox/GridRow/BricksCol/BricksBotRow"]
+[node name="PendingBricksStack" type="Control" parent="Content/Panel/VBox/GridRow/BricksCol/BricksBotRow"]
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
+clip_children = 1
 tooltip_text = "Pending building sites needing bricks"
+
+[node name="PendingBricksHouse" type="TextureRect" parent="Content/Panel/VBox/GridRow/BricksCol/BricksBotRow/PendingBricksStack"]
+layout_mode = 0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+mouse_filter = 2
 texture = ExtResource("7_bhouse")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PendingBricksFence" type="TextureRect" parent="Content/Panel/VBox/GridRow/BricksCol/BricksBotRow/PendingBricksStack"]
+layout_mode = 0
+offset_right = 20.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture = ExtResource("13_fence")
 expand_mode = 1
 stretch_mode = 5
 

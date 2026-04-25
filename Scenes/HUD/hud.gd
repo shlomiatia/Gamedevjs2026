@@ -2,8 +2,8 @@ class_name HUD
 extends HBoxContainer
 
 const ICON_SIZE := Vector2(20, 20)
-const NEED_COLOR_LOW := Color("b12935")
-const NEED_COLOR_HIGH := Color("b12935")
+const NEED_COLOR_LOW := Color("f22f46")
+const NEED_COLOR_HIGH := Color("f22f46")
 
 var _coordination_manager: CoordinationManager = null
 

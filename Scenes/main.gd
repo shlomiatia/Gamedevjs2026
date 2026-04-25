@@ -145,17 +145,43 @@ func _ready() -> void:
 	_click_player.stream = load("res://Audio/click.wav") as AudioStream
 	add_child(_click_player)
 
+	var game_theme := Theme.new()
+	game_theme.set_color("font_color", "Button", Color.WHITE)
+	game_theme.set_color("font_hover_color", "Button", Color.WHITE)
+	game_theme.set_color("font_pressed_color", "Button", Color(0.9, 0.9, 0.9))
+	game_theme.set_color("font_disabled_color", "Button", Color(0.6, 0.6, 0.6, 0.5))
+	game_theme.set_color("font_focus_color", "Button", Color.WHITE)
+	game_theme.set_color("font_hover_pressed_color", "Button", Color.WHITE)
+	game_theme.set_color("font_color", "CheckBox", Color.WHITE)
+	game_theme.set_color("font_hover_color", "CheckBox", Color.WHITE)
+	game_theme.set_color("font_focus_color", "CheckBox", Color.WHITE)
+	game_theme.set_color("font_color", "TooltipLabel", Color.WHITE)
+	var tooltip_style := StyleBoxFlat.new()
+	tooltip_style.bg_color = Color(0.08, 0.06, 0.05, 0.92)
+	tooltip_style.corner_radius_top_left = 4
+	tooltip_style.corner_radius_top_right = 4
+	tooltip_style.corner_radius_bottom_left = 4
+	tooltip_style.corner_radius_bottom_right = 4
+	tooltip_style.content_margin_left = 6
+	tooltip_style.content_margin_top = 4
+	tooltip_style.content_margin_right = 6
+	tooltip_style.content_margin_bottom = 4
+	game_theme.set_stylebox("panel", "TooltipPanel", tooltip_style)
+	get_window().theme = game_theme
+
 	var tile_size := _map.get_tile_size()
 	_level_pixel_size = Vector2i(Map.LEVEL_WIDTH * tile_size.x, Map.LEVEL_HEIGHT * tile_size.y)
 	var scenic_top_px := (Map.RIVER_ROW - 4) * tile_size.y
 	camera.setup(_level_pixel_size, scenic_top_px)
 	_forest.setup(_map, self )
 	_building_manager.setup(_map, _coordination_manager, _forest)
+	_building_manager.set_ui_visible(false)
 	_coordination_manager.game_over.connect(_on_game_over)
 	_coordination_manager.game_won.connect(_on_game_won)
 
 	_hud_layer = CanvasLayer.new()
 	_hud_layer.layer = 10
+	_hud_layer.visible = false
 	add_child(_hud_layer)
 	_hud = preload("res://Scenes/HUD/HUD.tscn").instantiate() as HUD
 	_hud.setup(_coordination_manager)
@@ -235,6 +261,8 @@ func _show_start_screen() -> void:
 	start_btn.pressed.connect(func():
 		_click_player.play()
 		layer.queue_free()
+		_hud_layer.visible = true
+		_building_manager.set_ui_visible(true)
 		if tutorial_check.button_pressed:
 			_tutorial.start()
 	)
