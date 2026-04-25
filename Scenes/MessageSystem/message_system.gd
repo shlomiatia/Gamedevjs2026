@@ -58,11 +58,11 @@ func show_message(text: String, sound_type: String = "") -> void:
 	var style := StyleBoxFlat.new()
 	match sound_type:
 		"bell":
-			style.bg_color = Color(0.25, 0.04, 0.04, 0.88)
+			style.bg_color = Color(0.25, 0.04, 0.04, 0.4)
 		"alert":
-			style.bg_color = Color(0.30, 0.13, 0.0, 0.88)
+			style.bg_color = Color(0.30, 0.13, 0.0, 0.4)
 		_:
-			style.bg_color = Color(0.04, 0.04, 0.06, 0.85)
+			style.bg_color = Color(0.04, 0.04, 0.06, 0.4)
 	style.content_margin_left = 10.0
 	style.content_margin_top = 5.0
 	style.content_margin_right = 10.0
@@ -75,11 +75,7 @@ func show_message(text: String, sound_type: String = "") -> void:
 
 	var label := Label.new()
 	label.text = text
-	label.add_theme_color_override("font_color", Color.WHITE)
-	label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.9))
-	label.add_theme_constant_override("shadow_offset_x", 1)
-	label.add_theme_constant_override("shadow_offset_y", 1)
-	label.add_theme_font_size_override("font_size", 13)
+	label.label_settings = preload("res://Themes/label_small.tres")
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.custom_minimum_size.x = MESSAGE_WIDTH - 20.0
 	panel.add_child(label)

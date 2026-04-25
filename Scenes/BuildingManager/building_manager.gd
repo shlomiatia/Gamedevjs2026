@@ -144,8 +144,7 @@ func _make_section(parent: HBoxContainer, icon_path: String, label_text: String,
     header.add_child(icon)
     var lbl := Label.new()
     lbl.text = label_text
-    lbl.add_theme_font_size_override("font_size", 11)
-    lbl.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85, 1.0))
+    lbl.label_settings = preload("res://Themes/label_small.tres")
     header.add_child(lbl)
     section.add_child(header)
 
@@ -177,7 +176,7 @@ func _make_dropdown(
     # Popup lives in _popup_container (full-screen overlay) so it never pushes the bar up
     var popup := PanelContainer.new()
     var ps := StyleBoxFlat.new()
-    ps.bg_color = Color(0.08, 0.08, 0.08, 0.92)
+    ps.bg_color = Color(0.0, 0.0, 0.0, 0.4)
     ps.border_color = Color(0.5, 0.5, 0.5, 0.6)
     ps.set_border_width_all(1)
     ps.set_corner_radius_all(3)

@@ -19,7 +19,7 @@ content_margin_left = 10.0
 content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0.55)
+bg_color = Color(0, 0, 0, 0.4)
 
 [sub_resource type="AtlasTexture" id="sub_worker"]
 atlas = ExtResource("2_worker")
@@ -92,10 +92,10 @@ stretch_mode = 5
 layout_mode = 2
 tooltip_text = "Planks available"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = " 0"
 
 [node name="PlanksBotRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/PlanksCol"]
@@ -116,10 +116,10 @@ stretch_mode = 5
 layout_mode = 2
 tooltip_text = "Pending building sites needing planks"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = " 0"
 
 [node name="WorkersRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/PlanksCol"]
@@ -139,10 +139,10 @@ stretch_mode = 5
 layout_mode = 2
 tooltip_text = "Workers: current count / target (30)"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = " 30/30"
 
 [node name="Sep1" type="VSeparator" parent="Content/Panel/VBox/GridRow"]
@@ -173,10 +173,10 @@ stretch_mode = 5
 layout_mode = 2
 tooltip_text = "Bricks available"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = " 0"
 
 [node name="BricksBotRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/BricksCol"]
@@ -197,10 +197,10 @@ stretch_mode = 5
 layout_mode = 2
 tooltip_text = "Pending building sites needing bricks"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = " 0"
 
 [node name="Sep2" type="VSeparator" parent="Content/Panel/VBox/GridRow"]
@@ -230,10 +230,10 @@ stretch_mode = 5
 layout_mode = 2
 tooltip_text = "Food available"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = " 0"
 
 [node name="FoodNeedRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/FoodCol"]
@@ -254,10 +254,10 @@ stretch_mode = 5
 [node name="FoodNeedLabel" type="Label" parent="Content/Panel/VBox/GridRow/FoodCol/FoodNeedRow"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.486, 0.071, 0.169, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = "0"
 
 [node name="DeadRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/FoodCol"]
@@ -277,10 +277,10 @@ stretch_mode = 5
 layout_mode = 2
 tooltip_text = "Dead workers"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = " 0"
 
 [node name="Sep3" type="VSeparator" parent="Content/Panel/VBox/GridRow"]
@@ -311,10 +311,10 @@ stretch_mode = 5
 layout_mode = 2
 tooltip_text = "Drink available"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = " 0"
 
 [node name="DrinkNeedRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/DrinkCol"]
@@ -335,10 +335,10 @@ stretch_mode = 5
 [node name="DrinkNeedLabel" type="Label" parent="Content/Panel/VBox/GridRow/DrinkCol/DrinkNeedRow"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.486, 0.071, 0.169, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = " 0"
 
 [node name="Sep4" type="VSeparator" parent="Content/Panel/VBox/GridRow"]
@@ -368,10 +368,10 @@ stretch_mode = 5
 layout_mode = 2
 tooltip_text = "Clothing available"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = " 0"
 
 [node name="ClothesNeedRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/ClothesCol"]
@@ -392,10 +392,10 @@ stretch_mode = 5
 [node name="ClothesNeedLabel" type="Label" parent="Content/Panel/VBox/GridRow/ClothesCol/ClothesNeedRow"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.486, 0.071, 0.169, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = "0"
 
 [node name="ClothesBrokenRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/ClothesCol"]
@@ -429,10 +429,10 @@ stretch_mode = 5
 [node name="BrokenClothingLabel" type="Label" parent="Content/Panel/VBox/GridRow/ClothesCol/ClothesBrokenRow"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = "0"
 
 [node name="Sep5" type="VSeparator" parent="Content/Panel/VBox/GridRow"]
@@ -462,10 +462,10 @@ stretch_mode = 5
 layout_mode = 2
 tooltip_text = "Tools available"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = " 0"
 
 [node name="ToolsNeedRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/ToolsCol"]
@@ -486,10 +486,10 @@ stretch_mode = 5
 [node name="ToolsNeedLabel" type="Label" parent="Content/Panel/VBox/GridRow/ToolsCol/ToolsNeedRow"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.486, 0.071, 0.169, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = "0"
 
 [node name="ToolsBrokenRow" type="HBoxContainer" parent="Content/Panel/VBox/GridRow/ToolsCol"]
@@ -523,8 +523,8 @@ stretch_mode = 5
 [node name="BrokenToolLabel" type="Label" parent="Content/Panel/VBox/GridRow/ToolsCol/ToolsBrokenRow"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
-theme_override_constants/shadow_offset_x = 1
-theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
 text = "0"

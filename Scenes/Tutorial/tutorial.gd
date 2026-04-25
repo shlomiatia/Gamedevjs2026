@@ -56,11 +56,7 @@ func _build_ui() -> void:
     _msg_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     _msg_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
     _msg_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-    _msg_label.add_theme_font_size_override("font_size", 24)
-    _msg_label.add_theme_color_override("font_color", Color.WHITE)
-    _msg_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.95))
-    _msg_label.add_theme_constant_override("shadow_offset_x", 2)
-    _msg_label.add_theme_constant_override("shadow_offset_y", 2)
+    _msg_label.label_settings = preload("res://Themes/label_medium.tres")
     _msg_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
     add_child(_msg_label)
 
@@ -77,7 +73,7 @@ func start() -> void:
 func _build_steps() -> void:
     _steps = [
         _mc("Welcome to Millville!"),
-        _me("Use WASD, arrows, or middle mouse button to pan the map.", "panned", Callable(), 2.0, true),
+        _me("Use WASD, arrows, or middle mouse button to pan the map.", "panned", Callable(), 1.0, true),
         _mc("Your goal is to reach a population of 30."),
         _mc("You currently have none.", func(): return _hud.get_workers_rect()),
         _meu("Let's fix this by building a Builder Hut.", "builder_button_clicked",

@@ -112,8 +112,9 @@ func _ready() -> void:
     _vbox.add_child(_satisfy_row)
 
     _warning_label = Label.new()
-    _warning_label.add_theme_color_override("font_color", Color(0.9, 0.2, 0.2, 1))
-    _warning_label.add_theme_font_size_override("font_size", 13)
+    var warning_settings := (preload("res://Themes/label_small.tres") as LabelSettings).duplicate()
+    warning_settings.font_color = Color(0.9, 0.2, 0.2)
+    _warning_label.label_settings = warning_settings
     _warning_label.visible = false
     _vbox.add_child(_warning_label)
 
@@ -175,7 +176,7 @@ func _process(_delta: float) -> void:
     _panel.position = Vector2(x, y)
 
 func _populate(data: Dictionary, show_cost: bool, warning: String = "") -> void:
-    var font_size := 14 if show_cost else 11
+    var font_size := 14
     var icon_size := 20 if show_cost else 14
     var pad := 8 if show_cost else 5
     var pad_v := 6 if show_cost else 4
@@ -188,7 +189,7 @@ func _populate(data: Dictionary, show_cost: bool, warning: String = "") -> void:
     _vbox.add_theme_constant_override("separation", sep)
 
     _name_label.text = data["display_name"]
-    _name_label.add_theme_font_size_override("font_size", font_size)
+    _name_label.label_settings = preload("res://Themes/label_small.tres")
 
     for c in _cost_row.get_children():
         c.queue_free()
@@ -240,11 +241,11 @@ func _populate(data: Dictionary, show_cost: bool, warning: String = "") -> void:
     _warning_label.text = warning
     _warning_label.visible = warning != ""
 
-func _add_label(parent: HBoxContainer, text: String, font_size: int) -> void:
+func _add_label(parent: HBoxContainer, text: String, _font_size: int) -> void:
     var lbl := Label.new()
     lbl.text = text
     lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-    lbl.add_theme_font_size_override("font_size", font_size)
+    lbl.label_settings = preload("res://Themes/label_small.tres")
     parent.add_child(lbl)
 
 func _add_icon(parent: HBoxContainer, resource_type: int, icon_size: int) -> void:
