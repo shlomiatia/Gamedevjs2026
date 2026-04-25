@@ -50,7 +50,9 @@ func resume_work() -> void:
             $Worker.navigate_to($Worker.home_world_pos())
 
 func _process(delta: float) -> void:
-    $Worker.set_working(_state == State.SHEAR)
+    var shear_blocked := _state == State.SHEAR and _shear_elapsed >= Constants.sheep_shear_time_ms \
+        and $Worker.is_output_full(_wool_pile) and $Worker.is_output_full(_milk_pile)
+    $Worker.set_working(_state == State.SHEAR and not shear_blocked)
     if _state == State.GO_HOME:
         _follow_all_sheep()
     if $Worker.is_satisfying_need():
