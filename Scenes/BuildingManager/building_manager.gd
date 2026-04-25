@@ -26,6 +26,10 @@ const WheatFarmScene = preload("res://Scenes/Buildings/WheatFarm/WheatFarm.tscn"
 const GritsmillScene = preload("res://Scenes/Buildings/Gritsmill/Gritsmill.tscn")
 const BakeryScene = preload("res://Scenes/Buildings/Bakery/Bakery.tscn")
 const BreweryScene = preload("res://Scenes/Buildings/Brewery/Brewery.tscn")
+const FishermanHutScene = preload("res://Scenes/Buildings/FishermanHut/FishermanHut.tscn")
+const SmokehouseScene = preload("res://Scenes/Buildings/Smokehouse/Smokehouse.tscn")
+const FlaxFarmScene = preload("res://Scenes/Buildings/FlaxFarm/FlaxFarm.tscn")
+const WeavingMillScene = preload("res://Scenes/Buildings/WeavingMill/WeavingMill.tscn")
 
 var _map: Map = null
 var _spawn_parent: Node2D = null
@@ -282,6 +286,13 @@ func _build_food_section(parent: HBoxContainer) -> void:
     _button_key_pairs.append(["Gritsmill", bread_btns[2], CostTier.PLANK, "Flour Mill"])
     _button_key_pairs.append(["WheatFarm", bread_btns[3], CostTier.PLANK, "Wheat Farm"])
 
+    var fish_btns := _make_dropdown(row, "res://Textures/smoked fish.png", CostTier.BRICK, [
+        {"key": "Smokehouse", "scene": SmokehouseScene, "size_x": Smokehouse.SIZE_X, "size_y": Smokehouse.SIZE_Y, "text": "Smokehouse", "tier": CostTier.BRICK},
+        {"key": "FishermanHut", "scene": FishermanHutScene, "size_x": FishermanHut.SIZE_X, "size_y": FishermanHut.SIZE_Y, "text": "Fisherman", "tier": CostTier.PLANK},
+    ])
+    _button_key_pairs.append(["Smokehouse", fish_btns[0], CostTier.BRICK, "Smokehouse"])
+    _button_key_pairs.append(["FishermanHut", fish_btns[1], CostTier.PLANK, "Fisherman"])
+
 func _build_drink_section(parent: HBoxContainer) -> void:
     var drink_mat := ShaderMaterial.new()
     drink_mat.shader = load("res://Shaders/pallete_swap.gdshader") as Shader
@@ -330,6 +341,13 @@ func _build_clothes_section(parent: HBoxContainer) -> void:
     ])
     _button_key_pairs.append(["WoolMill", clothes_btns[0], CostTier.PLANK, "Wool Mill"])
     _button_key_pairs.append(["SheepFarm", clothes_btns[1], CostTier.PLANK, "Sheep Farm"])
+
+    var flax_btns := _make_dropdown(row, "res://Textures/flax clothes.png", CostTier.PLANK, [
+        {"key": "WeavingMill", "scene": WeavingMillScene, "size_x": WeavingMill.SIZE_X, "size_y": WeavingMill.SIZE_Y, "text": "Weaving Mill", "tier": CostTier.PLANK},
+        {"key": "FlaxFarm", "scene": FlaxFarmScene, "size_x": FlaxFarm.SIZE_X, "size_y": FlaxFarm.SIZE_Y, "text": "Flax Farm", "tier": CostTier.PLANK},
+    ])
+    _button_key_pairs.append(["WeavingMill", flax_btns[0], CostTier.PLANK, "Weaving Mill"])
+    _button_key_pairs.append(["FlaxFarm", flax_btns[1], CostTier.PLANK, "Flax Farm"])
     
 
 func _build_tools_section(parent: HBoxContainer) -> void:

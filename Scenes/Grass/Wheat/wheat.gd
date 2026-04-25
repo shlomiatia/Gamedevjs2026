@@ -1,4 +1,4 @@
-class_name WheatLayer
+class_name CropLayer
 extends Node2D
 
 var _grass_layer: TileMapLayer = null
@@ -9,10 +9,10 @@ var _wheat_sprites: Dictionary = {}
 var _wheat_ready: Dictionary = {}
 var _wheat_harvesting: Dictionary = {}
 
-func setup(grass_layer: TileMapLayer, occupied_tiles: Dictionary) -> void:
+func setup(grass_layer: TileMapLayer, occupied_tiles: Dictionary, texture_path: String = "res://Textures/wheat tileset.png") -> void:
     _grass_layer = grass_layer
     _occupied_tiles = occupied_tiles
-    _wheat_texture = preload("res://Textures/wheat tileset.png") as Texture2D
+    _wheat_texture = load(texture_path) as Texture2D
 
 func plant_wheat(tile: Vector2i, grow_duration: float) -> void:
     var sprite := Sprite2D.new()
@@ -49,7 +49,7 @@ func find_wheat_planting_tile(near_pos: Vector2) -> Vector2i:
     var visited: Dictionary = {start: true}
     while not queue.is_empty():
         var tile: Vector2i = queue.pop_front()
-        if _occupied_tiles.get(tile, 0) != Map.OccupiedType.BLOCK_WORKERS and not _wheat_sprites.has(tile) and _grass_layer.get_cell_atlas_coords(tile) == Vector2i(0, 0):
+        if _occupied_tiles.get(tile, 0) == 0 and not _wheat_sprites.has(tile) and _grass_layer.get_cell_atlas_coords(tile) == Vector2i(0, 0):
             return tile
         for offset: Vector2i in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
             var neighbor := tile + offset

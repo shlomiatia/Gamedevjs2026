@@ -14,8 +14,11 @@ var occupied_tiles: Dictionary = {}
 @onready var _mountain: Mountain = $Mountain
 @onready var _nav_region: NavigationRegion2D = $NavRegion
 
-var wheat: WheatLayer:
+var wheat: CropLayer:
 	get: return _grass.wheat
+
+var flax: CropLayer:
+	get: return _grass.flax
 
 func _ready() -> void:
 	_grass.setup(LEVEL_WIDTH, LEVEL_HEIGHT, RIVER_ROW, 2, occupied_tiles)

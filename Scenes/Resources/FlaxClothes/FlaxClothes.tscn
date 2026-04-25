@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scenes/Resources/FlaxClothes/flax_clothes.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://Textures/flax clothes.png" id="2_tex"]
+
+[node name="FlaxClothes" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+texture = ExtResource("2_tex")

@@ -1,0 +1,59 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://Scenes/Buildings/Smokehouse/smokehouse.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bap1qcvbb4owg" path="res://Scenes/Buildings/Building/Building.tscn" id="2_building"]
+[ext_resource type="Texture2D" uid="uid://b1s67fbuttl32" path="res://Textures/bricks_house.png" id="3_texture"]
+[ext_resource type="Shader" uid="uid://b8yka2iqauytq" path="res://Shaders/pallete_swap.gdshader" id="4_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_smokehouse"]
+shader = ExtResource("4_shader")
+shader_parameter/is_disabled = false
+shader_parameter/original_0 = Color(0.537255, 0.623529, 0.4, 1)
+shader_parameter/original_1 = Color(0.380392, 0.521569, 0.352941, 1)
+shader_parameter/original_2 = Color(0.298039, 0.376471, 0.317647, 1)
+shader_parameter/original_3 = Color(0, 0, 0, 1)
+shader_parameter/original_4 = Color(0, 0, 0, 1)
+shader_parameter/original_5 = Color(0, 0, 0, 1)
+shader_parameter/original_6 = Color(0, 0, 0, 1)
+shader_parameter/original_7 = Color(0, 0, 0, 1)
+shader_parameter/original_8 = Color(0, 0, 0, 1)
+shader_parameter/original_9 = Color(0, 0, 0, 1)
+shader_parameter/original_10 = Color(0, 0, 0, 1)
+shader_parameter/original_11 = Color(0, 0, 0, 1)
+shader_parameter/original_12 = Color(0, 0, 0, 1)
+shader_parameter/replace_0 = Color(0.164706, 0.733333, 0.815686, 1)
+shader_parameter/replace_1 = Color(0.192157, 0.364706, 0.803922, 1)
+shader_parameter/replace_2 = Color(0.278431, 0.164706, 0.611765, 1)
+shader_parameter/replace_3 = Color(0, 0, 0, 1)
+shader_parameter/replace_4 = Color(0, 0, 0, 1)
+shader_parameter/replace_5 = Color(0, 0, 0, 1)
+shader_parameter/replace_6 = Color(0, 0, 0, 1)
+shader_parameter/replace_7 = Color(0, 0, 0, 1)
+shader_parameter/replace_8 = Color(0, 0, 0, 1)
+shader_parameter/replace_9 = Color(0, 0, 0, 1)
+shader_parameter/replace_10 = Color(0, 0, 0, 1)
+shader_parameter/replace_11 = Color(0, 0, 0, 1)
+shader_parameter/replace_12 = Color(0, 0, 0, 1)
+shader_parameter/modulate = Color(1, 1, 1, 1)
+
+[node name="Smokehouse" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Building" parent="." instance=ExtResource("2_building")]
+building_name = "Smokehouse"
+building_texture = ExtResource("3_texture")
+building_material = SubResource("ShaderMaterial_smokehouse")
+
+[node name="Smoke" type="CPUParticles2D" parent="."]
+position = Vector2(-36, -201)
+emitting = false
+amount = 16
+lifetime = 4.0
+direction = Vector2(0, -1)
+spread = 15.0
+gravity = Vector2(3, -10)
+initial_velocity_min = 8.0
+initial_velocity_max = 15.0
+scale_amount_min = 20.0
+scale_amount_max = 40.0
+color = Color(0.67058825, 0.6862745, 0.7254902, 0.7019608)

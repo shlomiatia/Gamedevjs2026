@@ -18,3 +18,6 @@ tile_set = ExtResource("2_tileset")
 
 [node name="Wheat" type="Node2D" parent="."]
 script = ExtResource("3_wheat_script")
+
+[node name="Flax" type="Node2D" parent="."]
+script = ExtResource("3_wheat_script")

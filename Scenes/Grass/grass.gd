@@ -1,7 +1,8 @@
 class_name Grass
 extends Node2D
 
-@onready var wheat: WheatLayer = $Wheat
+@onready var wheat: CropLayer = $Wheat
+@onready var flax: CropLayer = $Flax
 @onready var _grass_layer: TileMapLayer = $GrassLayer
 @onready var _dirt_layer: TileMapLayer = $DirtLayer
 @onready var _fade_layer: TileMapLayer = $FadeLayer
@@ -14,6 +15,7 @@ var _fade_tween: Tween = null
 func setup(level_width: int, level_height: int, river_row: int, river_rows: int = 1, occupied_tiles: Dictionary = {}) -> void:
     _occupied_tiles = occupied_tiles
     wheat.setup(_grass_layer, occupied_tiles)
+    flax.setup(_grass_layer, occupied_tiles, "res://Textures/flax tileset.png")
     for x in level_width:
         for y in level_height:
             _grass_layer.set_cell(Vector2i(x, y), 0, Vector2i(0, 0))

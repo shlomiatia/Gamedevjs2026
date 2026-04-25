@@ -8,6 +8,8 @@ const _HOVER_DELAY := 1.0
 
 # ResourceType integers: LOG=0 PLANK=1 APPLE=2 CIDER=3 WOOL=4 CLOTHES=5
 #                        CLAY=6 BRICK=7 COAL=8 IRON_ORE=9 IRON_BAR=10 TOOL=11
+#                        MILK=12 CHEESE=13 WHEAT=14 FLOUR=15 BREAD=16 BEER=17
+#                        RAW_FISH=18 SMOKED_FISH=19 FLAX=20 FLAX_CLOTHES=21
 const TOOLTIP_DATA := {
     "WoodcutterHut": {"display_name": "Woodcutter", "cost": 1, "action": "produce", "output": [0]},
     "BuilderHut": {"display_name": "Builder", "cost": 1, "action": "train"},
@@ -27,6 +29,10 @@ const TOOLTIP_DATA := {
     "Gritsmill": {"display_name": "Flour Mill", "cost": 1, "action": "convert", "inputs": [14], "output": [15]},
     "Bakery": {"display_name": "Bakery", "cost": 7, "action": "convert", "inputs": [15, 0], "output": [16]},
     "Brewery": {"display_name": "Brewery", "cost": 7, "action": "convert", "inputs": [14, 0], "output": [17]},
+    "FishermanHut": {"display_name": "Fisherman Hut", "cost": 1, "action": "produce", "output": [18]},
+    "Smokehouse": {"display_name": "Smokehouse", "cost": 7, "action": "convert", "inputs": [18, 0], "output": [19]},
+    "FlaxFarm": {"display_name": "Flax Farm", "cost": 1, "action": "produce", "output": [20]},
+    "WeavingMill": {"display_name": "Weaving Mill", "cost": 1, "action": "convert", "inputs": [20], "output": [21]},
 }
 
 var _tooltip: BuildingTooltip

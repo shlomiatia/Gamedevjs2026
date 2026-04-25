@@ -15,23 +15,25 @@ signal construction_queued
 
 const WIN_WORKER_COUNT := 30
 
-enum ResourceType {LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR, TOOL, MILK, CHEESE, WHEAT, FLOUR, BREAD, BEER}
+enum ResourceType {LOG, PLANK, APPLE, CIDER, WOOL, CLOTHES, CLAY, BRICK, COAL, IRON_ORE, IRON_BAR, TOOL, MILK, CHEESE, WHEAT, FLOUR, BREAD, BEER, RAW_FISH, SMOKED_FISH, FLAX, FLAX_CLOTHES}
 
 const RESOURCE_TO_NEED := {
     ResourceType.APPLE: Worker.NeedType.FOOD,
     ResourceType.CHEESE: Worker.NeedType.FOOD,
     ResourceType.BREAD: Worker.NeedType.FOOD,
+    ResourceType.SMOKED_FISH: Worker.NeedType.FOOD,
     ResourceType.CIDER: Worker.NeedType.DRINK,
     ResourceType.MILK: Worker.NeedType.DRINK,
     ResourceType.BEER: Worker.NeedType.DRINK,
     ResourceType.CLOTHES: Worker.NeedType.CLOTHING,
+    ResourceType.FLAX_CLOTHES: Worker.NeedType.CLOTHING,
     ResourceType.TOOL: Worker.NeedType.TOOL,
 }
 
 const NEED_TO_RESOURCE := {
-    Worker.NeedType.FOOD: [ResourceType.APPLE, ResourceType.CHEESE, ResourceType.BREAD],
+    Worker.NeedType.FOOD: [ResourceType.APPLE, ResourceType.CHEESE, ResourceType.BREAD, ResourceType.SMOKED_FISH],
     Worker.NeedType.DRINK: [ResourceType.CIDER, ResourceType.MILK, ResourceType.BEER],
-    Worker.NeedType.CLOTHING: [ResourceType.CLOTHES],
+    Worker.NeedType.CLOTHING: [ResourceType.CLOTHES, ResourceType.FLAX_CLOTHES],
     Worker.NeedType.TOOL: [ResourceType.TOOL],
 }
 
@@ -40,10 +42,12 @@ func get_satisfaction_for_resource(resource_type: int) -> float:
         ResourceType.APPLE: return Constants.apple_satisfaction
         ResourceType.CHEESE: return Constants.cheese_satisfaction
         ResourceType.BREAD: return Constants.bread_satisfaction
+        ResourceType.SMOKED_FISH: return Constants.smoked_fish_satisfaction
         ResourceType.MILK: return Constants.milk_satisfaction
         ResourceType.CIDER: return Constants.cider_satisfaction
         ResourceType.BEER: return Constants.beer_satisfaction
         ResourceType.CLOTHES: return Constants.clothes_satisfaction
+        ResourceType.FLAX_CLOTHES: return Constants.flax_clothes_satisfaction
         ResourceType.TOOL: return Constants.tool_satisfaction
     return Constants.initial_hunger
 
