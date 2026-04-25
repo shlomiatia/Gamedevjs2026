@@ -110,6 +110,7 @@ func _cancel_hover() -> void:
     _tooltip_shown = false
 
 func _process(delta: float) -> void:
+    _hovered = _hovered.filter(func(h): return is_instance_valid(h["building"]))
     if _hovered.is_empty() or _tooltip_shown:
         return
     _hover_timer += delta
