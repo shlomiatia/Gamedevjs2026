@@ -278,5 +278,5 @@ func _show_start_screen() -> void:
     mill_rect.pivot_offset = Vector2(48 * 4, 48 * 4)
     vbox.add_child(mill_rect)
 
-    #var mill_tween := layer.create_tween().set_loops()
-    #mill_tween.tween_property(mill_rect, "rotation_degrees", 360.0, 6.0).set_trans(Tween.TRANS_LINEAR).as_relative()
+    var mill_tween := layer.create_tween().set_loops()
+    mill_tween.tween_property(mill_rect, "rotation_degrees", 360.0, 6.0).set_trans(Tween.TRANS_LINEAR).as_relative()

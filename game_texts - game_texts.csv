@@ -1,0 +1,112 @@
+category,key,text,text updated,source,notes
+building_name,apple_farm,Apple Picker,Apple picker,Scenes/Buildings/AppleFarm/apple_farm.gd,
+building_name,bakery,Bakery,Bakery,Scenes/Buildings/Bakery/bakery.gd,
+building_name,brewery,Brewery,Brewery,Scenes/Buildings/Brewery/brewery.gd,
+building_name,builder_hut,Builder,Builder,Scenes/Buildings/BuilderHut/builder_hut.gd,
+building_name,cider_mill,Cider Mill,Cider mill,Scenes/Buildings/CiderMill/cider_mill.gd,
+building_name,clay_kiln,Clay Kiln,Clay kiln,Scenes/Buildings/ClayKiln/clay_kiln.gd,
+building_name,clay_pit,Clay Pit,Clay pit,Scenes/BuildingManager/building_manager.gd,hardcoded string
+building_name,coal_mine,Coal Mine,Coal mine,Scenes/BuildingManager/building_manager.gd,hardcoded string
+building_name,fisherman_hut,Fisherman Hut,Fisherman hut,Scenes/Buildings/FishermanHut/fisherman_hut.gd,
+building_name,flax_farm,Flax Farm,Flax farm,Scenes/Buildings/FlaxFarm/flax_farm.gd,
+building_name,gritsmill,Flour Mill,Flour mill,Scenes/Buildings/Gritsmill/gritsmill.gd,scene is named Gritsmill
+building_name,fromage,Fromage,Dairy,Scenes/Buildings/Fromage/fromage.gd,
+building_name,iron_mine,Iron Mine,Iron mine,Scenes/BuildingManager/building_manager.gd,hardcoded string
+building_name,sawmill,Sawmill,Sawmill,Scenes/Buildings/Sawmill/sawmill.gd,
+building_name,sheep_farm,Sheep Farm,Sheep farm,Scenes/Buildings/SheepFarm/sheep_farm.gd,
+building_name,smokehouse,Smokehouse,Smokehouse,Scenes/Buildings/Smokehouse/smokehouse.gd,
+building_name,steel_mill,Steel Mill,Steel mill,Scenes/Buildings/SteelMill/steel_mill.gd,
+building_name,toolsmith,Toolsmith,Toolsmith,Scenes/Buildings/Toolsmith/toolsmith.gd,
+building_name,weaving_mill,Weaving Mill,Weaving mill,Scenes/Buildings/WeavingMill/weaving_mill.gd,
+building_name,wheat_farm,Wheat Farm,Wheat farm,Scenes/Buildings/WheatFarm/wheat_farm.gd,
+building_name,woodcutter_hut,Woodcutter,Woodcutter,Scenes/Buildings/WoodcutterHut/woodcutter_hut.gd,
+building_name,wool_mill,Wool Mill,Wool mill,Scenes/Buildings/WoolMill/wool_mill.gd,
+worker_name,apple_picker,Apple Picker,Apple picker,Scenes/Buildings/AppleFarm/apple_farm.gd,
+worker_name,baker,Baker,Baker,Scenes/Buildings/Bakery/bakery.gd,
+worker_name,brewer,Brewer,Brewer,Scenes/Buildings/Brewery/brewery.gd,
+worker_name,brick_maker,Brick Maker,Brick maker,Scenes/Buildings/ClayKiln/clay_kiln.gd,
+worker_name,builder,Builder,Builder,Scenes/Buildings/BuilderHut/builder_hut.gd,
+worker_name,cider_miller,Cider Miller,Cider miller,Scenes/Buildings/CiderMill/cider_mill.gd,
+worker_name,clay_digger,Clay Digger,Clay digger,Scenes/Buildings/Mine/mine.gd,CLAY resource type
+worker_name,coal_miner,Coal Miner,Coal miner,Scenes/Buildings/Mine/mine.gd,COAL resource type
+worker_name,fisherman,Fisherman,Fisherman,Scenes/Buildings/FishermanHut/fisherman_hut.gd,
+worker_name,flax_farmer,Flax Farmer,Flax farmer,Scenes/Buildings/FlaxFarm/flax_farm.gd,
+worker_name,fromager,Fromager,Cheesemaker,Scenes/Buildings/Fromage/fromage.gd,
+worker_name,grinder,Grinder,Flour miller,Scenes/Buildings/Gritsmill/gritsmill.gd,
+worker_name,iron_miner,Iron Miner,Iron miner,Scenes/Buildings/Mine/mine.gd,IRON_ORE resource type
+worker_name,miner,Miner,Miner,Scenes/Buildings/Mine/mine.gd,fallback/default
+worker_name,sawmiller,Sawmiller,Sawmiller,Scenes/Buildings/Sawmill/sawmill.gd,
+worker_name,sheep_farmer,Sheep Farmer,Sheep farmer,Scenes/Buildings/SheepFarm/sheep_farm.gd,
+worker_name,smelter,Smelter,Smelter,Scenes/Buildings/SteelMill/steel_mill.gd,
+worker_name,smoker,Smoker,Smoker,Scenes/Buildings/Smokehouse/smokehouse.gd,
+worker_name,toolsmith,Toolsmith,Toolsmith,Scenes/Buildings/Toolsmith/toolsmith.gd,
+worker_name,weaver,Weaver,Weaver,Scenes/Buildings/WeavingMill/weaving_mill.gd,also used by WoolMill
+worker_name,wheat_farmer,Wheat Farmer,Wheat farmer,Scenes/Buildings/WheatFarm/wheat_farm.gd,
+worker_name,woodcutter,Woodcutter,Woodcutter,Scenes/Buildings/WoodcutterHut/woodcutter_hut.gd,
+tutorial,step_01,Welcome to Millville!,Welcome to Millville!,Scenes/Tutorial/tutorial.gd,advance by click
+tutorial,step_02,"Use WASD, arrows, or middle mouse button to pan the map.","Use WASD, arrows or the middle mouse button to pan the map.",Scenes/Tutorial/tutorial.gd,advance by panning camera
+tutorial,step_03,Your goal is to reach a population of 30.,Your goal is to grow your town to a population of 30.,Scenes/Tutorial/tutorial.gd,advance by click
+tutorial,step_04,You currently have none.,Millville's current population: 0,Scenes/Tutorial/tutorial.gd,advance by click; highlights workers HUD
+tutorial,step_05,Let's fix this by building a Builder Hut.,Let's fix this by building a builder hut.,Scenes/Tutorial/tutorial.gd,advance by clicking Builder button
+tutorial,step_06,"Your first building is free, but others are not.","Your first building is free, but others are not. To grow your town, you’ll need to produce planks and bricks to build more.\nYou’ll need tools for your workers, and food and textile to feed and clothe them.",Scenes/Tutorial/tutorial.gd,advance by click; waits for building_placed:BuilderHut
+tutorial,step_07,You have 2 planks.,You have 2 planks.,Scenes/Tutorial/tutorial.gd,advance by click; highlights planks HUD
+tutorial,step_08,Use them to secure plank production.\nBuild a woodcutter and a sawmill.,Use them to secure plank production.\nBuild a woodcutter hut and a sawmill.,Scenes/Tutorial/tutorial.gd,advance by hovering planks dropdown
+tutorial,step_09,You already have 3 workers!,You already have 3 workers!,Scenes/Tutorial/tutorial.gd,advance by click; waits for worker_count:3
+tutorial,step_10,"But remember, they have needs.","But remember, they have needs.",Scenes/Tutorial/tutorial.gd,advance by click
+tutorial,step_11,"Without food and drink, your workers will die.","Without food and drink, your workers will starve.",Scenes/Tutorial/tutorial.gd,advance by click; highlights food/drink HUD
+tutorial,step_12,"Without clothes and tools, they will stop working.","Without clothes and tools, they won't be able to continue producing.",Scenes/Tutorial/tutorial.gd,advance by click; highlights clothing/tool HUD
+tutorial,step_13,You have some time before it happens.,You have some time before it happens.,Scenes/Tutorial/tutorial.gd,advance by click
+tutorial,step_14,"Start food production early, and good luck!",Start food production early. Good luck!,Scenes/Tutorial/tutorial.gd,advance by hovering food section
+message,worker_hungry,A worker is hungry.,A worker is hungry.,Scenes/MessageSystem/message_system.gd,triggered by worker_became_hungry signal
+message,worker_thirsty,A worker is thirsty.,A worker is thirsty.,Scenes/MessageSystem/message_system.gd,triggered by worker_became_thirsty signal
+message,worker_clothes_worn,Worker clothes are worn.,A worker's clothes are getting shabby.,Scenes/MessageSystem/message_system.gd,triggered by worker_clothes_worn signal
+message,worker_tools_worn,Worker tools are worn.,A worker's tools need repair.,Scenes/MessageSystem/message_system.gd,triggered by worker_tool_worn signal
+message,worker_died_starvation,[worker_name] has died due to starvation.,[worker_name] has died of starvation.,Scenes/MessageSystem/message_system.gd,death sound; [worker_name] is dynamic
+message,worker_died_dehydration,[worker_name] has died due to dehydration.,[worker_name] has died of dehydration.,Scenes/MessageSystem/message_system.gd,death sound; [worker_name] is dynamic
+message,worker_tool_broken,[worker_name] can't work due to broken tool!,[worker_name] can't work because his to broken tool!,Scenes/MessageSystem/message_system.gd,alert sound; [worker_name] is dynamic
+message,worker_clothes_unusable,[worker_name] can't work due to unusable clothes!,[worker_name] can't work due to unusable clothes!,Scenes/MessageSystem/message_system.gd,alert sound; [worker_name] is dynamic
+tooltip,cost_free,Cost: Free,Cost: free,Scenes/Tooltip/tooltip.gd,shown when building is free (first Builder Hut)
+tooltip,cost_prefix,Cost: ,Cost: ,Scenes/Tooltip/tooltip.gd,followed by resource icon
+tooltip,produces_prefix,Produces ,Produces ,Scenes/Tooltip/tooltip.gd,followed by output resource icon(s)
+tooltip,converts_prefix,Converts ,Converts ,Scenes/Tooltip/tooltip.gd,followed by input resource icon(s)
+tooltip,converts_to, to , to ,Scenes/Tooltip/tooltip.gd,between inputs and output icons
+tooltip,resource_separator, + , + ,Scenes/Tooltip/tooltip.gd,between multiple resource icons
+tooltip,action_train,Build buildings,Build buildings,Scenes/Tooltip/tooltip.gd,for Builder Hut
+tooltip,satisfies_hunger,Satisfies %d hunger,Satisfies %d hunger,Scenes/Tooltip/tooltip.gd,%d = satisfaction value
+tooltip,satisfies_thirst,Satisfies %d thirst,Quenches %d thirst,Scenes/Tooltip/tooltip.gd,%d = satisfaction value
+tooltip,satisfies_clothing,Satisfies %d clothing,Spruces up %d clothing,Scenes/Tooltip/tooltip.gd,%d = satisfaction value
+tooltip,satisfies_tools,Satisfies %d tools,Repairs %d tools,Scenes/Tooltip/tooltip.gd,%d = satisfaction value
+tooltip,warning_requires_clay_kiln,Requires Clay Kiln,Requires clay kiln,Scenes/BuildingManager/building_manager.gd,shown for brick-tier buildings when Clay Kiln not placed
+tooltip,placement_mill,Mills must be built next to the river.,Mills need water to run. Build your mills on the riverbank. ,Scenes/BuildingManager/building_manager.gd,world-space overlay during placement
+tooltip,placement_mine,Mines must be built next to the mountain.,"Best mining is in the mountains, so that's where your mines should be.",Scenes/BuildingManager/building_manager.gd,world-space overlay during placement
+hud_tooltip,planks_available,Planks available,Planks available,Scenes/HUD/HUD.tscn,
+hud_tooltip,planks_pending,Pending building sites needing planks,Pending building sites needing planks,Scenes/HUD/HUD.tscn,
+hud_tooltip,workers,Workers: current count / target (30),Workers: current count / target (30),Scenes/HUD/HUD.tscn,
+hud_tooltip,bricks_available,Bricks available,Bricks available,Scenes/HUD/HUD.tscn,
+hud_tooltip,bricks_pending,Pending building sites needing bricks,Pending building sites needing bricks,Scenes/HUD/HUD.tscn,
+hud_tooltip,food_available,Food available,Food available,Scenes/HUD/HUD.tscn,
+hud_tooltip,workers_hungry,Hungry workers (below 50% hunger),Hungry workers (less than 50% energy),Scenes/HUD/HUD.tscn,
+hud_tooltip,workers_dead,Dead workers,Dead workers,Scenes/HUD/HUD.tscn,
+hud_tooltip,drink_available,Drink available,Drink available,Scenes/HUD/HUD.tscn,
+hud_tooltip,workers_thirsty,Thirsty workers (below 50% thirst),Thirsty workers (less than 50% hydrated),Scenes/HUD/HUD.tscn,
+hud_tooltip,clothing_available,Clothing available,Clothing available,Scenes/HUD/HUD.tscn,
+hud_tooltip,workers_worn_clothing,Workers with worn clothing (below 50%),Workers with shabby clothing (below 50%),Scenes/HUD/HUD.tscn,
+hud_tooltip,workers_unusable_clothing,Unusuable clothing (workers can't work),Unusuable clothing (workers can't work),Scenes/HUD/HUD.tscn,typo in source: Unusuable
+hud_tooltip,tools_available,Tools available,Tools available,Scenes/HUD/HUD.tscn,
+hud_tooltip,workers_worn_tools,Workers with worn tools (below 50%),Workers with worn tools (below 50%),Scenes/HUD/HUD.tscn,
+hud_tooltip,workers_broken_tools,Broken tools (workers can't work),Broken tools (workers can't work),Scenes/HUD/HUD.tscn,
+panel_label,section_construction,Construction,Construction,Scenes/BuildingManager/building_manager.gd,build panel section header
+panel_label,section_food,Food,Food,Scenes/BuildingManager/building_manager.gd,build panel section header
+panel_label,section_drink,Drink,Drink,Scenes/BuildingManager/building_manager.gd,build panel section header
+panel_label,section_clothes,Clothes,Clothes,Scenes/BuildingManager/building_manager.gd,build panel section header
+panel_label,section_tools,Tools,Tools,Scenes/BuildingManager/building_manager.gd,build panel section header
+screen,title,Millville,Millville,Scenes/main.gd,start screen title
+screen,tutorial_checkbox,Enable Tutorial,Enable tutorial,Scenes/main.gd,start screen checkbox
+screen,start_button,Start Game,Start game,Scenes/main.gd,start screen button
+screen,gameover_title,GAME OVER,Game over,Scenes/main.gd,game over screen
+screen,gameover_subtitle,Your last builder has died.,Your last builder has died.,Scenes/main.gd,game over screen
+screen,gameover_button,Restart,Restart,Scenes/main.gd,game over screen button
+screen,win_title,The town of Millville is flourishing...,The town of Millville is thriving...,Scenes/main.gd,win screen
+screen,win_subtitle,Thanks for playing!,Thanks for playing!,Scenes/main.gd,win screen
+screen,win_button,Continue playing,Continue playing,Scenes/main.gd,win screen button
+ui,cancel_button,Cancel,Cancel,Scenes/Buildings/Building/Building.tscn,button on building fence during construction
