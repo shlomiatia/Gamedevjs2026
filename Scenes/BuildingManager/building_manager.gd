@@ -273,6 +273,13 @@ func _build_food_section(parent: HBoxContainer) -> void:
     _button_key_pairs.append(["Fromage", cheese_btns[1], CostTier.BRICK, Fromage.BUILDING_NAME])
     _button_key_pairs.append(["SheepFarm", cheese_btns[2], CostTier.PLANK, SheepFarm.BUILDING_NAME])
 
+    var fish_btns := _make_dropdown(row, "res://Textures/smoked fish.png", CostTier.BRICK, [
+        {"key": "Smokehouse", "scene": SmokehouseScene, "size_x": Smokehouse.SIZE_X, "size_y": Smokehouse.SIZE_Y, "text": Smokehouse.BUILDING_NAME, "tier": CostTier.BRICK},
+        {"key": "FishermanHut", "scene": FishermanHutScene, "size_x": FishermanHut.SIZE_X, "size_y": FishermanHut.SIZE_Y, "text": FishermanHut.BUILDING_NAME, "tier": CostTier.PLANK},
+    ])
+    _button_key_pairs.append(["Smokehouse", fish_btns[0], CostTier.BRICK, Smokehouse.BUILDING_NAME])
+    _button_key_pairs.append(["FishermanHut", fish_btns[1], CostTier.PLANK, FishermanHut.BUILDING_NAME])
+
     var bread_btns := _make_dropdown(row, "res://Textures/bread.png.png", CostTier.BRICK, [
         {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": WoodcutterHut.BUILDING_NAME, "tier": CostTier.FREE},
         {"key": "Bakery", "scene": BakeryScene, "size_x": Bakery.SIZE_X, "size_y": Bakery.SIZE_Y, "text": Bakery.BUILDING_NAME, "tier": CostTier.BRICK},
@@ -283,13 +290,6 @@ func _build_food_section(parent: HBoxContainer) -> void:
     _button_key_pairs.append(["Bakery", bread_btns[1], CostTier.BRICK, Bakery.BUILDING_NAME])
     _button_key_pairs.append(["Gritsmill", bread_btns[2], CostTier.PLANK, Gritsmill.BUILDING_NAME])
     _button_key_pairs.append(["WheatFarm", bread_btns[3], CostTier.PLANK, WheatFarm.BUILDING_NAME])
-
-    var fish_btns := _make_dropdown(row, "res://Textures/smoked fish.png", CostTier.BRICK, [
-        {"key": "Smokehouse", "scene": SmokehouseScene, "size_x": Smokehouse.SIZE_X, "size_y": Smokehouse.SIZE_Y, "text": Smokehouse.BUILDING_NAME, "tier": CostTier.BRICK},
-        {"key": "FishermanHut", "scene": FishermanHutScene, "size_x": FishermanHut.SIZE_X, "size_y": FishermanHut.SIZE_Y, "text": FishermanHut.BUILDING_NAME, "tier": CostTier.PLANK},
-    ])
-    _button_key_pairs.append(["Smokehouse", fish_btns[0], CostTier.BRICK, Smokehouse.BUILDING_NAME])
-    _button_key_pairs.append(["FishermanHut", fish_btns[1], CostTier.PLANK, FishermanHut.BUILDING_NAME])
 
 func _build_drink_section(parent: HBoxContainer) -> void:
     var drink_mat := ShaderMaterial.new()
