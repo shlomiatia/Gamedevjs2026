@@ -7,9 +7,11 @@ var _is_eating := false
 var _follow_delay := 0.0
 var _nav_elapsed_sec := 0.0
 var _nav_warned := false
+var _wool_tween: Tween = null
 
 func _ready() -> void:
-	$AnimatedSprite2D.play("unsheared_stand")
+	$AnimatedSprite2D.play("stand")
+	$WoolSprite.modulate.a = 1.0
 	_follow_delay = randf_range(0.1, 0.8)
 	$NavigationAgent2D.target_position = global_position
 	$NavigationAgent2D.target_desired_distance = 8.0
@@ -33,6 +35,7 @@ func stop() -> void:
 	set_walking(false)
 
 func _process(delta: float) -> void:
+	_sync_layers()
 	if _is_eating:
 		return
 	if not $NavigationAgent2D.is_navigation_finished():
@@ -66,6 +69,17 @@ func _process(delta: float) -> void:
 	else:
 		set_walking(false)
 
+func _sync_layers() -> void:
+	var body := $AnimatedSprite2D
+	if $WoolSprite.animation != body.animation:
+		$WoolSprite.animation = body.animation
+	$WoolSprite.frame = body.frame
+	$WoolSprite.flip_h = body.flip_h
+	if $HeadSprite.animation != body.animation:
+		$HeadSprite.animation = body.animation
+	$HeadSprite.frame = body.frame
+	$HeadSprite.flip_h = body.flip_h
+
 func set_eating(eating: bool) -> void:
 	if eating == _is_eating:
 		return
@@ -73,9 +87,11 @@ func set_eating(eating: bool) -> void:
 	_is_walking = false
 	if eating:
 		$NavigationAgent2D.target_position = global_position
-		$AnimatedSprite2D.play("sheared_eat" if is_sheared else "unsheared_eat")
+		$AnimatedSprite2D.play("eat")
+		if is_sheared:
+			_tween_wool(0.0, 1.0, Constants.sheep_eat_time_ms / 1000.0)
 	else:
-		$AnimatedSprite2D.play("sheared_stand" if is_sheared else "unsheared_stand")
+		$AnimatedSprite2D.play("stand")
 
 func set_walking(walking: bool) -> void:
 	if _is_eating:
@@ -83,19 +99,27 @@ func set_walking(walking: bool) -> void:
 	if walking == _is_walking:
 		return
 	_is_walking = walking
-	if is_sheared:
-		$AnimatedSprite2D.play("sheared_walk" if walking else "sheared_stand")
-	else:
-		$AnimatedSprite2D.play("unsheared_walk" if walking else "unsheared_stand")
+	$AnimatedSprite2D.play("walk" if walking else "stand")
 
 func shear() -> void:
 	is_sheared = true
 	_is_eating = false
 	_is_walking = false
-	$AnimatedSprite2D.play("sheared_stand")
+	$AnimatedSprite2D.play("stand")
+	_tween_wool(1.0, 0.0, 0.5)
 
 func regrow() -> void:
 	is_sheared = false
 	_is_eating = false
 	_is_walking = false
-	$AnimatedSprite2D.play("unsheared_stand")
+	$AnimatedSprite2D.play("stand")
+	if _wool_tween != null and _wool_tween.is_running():
+		_wool_tween.kill()
+	$WoolSprite.modulate.a = 1.0
+
+func _tween_wool(from: float, to: float, duration: float) -> void:
+	if _wool_tween != null and _wool_tween.is_running():
+		_wool_tween.kill()
+	$WoolSprite.modulate.a = from
+	_wool_tween = create_tween()
+	_wool_tween.tween_property($WoolSprite, "modulate:a", to, duration)

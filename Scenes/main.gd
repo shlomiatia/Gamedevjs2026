@@ -15,6 +15,7 @@ var _tutorial: Tutorial
 var _level_pixel_size: Vector2i
 var _win_overlay: Control
 var _click_player: AudioStreamPlayer
+var _music_player: AudioStreamPlayer
 
 func _on_game_over() -> void:
     BuilderHut._placed_count = 0
@@ -150,6 +151,9 @@ func _ready() -> void:
     _click_player = AudioStreamPlayer.new()
     _click_player.stream = load("res://Audio/click.wav") as AudioStream
     add_child(_click_player)
+    _music_player = AudioStreamPlayer.new()
+    _music_player.stream = load("res://Audio/music.mp3") as AudioStream
+    add_child(_music_player)
 
     var game_theme := Theme.new()
     game_theme.set_color("font_color", "Button", Color.WHITE)
@@ -184,6 +188,10 @@ func _ready() -> void:
     _building_manager.set_ui_visible(false)
     _coordination_manager.game_over.connect(_on_game_over)
     _coordination_manager.game_won.connect(_on_game_won)
+    _coordination_manager.building_completed.connect(func(count: int):
+        if count == 4:
+            _music_player.play()
+    )
 
     _hud_layer = CanvasLayer.new()
     _hud_layer.layer = 10
@@ -282,6 +290,7 @@ func _show_start_screen() -> void:
     mill_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
     mill_rect.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
     mill_rect.pivot_offset = Vector2(48 * 4, 48 * 4)
+    mill_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
     vbox.add_child(mill_rect)
 
     var mill_tween := layer.create_tween().set_loops()

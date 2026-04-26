@@ -119,6 +119,7 @@ func _do_build(delta: float) -> void:
 
 func _finish_build() -> void:
     _target_hut.complete_construction()
+    _coordination_manager.notify_building_completed()
     _target_hut = null
     _state = State.IDLE
     _coordination_manager.notify_idle_builder(self )

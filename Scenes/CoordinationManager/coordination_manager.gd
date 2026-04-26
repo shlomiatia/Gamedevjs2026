@@ -12,6 +12,7 @@ signal worker_died(worker_name: String, cause: String)
 signal worker_tool_broken(worker_name: String)
 signal worker_clothes_unusable(worker_name: String)
 signal construction_queued
+signal building_completed(count: int)
 
 const WIN_WORKER_COUNT := 30
 
@@ -51,6 +52,7 @@ func get_satisfaction_for_resource(resource_type: int) -> float:
         ResourceType.TOOL: return Constants.tool_satisfaction
     return Constants.initial_hunger
 
+var _completed_building_count: int = 0
 var _builders: Array = []
 var all_workers: Array = []
 var _dead_count: int = 0
@@ -118,6 +120,10 @@ func deregister_worker(worker_node: Node2D) -> void:
 
 func register_building(building: Node2D) -> void:
     buildings.append(building)
+
+func notify_building_completed() -> void:
+    _completed_building_count += 1
+    building_completed.emit(_completed_building_count)
 
 # --- Construction queue ---
 

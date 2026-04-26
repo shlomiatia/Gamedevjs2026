@@ -1,138 +1,203 @@
-[gd_scene load_steps=17 format=3 uid="uid://bgyh71jiybprg"]
+[gd_scene load_steps=23 format=3 uid="uid://bgyh71jiybprg"]
 
 [ext_resource type="Texture2D" uid="uid://cyqbopsbhae80" path="res://Textures/sheep.png" id="1_sheep_tex"]
 [ext_resource type="Script" uid="uid://dq2k04mppnjr" path="res://Scenes/Sheep/sheep.gd" id="2_script"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fwbsn"]
-atlas = ExtResource("1_sheep_tex")
-region = Rect2(128, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xbw8u"]
-atlas = ExtResource("1_sheep_tex")
-region = Rect2(160, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l8prm"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_b_s0"]
 atlas = ExtResource("1_sheep_tex")
 region = Rect2(0, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ogxwu"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_b_s1"]
 atlas = ExtResource("1_sheep_tex")
 region = Rect2(32, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_15its"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_b_w0"]
 atlas = ExtResource("1_sheep_tex")
 region = Rect2(64, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fuv2o"]
-atlas = ExtResource("1_sheep_tex")
-region = Rect2(0, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_j8p5b"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_b_w2"]
 atlas = ExtResource("1_sheep_tex")
 region = Rect2(96, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cj8bi"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_b_e0"]
 atlas = ExtResource("1_sheep_tex")
-region = Rect2(128, 0, 32, 32)
+region = Rect2(128, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_27vvu"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_b_e1"]
 atlas = ExtResource("1_sheep_tex")
-region = Rect2(160, 0, 32, 32)
+region = Rect2(160, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_us1"]
-atlas = ExtResource("1_sheep_tex")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_us2"]
-atlas = ExtResource("1_sheep_tex")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_uw1"]
-atlas = ExtResource("1_sheep_tex")
-region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_y8hp0"]
-atlas = ExtResource("1_sheep_tex")
-region = Rect2(96, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_sheep"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_body"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_fwbsn")
+"texture": SubResource("AtlasTexture_b_e0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xbw8u")
+"texture": SubResource("AtlasTexture_b_e1")
 }],
 "loop": true,
-"name": &"sheared_eat",
+"name": &"eat",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_l8prm")
+"texture": SubResource("AtlasTexture_b_s0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ogxwu")
+"texture": SubResource("AtlasTexture_b_s1")
 }],
 "loop": true,
-"name": &"sheared_stand",
+"name": &"stand",
 "speed": 2.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_15its")
+"texture": SubResource("AtlasTexture_b_w0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_fuv2o")
+"texture": SubResource("AtlasTexture_b_s0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_j8p5b")
+"texture": SubResource("AtlasTexture_b_w2")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_fuv2o")
+"texture": SubResource("AtlasTexture_b_s0")
 }],
 "loop": true,
-"name": &"sheared_walk",
+"name": &"walk",
 "speed": 6.0
-}, {
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w_s0"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w_s1"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w_w0"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w_w2"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w_e0"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(128, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w_e1"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(160, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wool"]
+animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_cj8bi")
+"texture": SubResource("AtlasTexture_w_e0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_27vvu")
+"texture": SubResource("AtlasTexture_w_e1")
 }],
 "loop": true,
-"name": &"unsheared_eat",
+"name": &"eat",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_us1")
+"texture": SubResource("AtlasTexture_w_s0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_us2")
+"texture": SubResource("AtlasTexture_w_s1")
 }],
 "loop": true,
-"name": &"unsheared_stand",
+"name": &"stand",
 "speed": 2.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_uw1")
+"texture": SubResource("AtlasTexture_w_w0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_us1")
+"texture": SubResource("AtlasTexture_w_s0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_y8hp0")
+"texture": SubResource("AtlasTexture_w_w2")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_us1")
+"texture": SubResource("AtlasTexture_w_s0")
 }],
 "loop": true,
-"name": &"unsheared_walk",
+"name": &"walk",
+"speed": 6.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h_s0"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h_s1"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(32, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h_w0"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(64, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h_w2"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(96, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h_e0"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(128, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h_e1"]
+atlas = ExtResource("1_sheep_tex")
+region = Rect2(160, 96, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_head"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h_e0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h_e1")
+}],
+"loop": true,
+"name": &"eat",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h_s0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h_s1")
+}],
+"loop": true,
+"name": &"stand",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h_w0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h_s0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h_w2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h_s0")
+}],
+"loop": true,
+"name": &"walk",
 "speed": 6.0
 }]
 
@@ -143,7 +208,16 @@ script = ExtResource("2_script")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -16)
-sprite_frames = SubResource("SpriteFrames_sheep")
-animation = &"unsheared_walk"
-autoplay = "unsheared_stand"
-frame_progress = 0.8954787
+sprite_frames = SubResource("SpriteFrames_body")
+animation = &"stand"
+autoplay = "stand"
+
+[node name="WoolSprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_wool")
+animation = &"stand"
+
+[node name="HeadSprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_head")
+animation = &"stand"
