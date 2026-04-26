@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+WavedashSdk="*res://addons/wavedash/WavedashSDK.gd"
 Constants="*res://Scenes/Constants/constants.gd"
 
 [display]

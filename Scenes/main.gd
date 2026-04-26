@@ -140,7 +140,13 @@ func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F1:
         _coordination_manager.debug_dump()
 
+func _on_connected(_payload):
+        print("Playing as: ", WavedashSdk.get_username())
+
 func _ready() -> void:
+    WavedashSdk.backend_connected.connect(_on_connected)
+    WavedashSdk.init({"debug": true})
+    
     _click_player = AudioStreamPlayer.new()
     _click_player.stream = load("res://Audio/click.wav") as AudioStream
     add_child(_click_player)
