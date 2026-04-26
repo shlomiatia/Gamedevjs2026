@@ -9,6 +9,7 @@
 
 [node name="Main" type="Node2D"]
 y_sort_enabled = true
+position = Vector2(0, 1)
 script = ExtResource("1_r150o")
 
 [node name="Map" parent="." instance=ExtResource("6_map")]

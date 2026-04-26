@@ -20,14 +20,17 @@ func _ready() -> void:
 
 	_audio_message = AudioStreamPlayer.new()
 	_audio_message.stream = load("res://Audio/message.mp3")
+	_audio_message.volume_db = -12.0
 	audio_root.add_child(_audio_message)
 
 	_audio_bell = AudioStreamPlayer.new()
+	_audio_bell.volume_db = -12.0
 	_audio_bell.stream = load("res://Audio/bell.mp3")
 	audio_root.add_child(_audio_bell)
 
 	_audio_alert = AudioStreamPlayer.new()
 	_audio_alert.stream = load("res://Audio/alert.mp3")
+	_audio_alert.volume_db = -12.0
 	audio_root.add_child(_audio_alert)
 
 func setup(coordination_manager: CoordinationManager) -> void:

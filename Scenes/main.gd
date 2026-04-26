@@ -152,6 +152,7 @@ func _ready() -> void:
     _click_player.stream = load("res://Audio/click.wav") as AudioStream
     add_child(_click_player)
     _music_player = AudioStreamPlayer.new()
+    _music_player.volume_db = -12.0
     _music_player.stream = load("res://Audio/music.mp3") as AudioStream
     add_child(_music_player)
 
