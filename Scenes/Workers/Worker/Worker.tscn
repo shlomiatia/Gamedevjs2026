@@ -259,7 +259,7 @@ target_desired_distance = 8.0
 material = SubResource("ShaderMaterial_worker")
 position = Vector2(0, -26)
 sprite_frames = SubResource("frames")
-animation = &"down_walk"
+animation = &"down_work"
 autoplay = "down_stand"
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
