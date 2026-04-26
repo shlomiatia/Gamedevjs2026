@@ -3,7 +3,7 @@ extends Node2D
 
 const SIZE_X := 5
 const SIZE_Y := 1
-const BUILDING_NAME := "Wool Mill"
+const BUILDING_NAME := "Wool mill"
 const WORKER_NAME := "Weaver"
 
 const MillerScene = preload("res://Scenes/Workers/Miller/Miller.tscn")

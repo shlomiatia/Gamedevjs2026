@@ -204,7 +204,7 @@ func _make_dropdown(
         var item_tier: int = item.get("tier", CostTier.FREE)
         btn.pressed.connect(func(): _start_building(sc, sz, key))
         if item_tier == CostTier.BRICK:
-            _tooltip_manager.connect_button(btn, key, func(): return "" if _placed_keys.has("ClayKiln") else "Requires Clay Kiln")
+            _tooltip_manager.connect_button(btn, key, func(): return "" if _placed_keys.has("ClayKiln") else "Requires clay kiln")
         else:
             _tooltip_manager.connect_button(btn, key)
 
@@ -247,12 +247,12 @@ func _build_construction_section(parent: HBoxContainer) -> void:
     var bricks_btns := _make_dropdown(row, "res://Textures/brick.png", CostTier.PLANK, [
         {"key": "WoodcutterHut", "scene": WoodcutterHutScene, "size_x": WoodcutterHut.SIZE_X, "size_y": WoodcutterHut.SIZE_Y, "text": WoodcutterHut.BUILDING_NAME, "tier": CostTier.FREE},
         {"key": "ClayKiln", "scene": ClayKilnScene, "size_x": ClayKiln.SIZE_X, "size_y": ClayKiln.SIZE_Y, "text": ClayKiln.BUILDING_NAME, "tier": CostTier.PLANK},
-        {"key": "ClayPit", "scene": ClayPitScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Clay Pit", "tier": CostTier.PLANK},
+        {"key": "ClayPit", "scene": ClayPitScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Clay pit", "tier": CostTier.PLANK},
     ])
 
     _button_key_pairs.append(["WoodcutterHut", bricks_btns[0], CostTier.FREE, WoodcutterHut.BUILDING_NAME])
     _button_key_pairs.append(["ClayKiln", bricks_btns[1], CostTier.PLANK, ClayKiln.BUILDING_NAME])
-    _button_key_pairs.append(["ClayPit", bricks_btns[2], CostTier.PLANK, "Clay Pit"])
+    _button_key_pairs.append(["ClayPit", bricks_btns[2], CostTier.PLANK, "Clay pit"])
 
 func _build_food_section(parent: HBoxContainer) -> void:
     var row := _make_section(parent, "res://Textures/food.png", "Food")
@@ -354,13 +354,13 @@ func _build_tools_section(parent: HBoxContainer) -> void:
     var tools_btns := _make_dropdown(row, "res://Textures/tool.png", CostTier.BRICK, [
         {"key": "Toolsmith", "scene": ToolsmithScene, "size_x": Toolsmith.SIZE_X, "size_y": Toolsmith.SIZE_Y, "text": Toolsmith.BUILDING_NAME, "tier": CostTier.BRICK},
         {"key": "SteelMill", "scene": SteelMillScene, "size_x": SteelMill.SIZE_X, "size_y": SteelMill.SIZE_Y, "text": SteelMill.BUILDING_NAME, "tier": CostTier.BRICK},
-        {"key": "IronMine", "scene": IronMineScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Iron Mine", "tier": CostTier.PLANK},
-        {"key": "CoalMine", "scene": CoalMineScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Coal Mine", "tier": CostTier.PLANK},
+        {"key": "IronMine", "scene": IronMineScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Iron mine", "tier": CostTier.PLANK},
+        {"key": "CoalMine", "scene": CoalMineScene, "size_x": Mine.SIZE_X, "size_y": Mine.SIZE_Y, "text": "Coal mine", "tier": CostTier.PLANK},
     ])
     _button_key_pairs.append(["Toolsmith", tools_btns[0], CostTier.BRICK, Toolsmith.BUILDING_NAME])
     _button_key_pairs.append(["SteelMill", tools_btns[1], CostTier.BRICK, SteelMill.BUILDING_NAME])
-    _button_key_pairs.append(["IronMine", tools_btns[2], CostTier.PLANK, "Iron Mine"])
-    _button_key_pairs.append(["CoalMine", tools_btns[3], CostTier.PLANK, "Coal Mine"])
+    _button_key_pairs.append(["IronMine", tools_btns[2], CostTier.PLANK, "Iron mine"])
+    _button_key_pairs.append(["CoalMine", tools_btns[3], CostTier.PLANK, "Coal mine"])
 
     
 func _update_buttons() -> void:
@@ -523,9 +523,9 @@ func _update_arrow() -> void:
     var is_mill := building_comp != null and building_comp.has_mill
     var is_mine := _preview is Mine
     if is_mill:
-        _overlay.center_text = "Mills must be built next to the river."
+        _overlay.center_text = "Mills need water to run. Build your mills on the riverbank. "
     elif is_mine:
-        _overlay.center_text = "Mines must be built next to the mountain."
+        _overlay.center_text = "Best mining is in the mountains, so that's where your mines should be."
     else:
         _overlay.center_text = ""
         

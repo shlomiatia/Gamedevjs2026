@@ -3,8 +3,8 @@ extends Node2D
 
 const SIZE_X := 5
 const SIZE_Y := 2
-const BUILDING_NAME := "Fromage"
-const WORKER_NAME := "Fromager"
+const BUILDING_NAME := "Dairy"
+const WORKER_NAME := "Cheesemaker"
 const CONSTRUCTION_RESOURCE_TYPE := CoordinationManager.ResourceType.BRICK
 
 const KilnWorkerScene = preload("res://Scenes/Workers/KilnWorker/KilnWorker.tscn")

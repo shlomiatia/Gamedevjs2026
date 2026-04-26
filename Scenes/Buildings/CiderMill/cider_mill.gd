@@ -3,8 +3,8 @@ extends Node2D
 
 const SIZE_X := 5
 const SIZE_Y := 1
-const BUILDING_NAME := "Cider Mill"
-const WORKER_NAME := "Cider Miller"
+const BUILDING_NAME := "Cider mill"
+const WORKER_NAME := "Cider miller"
 
 const MillerScene = preload("res://Scenes/Workers/Miller/Miller.tscn")
 const CiderScene = preload("res://Scenes/Resources/Cider/Cider.tscn")

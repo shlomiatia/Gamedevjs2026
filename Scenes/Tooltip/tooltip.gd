@@ -32,16 +32,16 @@ const _ICON_TEXTURE := {
 }
 
 const _RESOURCE_NEED := {
-    2: ["hunger", "apple_satisfaction"],
-    3: ["thirst", "cider_satisfaction"],
-    5: ["clothing", "clothes_satisfaction"],
-    11: ["tools", "tool_satisfaction"],
-    12: ["thirst", "milk_satisfaction"],
-    13: ["hunger", "cheese_satisfaction"],
-    16: ["hunger", "bread_satisfaction"],
-    17: ["thirst", "beer_satisfaction"],
-    19: ["hunger", "smoked_fish_satisfaction"],
-    21: ["clothing", "flax_clothes_satisfaction"],
+    2: ["hunger", "apple_satisfaction", "Satisfies %d hunger"],
+    3: ["thirst", "cider_satisfaction", "Quenches %d thirst"],
+    5: ["clothing", "clothes_satisfaction", "Spruces up %d clothing"],
+    11: ["tools", "tool_satisfaction", "Repairs %d tools"],
+    12: ["thirst", "milk_satisfaction", "Quenches %d thirst"],
+    13: ["hunger", "cheese_satisfaction", "Satisfies %d hunger"],
+    16: ["hunger", "bread_satisfaction", "Satisfies %d hunger"],
+    17: ["thirst", "beer_satisfaction", "Quenches %d thirst"],
+    19: ["hunger", "smoked_fish_satisfaction", "Satisfies %d hunger"],
+    21: ["clothing", "flax_clothes_satisfaction", "Spruces up %d clothing"],
 }
 
 # Modulate to distinguish resources that share the same base texture
@@ -197,7 +197,7 @@ func _populate(data: Dictionary, show_cost: bool, warning: String = "") -> void:
     _cost_row.add_theme_constant_override("separation", sep)
     if show_cost:
         if data["cost"] < 0:
-            _add_label(_cost_row, "Cost: Free", font_size)
+            _add_label(_cost_row, "Cost: free", font_size)
         else:
             _add_label(_cost_row, "Cost: ", font_size)
             _add_icon(_cost_row, data["cost"], icon_size)
@@ -233,7 +233,7 @@ func _populate(data: Dictionary, show_cost: bool, warning: String = "") -> void:
     if _RESOURCE_NEED.has(output[0]):
         var info: Array = _RESOURCE_NEED[output[0]]
         var sat: int = int(Constants.get(info[1]))
-        _add_label(_satisfy_row, "Satisfies %d %s" % [sat, info[0]], font_size)
+        _add_label(_satisfy_row, info[2] % sat, font_size)
         _satisfy_row.visible = true
     else:
         _satisfy_row.visible = false

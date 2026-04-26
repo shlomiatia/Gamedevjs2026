@@ -275,7 +275,7 @@ text = " 0"
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "Hungry workers (below 50% hunger)"
+tooltip_text = "Hungry workers (less than 50% energy)"
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -356,7 +356,7 @@ text = " 0"
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "Thirsty workers (below 50% thirst)"
+tooltip_text = "Thirsty workers (less than 50% hydrated)"
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -413,7 +413,7 @@ text = " 0"
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "Workers with worn clothing (below 50%)"
+tooltip_text = "Workers with shabby clothing (below 50%)"
 theme_override_constants/separation = 0
 alignment = 1
 

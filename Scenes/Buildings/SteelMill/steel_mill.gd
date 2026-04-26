@@ -3,7 +3,7 @@ extends Node2D
 
 const SIZE_X := 5
 const SIZE_Y := 1
-const BUILDING_NAME := "Steel Mill"
+const BUILDING_NAME := "Steel mill"
 const WORKER_NAME := "Smelter"
 const CONSTRUCTION_RESOURCE_TYPE := CoordinationManager.ResourceType.BRICK
 

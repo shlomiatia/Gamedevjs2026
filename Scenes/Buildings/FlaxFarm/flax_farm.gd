@@ -3,8 +3,8 @@ extends Node2D
 
 const SIZE_X := 5
 const SIZE_Y := 2
-const BUILDING_NAME := "Flax Farm"
-const WORKER_NAME := "Flax Farmer"
+const BUILDING_NAME := "Flax farm"
+const WORKER_NAME := "Flax farmer"
 
 const CropFarmerScene = preload("res://Scenes/Workers/CropFarmer/CropFarmer.tscn")
 const FlaxScene = preload("res://Scenes/Resources/Flax/Flax.tscn")

@@ -38,16 +38,16 @@ func setup(coordination_manager: CoordinationManager) -> void:
 		show_message("A worker is thirsty.", "message")
 	)
 	coordination_manager.worker_clothes_worn.connect(func():
-		show_message("Worker clothes are worn.", "message")
+		show_message("A worker's clothes are getting shabby.", "message")
 	)
 	coordination_manager.worker_tool_worn.connect(func():
-		show_message("Worker tools are worn.", "message")
+		show_message("A worker's tools need repair.", "message")
 	)
 	coordination_manager.worker_died.connect(func(worker_name: String, cause: String):
-		show_message(worker_name + " has died due to " + cause + ".", "bell")
+		show_message(worker_name + " has died of " + cause + ".", "bell")
 	)
 	coordination_manager.worker_tool_broken.connect(func(worker_name: String):
-		show_message(worker_name + " can't work due to broken tool!", "alert")
+		show_message(worker_name + " can't work because of his broken tool!", "alert")
 	)
 	coordination_manager.worker_clothes_unusable.connect(func(worker_name: String):
 		show_message(worker_name + " can't work due to unusable clothes!", "alert")

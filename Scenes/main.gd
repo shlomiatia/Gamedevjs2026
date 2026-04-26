@@ -44,7 +44,7 @@ func _on_game_over() -> void:
     panel.add_child(vbox)
 
     var title := Label.new()
-    title.text = "GAME  OVER"
+    title.text = "Game over"
     title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     var red_title_settings := (preload("res://Themes/label_title.tres") as LabelSettings).duplicate()
     red_title_settings.font_color = Color(0.9, 0.2, 0.2)
@@ -103,7 +103,7 @@ func _show_win_overlay() -> void:
     panel.add_child(vbox)
 
     var title := Label.new()
-    title.text = "The  town  of  Millville  is  flourishing..."
+    title.text = "The town of Millville is thriving..."
     title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
     title.label_settings = preload("res://Themes/label_title.tres")
     vbox.add_child(title)
@@ -246,7 +246,7 @@ func _show_start_screen() -> void:
     vbox.add_child(title)
 
     var tutorial_check := CheckBox.new()
-    tutorial_check.text = "Enable Tutorial"
+    tutorial_check.text = "Enable tutorial"
     tutorial_check.focus_mode = Control.FOCUS_NONE
     tutorial_check.button_pressed = true
     tutorial_check.alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -256,7 +256,7 @@ func _show_start_screen() -> void:
     vbox.add_child(tutorial_check)
 
     var start_btn := Button.new()
-    start_btn.text = "Start Game"
+    start_btn.text = "Start game"
     start_btn.add_theme_font_size_override("font_size", 20)
     start_btn.custom_minimum_size = Vector2(160, 44)
     start_btn.pressed.connect(func():
