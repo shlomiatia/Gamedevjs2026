@@ -3,15 +3,11 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cdtfd7qdonry"
-path="res://.godot/imported/grave.png-0ed4b3ed589364cf6105076e015aceaa.ctex"
-metadata={
-"vram_texture": false
-}
+valid=false
 
 [deps]
 
 source_file="res://Textures/grave.png"
-dest_files=["res://.godot/imported/grave.png-0ed4b3ed589364cf6105076e015aceaa.ctex"]
 
 [params]
 

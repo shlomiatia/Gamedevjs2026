@@ -1,6 +1,8 @@
 class_name BuildingComponent
 extends Node2D
 
+signal cancel_requested
+
 const SPRITE_OFFSET_Y := -104.0
 const SIZE := Vector2i(5, 2)
 
@@ -109,6 +111,7 @@ func _on_button_pressed() -> void:
             var bc := b.get_node_or_null("Building") as BuildingComponent
             if bc != null and bc._map != null:
                 saved_map.set_occupied_ring(bc._top_left, BuildingComponent.SIZE, Map.OccupiedType.BLOCK_BUILDING)
+    cancel_requested.emit()
     cm.cancel_construction(parent)
     parent.queue_free()
 

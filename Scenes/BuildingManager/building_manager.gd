@@ -446,6 +446,12 @@ func _place_building() -> void:
     _tooltip_manager.attach_to_building(building, _active_tooltip_key)
     _placed_keys[_active_tooltip_key] = _placed_keys.get(_active_tooltip_key, 0) + 1
     var placed_key := _active_tooltip_key
+    var bc := building.get_node_or_null("Building") as BuildingComponent
+    if bc != null:
+        bc.cancel_requested.connect(func():
+            _placed_keys[placed_key] = maxi(0, _placed_keys.get(placed_key, 0) - 1)
+            _update_buttons()
+        )
     _cancel_building()
     _update_buttons()
     building_placed.emit(placed_key)
