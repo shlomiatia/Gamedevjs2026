@@ -11,6 +11,7 @@ var _occupied_tiles: Dictionary = {}
 var _eaten_tiles: Dictionary = {}
 var _fade_tiles: Array[Vector2i] = []
 var _fade_tween: Tween = null
+var _grass_tiles: Array[Vector2i] = [Vector2i(0, 0), Vector2i(2, 0), Vector2i(3, 0), Vector2i(4, 0), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(0, 2), Vector2i(1, 2), Vector2i(5, 2), Vector2i(0, 3), Vector2i(1, 3)]
 
 func setup(level_width: int, level_height: int, river_row: int, river_rows: int = 1, occupied_tiles: Dictionary = {}) -> void:
     _occupied_tiles = occupied_tiles
@@ -18,7 +19,10 @@ func setup(level_width: int, level_height: int, river_row: int, river_rows: int 
     flax.setup(_grass_layer, occupied_tiles, "res://Textures/flax tileset.png")
     for x in level_width:
         for y in level_height:
-            _grass_layer.set_cell(Vector2i(x, y), 0, Vector2i(0, 0))
+            var grass_tile := Vector2i(0, 0)
+            if randi() % 20 == 0:
+                grass_tile = _grass_tiles[randi() % _grass_tiles.size()]
+            _grass_layer.set_cell(Vector2i(x, y), 0, grass_tile)
             if y < river_row or y >= river_row + river_rows:
                 _dirt_layer.set_cell(Vector2i(x, y), 0, Vector2i(1, 0))
     for x in level_width:
@@ -85,7 +89,7 @@ func find_sheep_grass_tile(near_pos: Vector2, extra_occupied: Dictionary = {}) -
     var visited: Dictionary = {start: true}
     while not queue.is_empty():
         var tile: Vector2i = queue.pop_front()
-        if _occupied_tiles.get(tile, 0) != Map.OccupiedType.BLOCK_WORKERS and not extra_occupied.has(tile) and _grass_layer.get_cell_atlas_coords(tile) == Vector2i(0, 0):
+        if _occupied_tiles.get(tile, 0) != Map.OccupiedType.BLOCK_WORKERS and not extra_occupied.has(tile) and _grass_tiles.has(_grass_layer.get_cell_atlas_coords(tile)):
             return tile
         for offset: Vector2i in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
             var neighbor := tile + offset
