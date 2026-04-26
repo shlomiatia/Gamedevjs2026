@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bsrrpa1hvme71" path="res://Scenes/Workers/Worker/worker.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://Scenes/Workers/WorkerNavigator/WorkerNavigator.tscn" id="3_navigator"]
-[ext_resource type="PackedScene" path="res://Scenes/Workers/WorkerNeeds/WorkerNeeds.tscn" id="4_needs"]
+[ext_resource type="PackedScene" uid="uid://b0medf8jm1xto" path="res://Scenes/Workers/WorkerNeeds/WorkerNeeds.tscn" id="4_needs"]
 [ext_resource type="PackedScene" path="res://Scenes/Workers/WorkerBackpack/WorkerBackpack.tscn" id="5_backpack"]
 [ext_resource type="Texture2D" uid="uid://cmysa80q0ep88" path="res://Textures/worker.png" id="5_jdvju"]
 [ext_resource type="Shader" uid="uid://b8yka2iqauytq" path="res://Shaders/pallete_swap.gdshader" id="6_shader"]
@@ -13,29 +13,29 @@ shader_parameter/is_disabled = false
 shader_parameter/original_0 = Color(0.969, 0.29, 0.325, 1)
 shader_parameter/original_1 = Color(0.949, 0.184, 0.275, 1)
 shader_parameter/original_2 = Color(0.737, 0.086, 0.259, 1)
-shader_parameter/original_3 = Color(0, 0, 0, 1)
-shader_parameter/original_4 = Color(0, 0, 0, 1)
-shader_parameter/original_5 = Color(0, 0, 0, 1)
-shader_parameter/original_6 = Color(0, 0, 0, 1)
-shader_parameter/original_7 = Color(0, 0, 0, 1)
-shader_parameter/original_8 = Color(0, 0, 0, 1)
-shader_parameter/original_9 = Color(0, 0, 0, 1)
-shader_parameter/original_10 = Color(0, 0, 0, 1)
-shader_parameter/original_11 = Color(0, 0, 0, 1)
-shader_parameter/original_12 = Color(0, 0, 0, 1)
+shader_parameter/original_3 = Color(0.514, 0.251, 0.298, 1)
+shader_parameter/original_4 = Color(0.404, 0.192, 0.294, 1)
+shader_parameter/original_5 = Color(0.247, 0.137, 0.137, 1)
+shader_parameter/original_6 = Color(0.992, 0.741, 0.561, 1)
+shader_parameter/original_7 = Color(0.941, 0.533, 0.42, 1)
+shader_parameter/original_8 = Color(0.827, 0.408, 0.325, 1)
+shader_parameter/original_9 = Color(0.388, 0.231, 0.247, 1)
+shader_parameter/original_10 = Color(0.4, 0.561, 0.686, 1)
+shader_parameter/original_11 = Color(0.345, 0.365, 0.506, 1)
+shader_parameter/original_12 = Color(0.271, 0.212, 0.365, 1)
 shader_parameter/replace_0 = Color(0.784, 0.565, 0.376, 1)
 shader_parameter/replace_1 = Color(0.627, 0.439, 0.251, 1)
 shader_parameter/replace_2 = Color(0.471, 0.314, 0.188, 1)
-shader_parameter/replace_3 = Color(0, 0, 0, 1)
-shader_parameter/replace_4 = Color(0, 0, 0, 1)
-shader_parameter/replace_5 = Color(0, 0, 0, 1)
-shader_parameter/replace_6 = Color(0, 0, 0, 1)
-shader_parameter/replace_7 = Color(0, 0, 0, 1)
-shader_parameter/replace_8 = Color(0, 0, 0, 1)
-shader_parameter/replace_9 = Color(0, 0, 0, 1)
-shader_parameter/replace_10 = Color(0, 0, 0, 1)
-shader_parameter/replace_11 = Color(0, 0, 0, 1)
-shader_parameter/replace_12 = Color(0, 0, 0, 1)
+shader_parameter/replace_3 = Color(0.514, 0.251, 0.298, 1)
+shader_parameter/replace_4 = Color(0.404, 0.192, 0.294, 1)
+shader_parameter/replace_5 = Color(0.247, 0.137, 0.137, 1)
+shader_parameter/replace_6 = Color(0.992, 0.741, 0.561, 1)
+shader_parameter/replace_7 = Color(0.941, 0.533, 0.42, 1)
+shader_parameter/replace_8 = Color(0.827, 0.408, 0.325, 1)
+shader_parameter/replace_9 = Color(0.388, 0.231, 0.247, 1)
+shader_parameter/replace_10 = Color(0.4, 0.561, 0.686, 1)
+shader_parameter/replace_11 = Color(0.345, 0.365, 0.506, 1)
+shader_parameter/replace_12 = Color(0.271, 0.212, 0.365, 1)
 shader_parameter/modulate = Color(1, 1, 1, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kii70"]

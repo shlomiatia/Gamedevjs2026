@@ -35,7 +35,7 @@ func on_placed(spawn_parent: Node2D, map: Map, coordination_manager: Node, _fore
 	_output_pile.global_position = map.tile_to_world(tiles[1])
 	_output_pile.visible = false
 	$Building.start_construction()
-	coordination_manager.queue_construction(self)
+	coordination_manager.queue_construction(self )
 
 func complete_construction() -> void:
 	$Building.complete_construction()
@@ -44,9 +44,9 @@ func complete_construction() -> void:
 	miner.position = _spawn_pos
 	var miner_name: String
 	match output_resource_type:
-		CoordinationManager.ResourceType.CLAY: miner_name = "Clay digger"
+		CoordinationManager.ResourceType.CLAY: miner_name = "Clay miner"
 		CoordinationManager.ResourceType.COAL: miner_name = "Coal miner"
 		CoordinationManager.ResourceType.IRON_ORE: miner_name = "Iron miner"
 		_: miner_name = "Miner"
-	miner.setup(self, _output_pile, output_scene, _map, _coordination_manager, miner_name)
+	miner.setup(self , _output_pile, output_scene, _map, _coordination_manager, miner_name)
 	_spawn_parent.add_child(miner)

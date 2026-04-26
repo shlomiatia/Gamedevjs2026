@@ -109,6 +109,13 @@ func _finish_need_trip() -> void:
     _need_requested[entry.need] = false
     _active_needs.remove_at(0)
 
+    var w := _mover.get_node_or_null("Worker") as Worker
+    if w != null:
+        if entry.need == Worker.NeedType.TOOL:
+            w.on_tool_restored()
+        elif entry.need == Worker.NeedType.CLOTHING:
+            w.on_clothes_received(entry.resource_type)
+
     if not _active_needs.is_empty():
         _navigator.navigate_to(_active_needs[0].pile.global_position)
     elif _blocked_by_needs.is_empty():
@@ -148,6 +155,7 @@ func _process(delta: float) -> void:
             var w := _mover.get_node_or_null("Worker") as Worker
             if w != null:
                 (_coordination_manager as CoordinationManager).notify_clothes_unusable(w.display_name)
+                w.on_clothes_blocked()
         if uses_tools:
             if not _need_requested.get(Worker.NeedType.TOOL, false) and _tool < Constants.tool_threshold:
                 _need_requested[Worker.NeedType.TOOL] = true
@@ -157,6 +165,7 @@ func _process(delta: float) -> void:
                 var w := _mover.get_node_or_null("Worker") as Worker
                 if w != null:
                     (_coordination_manager as CoordinationManager).notify_tool_broken(w.display_name)
+                    w.on_tool_blocked()
 
     if not _active_needs.is_empty():
         if _navigator.tick(delta):
