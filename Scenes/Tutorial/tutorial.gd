@@ -79,7 +79,7 @@ func _build_steps() -> void:
         _meu("Let's fix this by building a builder hut.", "builder_button_clicked",
             func(): return _building_manager.get_builder_button_rect()),
         _w("building_placed:BuilderHut"),
-        _mc("Your first building is free, but others are not. To grow your town, you'll need to produce planks and bricks to build more.\nYou'll need tools for your workers, and food and textile to feed and clothe them."),
+        _mc("Your first building is free, but others are not.\nTo grow your town, you'll need to produce planks and bricks to build more."),
         _mc("You have 2 planks.", func(): return _hud.get_planks_rect()),
         _meu("Use them to secure plank production.\nBuild a woodcutter hut and a sawmill.", "planks_hovered",
             func(): return _building_manager.get_woodcutter_sawmill_rect()),

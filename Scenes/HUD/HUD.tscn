@@ -109,7 +109,7 @@ alignment = 1
 clip_children = 1
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
-tooltip_text = "Pending building sites needing planks"
+tooltip_text = "Building sites waiting for planks"
 
 [node name="PendingPlanksHouse" type="TextureRect" parent="Content/Panel/VBox/GridRow/PlanksCol/PlanksBotRow/PendingPlanksStack"]
 layout_mode = 0
@@ -132,7 +132,7 @@ stretch_mode = 5
 
 [node name="PendingPlanksLabel" type="Label" parent="Content/Panel/VBox/GridRow/PlanksCol/PlanksBotRow"]
 layout_mode = 2
-tooltip_text = "Pending building sites needing planks"
+tooltip_text = "Building sites waiting for planks"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
 theme_override_constants/shadow_offset_x = 2
@@ -207,7 +207,7 @@ alignment = 1
 clip_children = 1
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
-tooltip_text = "Pending building sites needing bricks"
+tooltip_text = "Building sites waiting for bricks"
 
 [node name="PendingBricksHouse" type="TextureRect" parent="Content/Panel/VBox/GridRow/BricksCol/BricksBotRow/PendingBricksStack"]
 layout_mode = 0
@@ -230,7 +230,7 @@ stretch_mode = 5
 
 [node name="PendingBricksLabel" type="Label" parent="Content/Panel/VBox/GridRow/BricksCol/BricksBotRow"]
 layout_mode = 2
-tooltip_text = "Pending building sites needing bricks"
+tooltip_text = "Building sites waiting for bricks"
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.95)
 theme_override_constants/shadow_offset_x = 2
@@ -275,7 +275,7 @@ text = " 0"
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "Hungry workers (less than 50% energy)"
+tooltip_text = "Hungry workers"
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -356,7 +356,7 @@ text = " 0"
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "Thirsty workers (less than 50% hydrated)"
+tooltip_text = "Thirsty workers"
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -413,7 +413,7 @@ text = " 0"
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "Workers with shabby clothing (below 50%)"
+tooltip_text = "Workers with shabby clothing"
 theme_override_constants/separation = 0
 alignment = 1
 
@@ -507,7 +507,7 @@ text = " 0"
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "Workers with worn tools (below 50%)"
+tooltip_text = "Workers with worn tools"
 theme_override_constants/separation = 0
 alignment = 1
 

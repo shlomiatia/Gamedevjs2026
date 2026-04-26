@@ -58,6 +58,7 @@ var buildings: Array = []
 var _construction_queue: Array = []
 var _resource_queues: Dictionary = {}
 var _need_queues: Dictionary = {}
+var _game_won_emitted := false
 
 func _ready() -> void:
     for type in ResourceType.values():
@@ -107,8 +108,9 @@ func deregister_builder(builder: Builder) -> void:
 func register_worker(worker_node: Node2D) -> void:
     all_workers.append(worker_node)
     worker_registered.emit(all_workers.size())
-    if all_workers.size() >= WIN_WORKER_COUNT:
+    if all_workers.size() >= WIN_WORKER_COUNT and not _game_won_emitted:
         game_won.emit()
+        _game_won_emitted = true
 
 func deregister_worker(worker_node: Node2D) -> void:
     all_workers.erase(worker_node)
