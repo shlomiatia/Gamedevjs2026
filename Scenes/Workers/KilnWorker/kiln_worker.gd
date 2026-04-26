@@ -64,7 +64,7 @@ func _process(delta: float) -> void:
 	if $Worker.is_satisfying_need():
 		return
 	match _state:
-		State.GO_TO_RES1, State.GO_TO_RES2, State.GO_HOME_WITH_RES1, State.GO_HOME_WITH_RES2, State.DELIVER, State.GO_HOME_TO_WORK:
+		State.GO_TO_RES1, State.GO_TO_RES2, State.GO_HOME_WITH_RES1, State.GO_HOME_WITH_RES2, State.DELIVER, State.GO_HOME_TO_WORK, State.WAIT_FOR_RES1, State.WAIT_FOR_RES2:
 			if $Worker.tick_movement(delta):
 				_on_path_finished()
 		State.WORK:

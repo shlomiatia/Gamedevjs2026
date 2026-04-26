@@ -42,6 +42,7 @@ func resume_work() -> void:
     match _state:
         State.GO_TO_GRAZE:
             if _furthest_graze_tile != Vector2i(-1, -1):
+                _farmer_at_graze = false
                 $Worker.navigate_to(_map.tile_to_world(_furthest_graze_tile))
         State.GRAZE:
             pass
