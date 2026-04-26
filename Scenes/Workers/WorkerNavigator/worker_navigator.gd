@@ -40,5 +40,8 @@ func is_moving() -> bool:
 		return false
 	return _agent.get_next_path_position().distance_squared_to(_mover.position) > 0.25
 
+func distance_to_next_path_position() -> float:
+	return _agent.get_next_path_position().distance_to(_mover.position)
+
 func get_facing() -> Vector2:
 	return _facing

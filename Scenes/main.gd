@@ -190,7 +190,7 @@ func _ready() -> void:
     _coordination_manager.game_over.connect(_on_game_over)
     _coordination_manager.game_won.connect(_on_game_won)
     _coordination_manager.building_completed.connect(func(count: int):
-        if count == 4:
+        if count == 3:
             _music_player.play()
     )
 

@@ -309,10 +309,13 @@ func _worker_debug_lines(wnode: Node2D) -> PackedStringArray:
     var nav := wnode.get_node_or_null("Worker/WorkerNavigator") as WorkerNavigator
     var label: String = w.display_name if w != null else wnode.name
     var out: PackedStringArray = []
-    out.append("  [%s] pos=%s  moving=%s" % [
+    out.append("  [%s] pos=%s  moving=%s anim=%s working=%s distance=%s" % [
         label,
         str(Vector2i(wnode.position)),
         str(nav.is_moving()) if nav != null else "?",
+        str(w._anim.animation) if w != null and w._anim != null else "?",
+        str(w._working) if w != null else "?",
+        str(nav.distance_to_next_path_position()) if nav != null else "?",
     ])
     if needs != null:
         out.append("    h=%.0f t=%.0f c=%.0f | satisfying=%s waiting=%s" % [
