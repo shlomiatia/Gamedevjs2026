@@ -7,7 +7,7 @@ extends CanvasLayer
 # WHEAT=14, FLOUR=15, BREAD=16, BEER=17,
 # RAW_FISH=18, SMOKED_FISH=19, FLAX=20, FLAX_CLOTHES=21
 const _ICON_TEXTURE := {
-    0: preload("res://Textures/Log.png"),
+    0: preload("res://Textures/log.png"),
     1: preload("res://Textures/planks.png"),
     2: preload("res://Textures/apple.png"),
     3: preload("res://Textures/cider.png"),

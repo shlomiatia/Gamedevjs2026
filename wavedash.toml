@@ -1,0 +1,5 @@
+game_id = "j9767we5bnv4fwzc095fjz29rn85jtk3"
+upload_dir = "build"
+
+[godot]
+version = "4.5"
